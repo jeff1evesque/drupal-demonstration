@@ -13,3 +13,6 @@
 [submodule "sites/all/modules/ckeditor"]
 	path = sites/all/modules/ckeditor
 	url = http://git.drupal.org/project/ckeditor.git
+[submodule "sites/all/modules/token"]
+	path = sites/all/modules/token
+	url = http://git.drupal.org/project/token.git
