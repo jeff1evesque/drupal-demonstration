@@ -43,3 +43,6 @@
 [submodule "sites/all/modules/email"]
 	path = sites/all/modules/email
 	url = http://git.drupal.org/project/email.git
+[submodule "sites/all/modules/features_extra"]
+	path = sites/all/modules/features_extra
+	url = http://git.drupal.org/project/features_extra.git
