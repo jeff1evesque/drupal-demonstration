@@ -52,3 +52,6 @@
 [submodule "sites/all/modules/date"]
 	path = sites/all/modules/date
 	url = http://git.drupal.org/project/date.git
+[submodule "sites/all/modules/views_php"]
+	path = sites/all/modules/views_php
+	url = http://git.drupal.org/project/views_php.git
