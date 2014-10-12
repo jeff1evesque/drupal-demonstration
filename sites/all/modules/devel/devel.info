@@ -1,0 +1,8 @@
+name = Devel
+description = Various blocks, pages, and functions for developers.
+package = Development
+core = 7.x
+configure = admin/config/development/devel
+tags[] = developer
+files[] = devel.test
+files[] = devel.mail.inc
