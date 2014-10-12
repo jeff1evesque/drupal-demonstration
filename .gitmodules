@@ -25,3 +25,6 @@
 [submodule "sites/all/modules/libraries"]
 	path = sites/all/modules/libraries
 	url = http://git.drupal.org/project/libraries.git
+[submodule "sites/all/modules/block_class"]
+	path = sites/all/modules/block_class
+	url = http://git.drupal.org/project/block_class.git
