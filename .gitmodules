@@ -46,3 +46,6 @@
 [submodule "sites/all/modules/features_extra"]
 	path = sites/all/modules/features_extra
 	url = http://git.drupal.org/project/features_extra.git
+[submodule "sites/all/modules/date"]
+	path = sites/all/modules/date
+	url = http://git.drupal.org/project/date.git
