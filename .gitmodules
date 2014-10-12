@@ -19,3 +19,6 @@
 [submodule "sites/all/modules/special_menu_items"]
 	path = sites/all/modules/special_menu_items
 	url = http://git.drupal.org/project/special_menu_items.git
+[submodule "sites/all/modules/pathauto"]
+	path = sites/all/modules/pathauto
+	url = http://git.drupal.org/project/pathauto.git
