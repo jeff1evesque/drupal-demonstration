@@ -28,3 +28,6 @@
 [submodule "sites/all/modules/block_class"]
 	path = sites/all/modules/block_class
 	url = http://git.drupal.org/project/block_class.git
+[submodule "sites/all/modules/imce"]
+	path = sites/all/modules/imce
+	url = http://git.drupal.org/project/imce.git
