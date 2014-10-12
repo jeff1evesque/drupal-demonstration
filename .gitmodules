@@ -10,3 +10,6 @@
 [submodule "sites/all/modules/views"]
 	path = sites/all/modules/views
 	url = http://git.drupal.org/project/views.git
+[submodule "sites/all/modules/ckeditor"]
+	path = sites/all/modules/ckeditor
+	url = http://git.drupal.org/project/ckeditor.git
