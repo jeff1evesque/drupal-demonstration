@@ -37,3 +37,6 @@
 [submodule "sites/all/modules/telephone"]
 	path = sites/all/modules/telephone
 	url = http://git.drupal.org/project/telephone.git
+[submodule "sites/all/modules/link"]
+	path = sites/all/modules/link
+	url = http://git.drupal.org/project/link.git
