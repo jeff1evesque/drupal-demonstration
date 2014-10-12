@@ -4,3 +4,6 @@
 [submodule "sites/all/modules/devel"]
 	path = sites/all/modules/devel
 	url = http://git.drupal.org/project/devel.git
+[submodule "sites/all/modules/admin_menu"]
+	path = sites/all/modules/admin_menu
+	url = http://git.drupal.org/project/admin_menu.git
