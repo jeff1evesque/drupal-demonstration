@@ -16,3 +16,6 @@
 [submodule "sites/all/modules/token"]
 	path = sites/all/modules/token
 	url = http://git.drupal.org/project/token.git
+[submodule "sites/all/modules/special_menu_items"]
+	path = sites/all/modules/special_menu_items
+	url = http://git.drupal.org/project/special_menu_items.git
