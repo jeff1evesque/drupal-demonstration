@@ -22,3 +22,6 @@
 [submodule "sites/all/modules/pathauto"]
 	path = sites/all/modules/pathauto
 	url = http://git.drupal.org/project/pathauto.git
+[submodule "sites/all/modules/libraries"]
+	path = sites/all/modules/libraries
+	url = http://git.drupal.org/project/libraries.git
