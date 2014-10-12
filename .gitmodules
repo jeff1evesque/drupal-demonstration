@@ -34,3 +34,6 @@
 [submodule "sites/all/modules/node_export"]
 	path = sites/all/modules/node_export
 	url = http://git.drupal.org/project/node_export.git
+[submodule "sites/all/modules/telephone"]
+	path = sites/all/modules/telephone
+	url = http://git.drupal.org/project/telephone.git
