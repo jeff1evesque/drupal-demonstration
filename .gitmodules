@@ -49,3 +49,6 @@
 [submodule "sites/all/modules/ctools"]
 	path = sites/all/modules/ctools
 	url = http://git.drupal.org/project/ctools.git
+[submodule "sites/all/modules/date"]
+	path = sites/all/modules/date
+	url = http://git.drupal.org/project/date.git
