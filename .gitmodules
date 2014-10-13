@@ -55,3 +55,6 @@
 [submodule "sites/all/modules/views_php"]
 	path = sites/all/modules/views_php
 	url = http://git.drupal.org/project/views_php.git
+[submodule "sites/all/modules/print"]
+	path = sites/all/modules/print
+	url = http://git.drupal.org/project/print.git
