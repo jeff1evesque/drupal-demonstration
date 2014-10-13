@@ -64,3 +64,6 @@
 [submodule "sites/all/modules/google_analytics"]
 	path = sites/all/modules/google_analytics
 	url = http://git.drupal.org/project/google_analytics.git
+[submodule "sites/all/modules/youtube"]
+	path = sites/all/modules/youtube
+	url = http://git.drupal.org/project/youtube.git
