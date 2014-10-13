@@ -67,3 +67,6 @@
 [submodule "sites/all/modules/youtube"]
 	path = sites/all/modules/youtube
 	url = http://git.drupal.org/project/youtube.git
+[submodule "sites/all/modules/jquery_update"]
+	path = sites/all/modules/jquery_update
+	url = http://git.drupal.org/project/jquery_update.git
