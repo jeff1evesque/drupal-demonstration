@@ -58,3 +58,6 @@
 [submodule "sites/all/modules/print"]
 	path = sites/all/modules/print
 	url = http://git.drupal.org/project/print.git
+[submodule "sites/all/modules/nice_menus"]
+	path = sites/all/modules/nice_menus
+	url = http://git.drupal.org/project/nice_menus.git
