@@ -76,3 +76,6 @@
 [submodule "sites/all/modules/exclude_node_title"]
 	path = sites/all/modules/exclude_node_title
 	url = http://git.drupal.org/project/exclude_node_title.git
+[submodule "sites/all/modules/field_permissions"]
+	path = sites/all/modules/field_permissions
+	url = http://git.drupal.org/project/field_permissions.git
