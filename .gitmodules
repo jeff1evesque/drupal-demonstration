@@ -79,3 +79,6 @@
 [submodule "sites/all/modules/field_permissions"]
 	path = sites/all/modules/field_permissions
 	url = http://git.drupal.org/project/field_permissions.git
+[submodule "sites/all/modules/rules"]
+	path = sites/all/modules/rules
+	url = http://git.drupal.org/project/field_rules.git
