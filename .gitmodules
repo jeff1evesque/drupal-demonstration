@@ -73,3 +73,6 @@
 [submodule "sites/all/modules/og"]
 	path = sites/all/modules/og
 	url = http://git.drupal.org/project/og.git
+[submodule "sites/all/modules/exclude_node_title"]
+	path = sites/all/modules/exclude_node_title
+	url = http://git.drupal.org/project/exclude_node_title.git
