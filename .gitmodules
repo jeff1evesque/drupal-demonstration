@@ -70,3 +70,6 @@
 [submodule "sites/all/modules/jquery_update"]
 	path = sites/all/modules/jquery_update
 	url = http://git.drupal.org/project/jquery_update.git
+[submodule "sites/all/modules/og"]
+	path = sites/all/modules/og
+	url = http://git.drupal.org/project/og.git
