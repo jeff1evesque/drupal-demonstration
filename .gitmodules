@@ -61,3 +61,6 @@
 [submodule "sites/all/modules/nice_menus"]
 	path = sites/all/modules/nice_menus
 	url = http://git.drupal.org/project/nice_menus.git
+[submodule "sites/all/modules/google_analytics"]
+	path = sites/all/modules/google_analytics
+	url = http://git.drupal.org/project/google_analytics.git
