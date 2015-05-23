@@ -1,7 +1,6 @@
 ## variables
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
 $packages_guest_additions = ['gcc', 'kernel-devel-2.6.32-504.16.2.el6.x86_64']
-$epl_repository = 'http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm'
 $drush_console_table = 'Console_Table-1.1.5'
 
 ## define $PATH for all execs
@@ -37,7 +36,7 @@ exec {'autostart-services':
 
 ## add EPEL Repository, which allows 'phpmyadmin' to be installed
 exec {'add-epel':
-    command => "rpm -iUvhF ${epl_repository}",
+    command => "yum -y install epel-release --enablerepo=extras",
     refreshonly => true,
     notify => Exec['update-yum'],
 }
