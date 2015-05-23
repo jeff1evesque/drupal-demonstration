@@ -39,6 +39,7 @@ exec {'add-epel':
     command => "yum -y install epel-release --enablerepo=extras",
     refreshonly => true,
     notify => Exec['update-yum'],
+    timeout => 450,
 }
 
 ## update yum using the added EPEL repository
@@ -46,6 +47,7 @@ exec {'update-yum':
     command => 'yum -y update',
     refreshonly => true,
     notify => Exec['install-phpmyadmin'],
+    timeout => 450,
 }
 
 ## install phpmyadmin: requires the above 'add-epel', and 'update-yum'
@@ -115,7 +117,7 @@ exec {'install-drush-dependency':
     notify => Exec['restart-services'],
 }
 
-## restart services to allow 'gd' to load PHP extensions to load properly (dom, gd)
+## restart services to allow PHP extensions to load properly (dom, gd)
 exec {'restart-services':
     command => 'service httpd restart && service mysqld restart',
     refreshonly => true,
