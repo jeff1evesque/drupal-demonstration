@@ -14,7 +14,7 @@
 #
 #  Note: to enable xx module:
 #
-$      $ subprocess.check_call(['drush', 'pm-enable', '-y', 'xx'])
+#      $ subprocess.check_call(['drush', 'pm-enable', '-y', 'xx'])
 import subprocess
 
 ## Contrib Modules: download and enable
