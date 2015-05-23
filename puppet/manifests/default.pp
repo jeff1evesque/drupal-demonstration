@@ -60,13 +60,6 @@ exec {'install-guest-additions':
 exec {'install-phpmyadmin':
     command => 'yum -y install phpmyadmin',
     refreshonly => true,
-    notify => Exec['move-old-phpmyadmin-conf'],
-}
-
-## move old 'phpMyAdmin.conf'
-exec {'move-old-phpmyadmin-conf':
-    command => 'mv /etc/httpd/conf.d/phpMyAdmin.conf /etc/httpd/conf.d/_phpMyAdmin.conf',
-    refreshonly => true,
     notify => Exec['symlink-website'],
 }
 
