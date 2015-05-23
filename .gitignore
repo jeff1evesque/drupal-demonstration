@@ -1,6 +1,9 @@
 # Ignore configuration files that may contain sensitive information.
-sites/*/settings*.php
+/sites/*/settings*.php
 
 # Ignore paths that contain user-generated content.
-sites/*/files
-sites/*/private
+/sites/*/files
+/sites/*/private
+
+# Ignore the following directories
+.vagrant
