@@ -64,7 +64,7 @@ exec {'install-guest-additions':
 
 ## allow phpmyadmin access from guest VM to host (part 1)
 exec {'phpmyadmin-access-part-1':
-    command => 'sed -i "/<Directory \/usr\/share\/phpMyAdmin\/>/a \   Order allow,deny\" /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'sed -i "/<Directory \/usr\/share\/phpMyAdmin\/>/a \   Order allow,deny" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-part-2'],
 }
