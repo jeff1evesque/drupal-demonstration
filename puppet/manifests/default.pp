@@ -42,9 +42,16 @@ exec {'add-epel':
     notify => Exec['update-yum'],
 }
 
-## update yum
+## update yum using the added EPEL repository
 exec {'update-yum':
     command => 'yum -y update',
+    refreshonly => true,
+    notify => Exec['install-phpmyadmin'],
+}
+
+## install phpmyadmin: requires the above 'add-epel', and 'update-yum'
+exec {'install-phpmyadmin':
+    command => 'yum -y install phpmyadmin',
     refreshonly => true,
     notify => Exec['install-guest-additions'],
 }
@@ -52,13 +59,6 @@ exec {'update-yum':
 ## install guest additions (for centos) using installed EPEL repository
 exec {'install-guest-additions':
     command => '/etc/init.d/vboxadd setup',
-    refreshonly => true,
-    notify => Exec['install-phpmyadmin'],
-}
-
-## install phpmyadmin
-exec {'install-phpmyadmin':
-    command => 'yum -y install phpmyadmin',
     refreshonly => true,
     notify => Exec['symlink-website'],
 }
