@@ -71,7 +71,7 @@ exec {'phpmyadmin-access-part-1':
 
 ## allow phpmyadmin access from guest VM to host (part 2)
 exec {'phpmyadmin-access-part-2':
-    command => 'sed -i "/Order allow,deny/a \   Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'sed -i "/Order allow,deny/a \   Allow from all \n" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['symlink-website'],
 }
