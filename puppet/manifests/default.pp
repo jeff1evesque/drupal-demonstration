@@ -59,6 +59,20 @@ exec {'install-phpmyadmin':
 exec {'install-guest-additions':
     command => '/etc/init.d/vboxadd setup',
     refreshonly => true,
+    notify => Exec['phpmyadmin-access-part-1'],
+}
+
+## allow phpmyadmin access from guest VM to host (part 1)
+exec {'phpmyadmin-access-part-1':
+    command => 'sed -i "12i\Order allow,deny" /etc/httpd/conf.d/phpMyAdmin.conf',
+    refreshonly => true,
+    notify => Exec['phpmyadmin-access-part-2'],
+}
+
+## allow phpmyadmin access from guest VM to host (part 2)
+exec {'phpmyadmin-access-part-2':
+    commmand => 'sed -i "13i\Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
+    refreshonly => true,
     notify => Exec['symlink-website'],
 }
 
