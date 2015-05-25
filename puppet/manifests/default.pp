@@ -147,7 +147,14 @@ exec {'allow-clean-url-4':
 
 ## allow drupal clean urls (part 5)
 exec {'allow-clean-url-5':
-    command => 'sed -i "/RewriteCond %{REQUEST_FILENAME} \!-d/a \   RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]" /etc/httpd/conf/httpd.conf',
+    command => 'sed -i "/RewriteCond %{REQUEST_FILENAME} \!-d/a \   RewriteCond %{REQUEST_URI} \!=favicon.ico" /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
+    notify => Exec['allow-clean-url-6'],
+}
+
+## allow drupal clean urls (part 6)
+exec {'allow-clean-url-5':
+    command => 'sed -i "/RewriteCond %{REQUEST_URI} \!=favicon.ico/a \   RewriteRule ^ index.php [L]" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['restart-services'],
 }
