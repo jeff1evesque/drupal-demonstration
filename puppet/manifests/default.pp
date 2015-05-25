@@ -126,14 +126,14 @@ exec {'allow-clean-url-1':
 
 ## allow drupal clean urls (part 2)
 exec {'allow-clean-url-2':
-    command => 'sed -i "/RewriteEngine on/a \   RewriteBase ///" /etc/httpd/conf/httpd.conf',
+    command => 'sed -i "/RewriteEngine on/a \   RewriteBase /" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['allow-clean-url-3'],
 }
 
 ## allow drupal clean urls (part 3)
 exec {'allow-clean-url-3':
-    command => 'sed -i "/RewriteBase ///a \   RewriteCond %{REQUEST_FILENAME} !-f" /etc/httpd/conf/httpd.conf',
+    command => 'sed -i "/RewriteBase //a \   RewriteCond %{REQUEST_FILENAME} !-f" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['allow-clean-url-4'],
 }
