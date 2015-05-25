@@ -114,6 +114,41 @@ exec {'install-drush':
 exec {'install-drush-dependency':
     command => "pear install ${drush_console_table}",
     refreshonly => true,
+    notify => Exec['allow-clean-url-1'],
+}
+
+## allow drupal clean urls (part 1)
+exec {'allow-clean-url-1':
+    command => 'sed -i "/<Directory \"\/var\/www\/html\">/a \   RewriteEngine on" /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
+    notify => Exec['allow-clean-url-2'],
+}
+
+## allow drupal clean urls (part 2)
+exec {'allow-clean-url-2':
+    command => 'sed -i "/RewriteEngine on/a \   RewriteBase ///" /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
+    notify => Exec['allow-clean-url-3'],
+}
+
+## allow drupal clean urls (part 3)
+exec {'allow-clean-url-3':
+    command => 'sed -i "/RewriteBase ///a \   RewriteCond %{REQUEST_FILENAME} !-f" /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
+    notify => Exec['allow-clean-url-4'],
+}
+
+## allow drupal clean urls (part 4)
+exec {'allow-clean-url-4':
+    command => 'sed -i "/RewriteCond %{REQUEST_FILENAME} !-f/a \   RewriteCond %{REQUEST_FILENAME} !-d" /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
+    notify => Exec['allow-clean-url-5'],
+}
+
+## allow drupal clean urls (part 5)
+exec {'allow-clean-url-5':
+    command => 'sed -i "/RewriteCond %{REQUEST_FILENAME} !-d/a \   RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]" /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
     notify => Exec['restart-services'],
 }
 
