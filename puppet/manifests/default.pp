@@ -84,7 +84,7 @@ exec {'phpmyadmin-access-part-2':
 
 ## create symlink: create symlink between mounted '/vagrant' directory to webserver
 exec {'symlink-website':
-    command => 'ln -s /vagrant/* /var/www/html',
+    command => 'ln -s /vagrant /var/www/html',
     refreshonly => true,
     notify => Exec['adjust-iptables'],
 }
