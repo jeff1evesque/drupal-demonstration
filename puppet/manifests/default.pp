@@ -79,12 +79,12 @@ exec {'phpmyadmin-access-part-1':
 exec {'phpmyadmin-access-part-2':
     command => 'sed -i "13i\Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
-    notify => Exec['symlink-website'],
+    notify => Exec['change-docroot'],
 }
 
-## create symlink: create symlink between mounted '/vagrant' directory to webserver
-exec {'symlink-website':
-    command => 'ln -s /vagrant/* /var/www/html',
+## change docroot: point docroot to mounted '/vagrant' directory
+exec {'change-docroot':
+    command => 'sed -i "s/\/var\/www\/html/\/vagrant/g" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['adjust-iptables'],
 }
