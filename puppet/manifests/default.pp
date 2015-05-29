@@ -119,14 +119,14 @@ exec {'install-drush-dependency':
 
 ## allow htaccess (part 1)
 exec {'allow-htaccess-1':
-    command => 'awk "/^(<Directory \/>|<\/Directory>)/{f=f?0:1}f&&\/AllowOverride None\/{$0=/"AllowOverride All/"}1',
+    command => 'awk "/^(<Directory \//>|<\//Directory>)/{f=f?0:1}f&&/AllowOverride None/{\$0=\"AllowOverride All\"}1 /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['allow-htaccess-2'],
 }
 
 ## allow htaccess (part 2)
 exec {'allow-htaccess-2':
-    command => 'awk "/^(<Directory /"vagrant/">|<\/Directory>)\/{f=f?0:1}f&&\/AllowOverride None\/{$0=/"AllowOverride All/"}1',
+    command => 'awk "/^(<Directory \"vagrant\">|<\//Directory>)/{f=f?0:1}f&&/AllowOverride None/{\$0=\"AllowOverride All\"}1 /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['restart-services'],
 }
