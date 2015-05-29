@@ -125,7 +125,7 @@ exec {'allow-htaccess-1':
 }
 
 ## allow htaccess (part 2)
-exec {'allow-htaccess-1':
+exec {'allow-htaccess-2':
     command => 'awk "/ ^(<Directory /"vagrant/"/>|</Directory>)/{f=f?0:1}f&&/AllowOverride None/{$0=/"AllowOverride All/"}1',
     refreshonly => true,
     notify => Exec['restart-services'],
