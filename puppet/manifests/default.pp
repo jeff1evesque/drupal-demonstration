@@ -119,28 +119,28 @@ exec {'install-drush-dependency':
 
 ## allow htaccess (part 1)
 exec {'allow-htaccess-1':
-    command => 'echo "$(/etc/httpd/conf/httpd.conf)" | awk "/^(<Directory \/>|<\/Directory>)/{f=f?0:1}f&&/AllowOverride None/{$0=\"    AllowOverride All\"}1" /etc/httpd/conf/httpd.conf > /home/vagrant/tmp.conf',
+    command => 'awk "/^(<Directory \/>|<\/Directory>)/{f=f?0:1}f&&/AllowOverride None/{$0=\"    AllowOverride All\"}1" /etc/httpd/conf/httpd.conf > ~/tmp.conf',
     refreshonly => true,
     notify => Exec['adjust-httpd-conf-1'],
 }
 
 ## move htaccess access (part 1)
 exec {'adjust-httpd-conf-1':
-    command => 'cp /home/vagrant/tmp.conf /etc/httpd/conf/httpd.conf',
+    command => 'cp ~/tmp.conf /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['allow-htaccess-2'],
 }
 
 ## allow htaccess (part 2)
 exec {'allow-htaccess-2':
-    command => 'echo "$(/etc/httpd/conf/httpd.conf)" | awk "/^(<Directory \"\/vagrant\">|<\/Directory>)/{f=f?0:1}f&&/AllowOverride None/{$0=\"    AllowOverride All\"}1" /etc/httpd/conf/httpd.conf > /home/vagrant/tmp.conf',
+    command => 'awk "/^(<Directory \"\/vagrant\">|<\/Directory>)/{f=f?0:1}f&&/AllowOverride None/{$0=\"    AllowOverride All\"}1" /etc/httpd/conf/httpd.conf > ~/tmp.conf',
     refreshonly => true,
     notify => Exec['adjust-httpd-conf-2'],
 }
 
 ## move htaccess access (part 2)
 exec {'adjust-httpd-conf-2':
-    command => 'cp /home/vagrant/tmp.conf /etc/httpd/conf/httpd.conf',
+    command => 'cp ~/tmp.conf /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['restart-services'],
 }
