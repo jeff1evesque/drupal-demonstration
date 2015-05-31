@@ -133,7 +133,7 @@ exec {'adjust-httpd-conf-1':
 
 ## allow htaccess (part 2): implement double backslash '\\' for literal escape
 exec {'allow-htaccess-2':
-    command => 'awk "/^(<Directory \"\\/vagrant\\/">|<\\/Directory>)/{f=f?0:1}f&&/AllowOverride None/{\$0=\"    AllowOverride All\"}1" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    command => 'awk "/^(<Directory \"\\/vagrant/">|<\\/Directory>)/{f=f?0:1}f&&/AllowOverride None/{\$0=\"    AllowOverride All\"}1" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
     notify => Exec['adjust-httpd-conf-2'],
 }
