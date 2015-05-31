@@ -124,7 +124,10 @@ exec {'allow-htaccess-1':
     notify => Exec['adjust-httpd-conf-1'],
 }
 
-## move htaccess access (part 1)
+## move htaccess access (part 1): an attempt to write the results directly to 'httpd.conf' in the above
+#                                 'allow htaccess (part 1)' step, results in an empty 'httpd.conf' file.
+#                                 Therefore, the temporary 'httpd.conf.tmp', and this corresponding 'mv'
+#                                 step is required.
 exec {'adjust-httpd-conf-1':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
@@ -138,7 +141,10 @@ exec {'allow-htaccess-2':
     notify => Exec['adjust-httpd-conf-2'],
 }
 
-## move htaccess access (part 2)
+## move htaccess access (part 2): an attempt to write the results directly to 'httpd.conf' in the above
+#                                 'allow htaccess (part 2)' step, results in an empty 'httpd.conf' file.
+#                                 Therefore, the temporary 'httpd.conf.tmp', and this corresponding 'mv'
+#                                 step is required.
 exec {'adjust-httpd-conf-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
