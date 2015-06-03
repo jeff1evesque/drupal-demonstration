@@ -118,7 +118,7 @@ exec {'install-drush-dependency':
 }
 
 ## allow htaccess (part 1): replace 'AllowOverride None', with 'AllowOverride All' between the starting
-#                           delimiter '<Directory />, and ending delimiter '</Directory>'.
+#                           delimiter '<Directory />', and ending delimiter '</Directory>'.
 exec {'allow-htaccess-1':
     command => 'awk "/<Directory \/>/,/<\/Directory>/ { if (/AllowOverride None/) \$0 = \"    AllowOverride All\" }1"  /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
@@ -136,7 +136,7 @@ exec {'adjust-httpd-conf-1':
 }
 
 ## allow htaccess (part 2): replace 'AllowOverride None', with 'AllowOverride All' between the starting
-#                           delimiter '<Directory "/vagrant">, and ending delimiter '</Directory>'.
+#                           delimiter '<Directory "/vagrant">', and ending delimiter '</Directory>'.
 exec {'allow-htaccess-2':
     command => 'awk "/<Directory \"\/vagrant\">/,/<\/Directory>/ { if (/AllowOverride None/) \$0 = \"    AllowOverride All\" }1"  /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
