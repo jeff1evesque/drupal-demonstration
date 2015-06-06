@@ -156,9 +156,9 @@ exec {'adjust-httpd-conf-2':
 
 ## define system timezone
 exec {'set-time-zone':
-    command => "cp /usr/share/zoneinfo/${time_zone} /etc/localtime",
+    command => "ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
-    notify => Exec[restart-services],
+    notify => Exec['restart-services'],
 }
 
 ## restart services to allow PHP extensions to load properly (dom, gd)
