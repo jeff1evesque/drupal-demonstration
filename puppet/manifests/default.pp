@@ -2,7 +2,7 @@
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
 $packages_guest_additions = ['gcc', 'kernel-devel-2.6.32-504.16.2.el6.x86_64']
 $drush_console_table = 'Console_Table-1.1.5'
-$timezone = 'America/New_York'
+$time_zone = 'America/New_York'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin', '/usr/bin/', '/bin/']}
@@ -156,7 +156,7 @@ exec {'adjust-httpd-conf-2':
 
 ## define system timezone
 exec {'set-time-zone':
-    command => "cp /usr/share/zoneinfo/${timezone} /etc/localtime",
+    command => "cp /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
     notify => Exec[restart-services],
 }
