@@ -156,7 +156,7 @@ exec {'adjust-httpd-conf-2':
 
 ## define system timezone
 exec {'set-time-zone':
-    command => "rm /etc/localtime && ln -s /etc/localtime /usr/share/zoneinfo/${time_zone}",
+    command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
     notify => Exec['restart-services'],
 }
