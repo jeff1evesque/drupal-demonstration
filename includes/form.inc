@@ -938,7 +938,7 @@ function drupal_process_form($form_id, &$form, &$form_state) {
         // after the batch is processed.
       }
 
-      // Set a flag to indicate the the form has been processed and executed.
+      // Set a flag to indicate that the form has been processed and executed.
       $form_state['executed'] = TRUE;
 
       // Redirect the form based on values in $form_state.
@@ -2451,6 +2451,17 @@ function form_type_password_confirm_value($element, $input = FALSE) {
     $element += array('#default_value' => array());
     return $element['#default_value'] + array('pass1' => '', 'pass2' => '');
   }
+  $value = array('pass1' => '', 'pass2' => '');
+  // Throw out all invalid array keys; we only allow pass1 and pass2.
+  foreach ($value as $allowed_key => $default) {
+    // These should be strings, but allow other scalars since they might be
+    // valid input in programmatic form submissions. Any nested array values
+    // are ignored.
+    if (isset($input[$allowed_key]) && is_scalar($input[$allowed_key])) {
+      $value[$allowed_key] = (string) $input[$allowed_key];
+    }
+  }
+  return $value;
 }
 
 /**
@@ -2495,6 +2506,27 @@ function form_type_select_value($element, $input = FALSE) {
 }
 
 /**
+ * Determines the value for a textarea form element.
+ *
+ * @param array $element
+ *   The form element whose value is being populated.
+ * @param mixed $input
+ *   The incoming input to populate the form element. If this is FALSE,
+ *   the element's default value should be returned.
+ *
+ * @return string
+ *   The data that will appear in the $element_state['values'] collection
+ *   for this element. Return nothing to use the default.
+ */
+function form_type_textarea_value($element, $input = FALSE) {
+  if ($input !== FALSE) {
+    // This should be a string, but allow other scalars since they might be
+    // valid input in programmatic form submissions.
+    return is_scalar($input) ? (string) $input : '';
+  }
+}
+
+/**
  * Determines the value for a textfield form element.
  *
  * @param $element
@@ -2509,9 +2541,12 @@ function form_type_select_value($element, $input = FALSE) {
  */
 function form_type_textfield_value($element, $input = FALSE) {
   if ($input !== FALSE && $input !== NULL) {
-    // Equate $input to the form value to ensure it's marked for
-    // validation.
-    return str_replace(array("\r", "\n"), '', $input);
+    // This should be a string, but allow other scalars since they might be
+    // valid input in programmatic form submissions.
+    if (!is_scalar($input)) {
+      $input = '';
+    }
+    return str_replace(array("\r", "\n"), '', (string) $input);
   }
 }
 
@@ -2627,8 +2662,8 @@ function _form_options_flatten($array) {
  *   - #required: (optional) Whether the user needs to select an option (TRUE)
  *     or not (FALSE). Defaults to FALSE.
  *   - #empty_option: (optional) The label to show for the first default option.
- *     By default, the label is automatically set to "- Please select -" for a
- *     required field and "- None -" for an optional field.
+ *     By default, the label is automatically set to "- Select -" for a required
+ *     field and "- None -" for an optional field.
  *   - #empty_value: (optional) The value for the first default option, which is
  *     used to determine whether the user submitted a value or not.
  *     - If #required is TRUE, this defaults to '' (an empty string).
@@ -2699,17 +2734,43 @@ function theme_select($variables) {
 }
 
 /**
- * Converts a select form element's options array into HTML.
+ * Converts an array of options into HTML, for use in select list form elements.
  *
- * @param $element
- *   An associative array containing the properties of the element.
- * @param $choices
- *   Mixed: Either an associative array of items to list as choices, or an
- *   object with an 'option' member that is an associative array. This
- *   parameter is only used internally and should not be passed.
+ * This function calls itself recursively to obtain the values for each optgroup
+ * within the list of options and when the function encounters an object with
+ * an 'options' property inside $element['#options'].
  *
- * @return
- *   An HTML string of options for the select form element.
+ * @param array $element
+ *   An associative array containing the following key-value pairs:
+ *   - #multiple: Optional Boolean indicating if the user may select more than
+ *     one item.
+ *   - #options: An associative array of options to render as HTML. Each array
+ *     value can be a string, an array, or an object with an 'option' property:
+ *     - A string or integer key whose value is a translated string is
+ *       interpreted as a single HTML option element. Do not use placeholders
+ *       that sanitize data: doing so will lead to double-escaping. Note that
+ *       the key will be visible in the HTML and could be modified by malicious
+ *       users, so don't put sensitive information in it.
+ *     - A translated string key whose value is an array indicates a group of
+ *       options. The translated string is used as the label attribute for the
+ *       optgroup. Do not use placeholders to sanitize data: doing so will lead
+ *       to double-escaping. The array should contain the options you wish to
+ *       group and should follow the syntax of $element['#options'].
+ *     - If the function encounters a string or integer key whose value is an
+ *       object with an 'option' property, the key is ignored, the contents of
+ *       the option property are interpreted as $element['#options'], and the
+ *       resulting HTML is added to the output.
+ *   - #value: Optional integer, string, or array representing which option(s)
+ *     to pre-select when the list is first displayed. The integer or string
+ *     must match the key of an option in the '#options' list. If '#multiple' is
+ *     TRUE, this can be an array of integers or strings.
+ * @param array|null $choices
+ *   (optional) Either an associative array of options in the same format as
+ *   $element['#options'] above, or NULL. This parameter is only used internally
+ *   and is not intended to be passed in to the initial function call.
+ *
+ * @return string
+ *   An HTML string of options and optgroups for use in a select form element.
  */
 function form_select_options($element, $choices = NULL) {
   if (!isset($choices)) {
@@ -3285,6 +3346,8 @@ function form_process_container($element, &$form_state) {
  */
 function theme_container($variables) {
   $element = $variables['element'];
+  // Ensure #attributes is set.
+  $element += array('#attributes' => array());
 
   // Special handling for form elements.
   if (isset($element['#array_parents'])) {
