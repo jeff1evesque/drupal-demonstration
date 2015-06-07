@@ -5,7 +5,7 @@ $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
 
 ## define $PATH for all execs
-Exec {path => ['/sbin', '/usr/bin/', '/bin/']}
+Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
 
 ## packages: install general packages
 package {$packages_general:
@@ -61,6 +61,27 @@ exec {'install-phpmyadmin':
 ## install guest additions (for centos) using installed EPEL repository
 exec {'install-guest-additions':
     command => '/etc/init.d/vboxadd setup',
+    refreshonly => true,
+    notify => Exec['define-errordocument-403'],
+}
+
+## define errordocument for 403 'bad request'
+exec {'define-errordocument-403':
+    command => 'sed "/\ErrorDocument 402/a ErrorDocument 400 \/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    refreshonly => true,
+    notify => Exec['remove-comment-errordocument'],
+}
+
+## remove unnecessary comments
+exec {'remove-comment-errordocument':
+    command => 'sed "/#Some examples:/d" /vagrant/httpd.conf.tmp > /vagrant/httpd.conf.tmp && sed -e "/ErrorDocument 400 \/error.php/,+1d" /vagrant/httpd.conf.tmp > /vagrant/httpd.conf.tmp',
+    refreshonly => true,
+    notify => Exec['mv-httpd-conf'],
+}
+
+## finalize changes to 'httpd.conf'
+exec {'mv-httpd-conf':
+    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-part-1'],
 }
@@ -123,14 +144,14 @@ exec {'install-drush-dependency':
 exec {'allow-htaccess-1':
     command => 'awk "/<Directory \/>/,/<\/Directory>/ { if (/AllowOverride None/) \$0 = \"    AllowOverride All\" }1"  /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
-    notify => Exec['adjust-httpd-conf-1'],
+    notify => Exec['mv-httpd-conf-htaccess-1'],
 }
 
 ## move htaccess access (part 1): an attempt to write the results directly to 'httpd.conf' in the above
 #                                 'allow htaccess (part 1)' step, results in an empty 'httpd.conf' file.
 #                                 Therefore, the temporary 'httpd.conf.tmp', and this corresponding 'mv'
 #                                 step is required.
-exec {'adjust-httpd-conf-1':
+exec {'mv-httpd-conf-htaccess-1':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['allow-htaccess-2'],
@@ -141,14 +162,14 @@ exec {'adjust-httpd-conf-1':
 exec {'allow-htaccess-2':
     command => 'awk "/<Directory \"\/vagrant\">/,/<\/Directory>/ { if (/AllowOverride None/) \$0 = \"    AllowOverride All\" }1"  /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
-    notify => Exec['adjust-httpd-conf-2'],
+    notify => Exec['mv-httpd-conf-htaccess-2'],
 }
 
 ## move htaccess access (part 2): an attempt to write the results directly to 'httpd.conf' in the above
 #                                 'allow htaccess (part 2)' step, results in an empty 'httpd.conf' file.
 #                                 Therefore, the temporary 'httpd.conf.tmp', and this corresponding 'mv'
 #                                 step is required.
-exec {'adjust-httpd-conf-2':
+exec {'mv-httpd-conf-htaccess-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['set-time-zone'],
