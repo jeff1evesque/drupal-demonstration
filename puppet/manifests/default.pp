@@ -67,7 +67,7 @@ exec {'install-guest-additions':
 
 ## define errordocument for 403 'bad request'
 exec {'define-errordocument-403':
-    command => 'set "/ErrorDocument 402.*/ErrorDocument 403 \/error.php" /etc/httpd/conf/httpd.conf',
+    command => 'sed "/ErrorDocument 402.*/ErrorDocument 403 \/error.php" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-part-1'],
 }
