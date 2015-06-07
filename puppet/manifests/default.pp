@@ -5,7 +5,7 @@ $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
 
 ## define $PATH for all execs
-Exec {path => ['/sbin', '/usr/bin/', '/bin/']}
+Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
 
 ## packages: install general packages
 package {$packages_general:
@@ -61,6 +61,13 @@ exec {'install-phpmyadmin':
 ## install guest additions (for centos) using installed EPEL repository
 exec {'install-guest-additions':
     command => '/etc/init.d/vboxadd setup',
+    refreshonly => true,
+    notify => Exec['define-errordocument-403'],
+}
+
+## define errordocument for 403 'bad request'
+exec {'define-errordocument-403':
+    command => 'set "/ErrorDocument 402.*/ErrorDocument 403 \/error.php" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-part-1'],
 }
