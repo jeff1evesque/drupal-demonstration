@@ -141,3 +141,32 @@ DirectoryIndex index.php index.html index.htm
     </FilesMatch>
   </IfModule>
 </IfModule>
+
+## Limitation of apache (2.2, 2.4) means definition must be in 'httpd.conf'
+## ErrorDocument 400 /error.php
+
+## Drupal handles all "Page Not Found" errors.
+## ErrorDocument 404 /error.php
+
+# Custom Error Responses
+ErrorDocument 401 /error.php
+ErrorDocument 402 /error.php
+ErrorDocument 403 /error.php
+ErrorDocument 405 /error.php
+ErrorDocument 406 /error.php
+ErrorDocument 407 /error.php
+ErrorDocument 408 /error.php
+ErrorDocument 409 /error.php
+ErrorDocument 411 /error.php
+ErrorDocument 412 /error.php
+ErrorDocument 413 /error.php
+ErrorDocument 414 /error.php
+ErrorDocument 415 /error.php
+ErrorDocument 416 /error.php
+ErrorDocument 417 /error.php
+ErrorDocument 500 /error.php
+ErrorDocument 501 /error.php
+ErrorDocument 502 /error.php
+ErrorDocument 503 /error.php
+ErrorDocument 504 /error.php
+ErrorDocument 505 /error.php
