@@ -91,29 +91,29 @@ exec {'mv-httpd-conf-comment-1':
 
 ## remove comment (part 2): remove line after 'ErrorDocument 400 /error.php'.
 exec {'remove-comment-errordocument-2':
-    command => 'sed -e "/ErrorDocument 400 \/error.php/,+1d" /vagrant/httpd.conf.tmp > /vagrant/httpd.conf.tmp',
+    command => 'sed -e "/ErrorDocument 400 \/error.php/,+1d" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
     notify => Exec['mv-httpd-conf-comment-2'],
 }
 exec {'mv-httpd-conf-comment-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
-    notify => Exec['phpmyadmin-access-part-1'],
+    notify => Exec['phpmyadmin-access-1'],
 }
 
 ## allow phpmyadmin access from guest VM to host (part 1)
 #
 #  Note: this segment appends directly below <Directory /usr/share/phpMyAdmin/>
-exec {'phpmyadmin-access-part-1':
+exec {'phpmyadmin-access-1':
     command => 'sed -i "12i\Order allow,deny" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
-    notify => Exec['phpmyadmin-access-part-2'],
+    notify => Exec['phpmyadmin-access-2'],
 }
 
 ## allow phpmyadmin access from guest VM to host (part 2)
 #
 #  Note: this segment appends directly below (part 1)
-exec {'phpmyadmin-access-part-2':
+exec {'phpmyadmin-access-2':
     command => 'sed -i "13i\Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['change-docroot'],
