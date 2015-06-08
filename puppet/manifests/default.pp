@@ -62,25 +62,40 @@ exec {'install-phpmyadmin':
 exec {'install-guest-additions':
     command => '/etc/init.d/vboxadd setup',
     refreshonly => true,
-    notify => Exec['define-errordocument-403'],
+    notify => Exec['define-http-400'],
 }
 
-## define errordocument for 403 'bad request'
-exec {'define-errordocument-403':
+## define errordocument for 400 'bad request'
+exec {'define-http-400':
     command => 'sed "/\ErrorDocument 402/a ErrorDocument 400 \/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
-    notify => Exec['remove-comment-errordocument'],
+    notify => Exec['mv-httpd-conf-400'],
 }
-
-## remove unnecessary comments
-exec {'remove-comment-errordocument':
-    command => 'sed "/#Some examples:/d" /vagrant/httpd.conf.tmp > /vagrant/httpd.conf.tmp && sed -e "/ErrorDocument 400 \/error.php/,+1d" /vagrant/httpd.conf.tmp > /vagrant/httpd.conf.tmp',
+exec {'mv-httpd-conf-400':
+    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
-    notify => Exec['mv-httpd-conf'],
+    notify => Exec['remove-comment-errordocument-1'],
 }
 
-## finalize changes to 'httpd.conf'
-exec {'mv-httpd-conf':
+## remove comment (part 1): remove '# Some examples:' line.
+exec {'remove-comment-errordocument-1':
+    command => 'sed "/\# Some examples:/d" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    refreshonly => true,
+    notify => Exec['mv-httpd-conf-comment-1'],
+}
+exec {'mv-httpd-conf-comment-1':
+    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
+    notify => Exec['remove-comment-errordocument-2'],
+}
+
+## remove comment (part 2): remove line after 'ErrorDocument 400 /error.php'.
+exec {'remove-comment-errordocument-2':
+    command => 'sed -e "/ErrorDocument 400 \/error.php/,+1d" /vagrant/httpd.conf.tmp > /vagrant/httpd.conf.tmp',
+    refreshonly => true,
+    notify => Exec['mv-httpd-conf-comment-2'],
+}
+exec {'mv-httpd-conf-comment-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-part-1'],
