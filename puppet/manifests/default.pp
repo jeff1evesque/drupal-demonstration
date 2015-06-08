@@ -91,7 +91,7 @@ exec {'mv-httpd-conf-400':
 
 ## remove comment (part 2): remove line after 'ErrorDocument 400 /error.php'.
 exec {'remove-comment-errordocument-2':
-    command => 'sed -e "/ErrorDocument 400 \/error.php/{n}" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    command => 'sed -e "/ErrorDocument 400 \/error.php/\{n\}" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
     notify => Exec['mv-httpd-conf-comment-2'],
 }
