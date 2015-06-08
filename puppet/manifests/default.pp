@@ -62,18 +62,6 @@ exec {'install-phpmyadmin':
 exec {'install-guest-additions':
     command => '/etc/init.d/vboxadd setup',
     refreshonly => true,
-    notify => Exec['define-http-400'],
-}
-
-## define errordocument for 400 'bad request'
-exec {'define-http-400':
-    command => 'sed "/\\#ErrorDocument 402/a ErrorDocument 400 \/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-400'],
-}
-exec {'mv-httpd-conf-400':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
     notify => Exec['remove-comment-errordocument-1'],
 }
 
@@ -96,6 +84,18 @@ exec {'remove-comment-errordocument-2':
     notify => Exec['mv-httpd-conf-comment-2'],
 }
 exec {'mv-httpd-conf-comment-2':
+    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
+    notify => Exec['define-httpd-400'],
+}
+
+## define errordocument for 400 'bad request'
+exec {'define-http-400':
+    command => 'sed "/\\#ErrorDocument 402/a ErrorDocument 400 \/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    refreshonly => true,
+    notify => Exec['mv-httpd-conf-400'],
+}
+exec {'mv-httpd-conf-400':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-1'],
