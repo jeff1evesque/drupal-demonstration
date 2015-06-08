@@ -86,7 +86,7 @@ exec {'remove-comment-errordocument-2':
 exec {'mv-httpd-conf-comment-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
-    notify => Exec['define-httpd-400'],
+    notify => Exec['define-http-400'],
 }
 
 ## define errordocument for 400 'bad request'
