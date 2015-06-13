@@ -18,5 +18,12 @@ file {'/etc/httpd/ssl/':
 exec {'record-each-certificate':
     command => "echo '100001' >serial && touch certindex.txt",
     refreshonly => true,
+    notify =>
     cwd => '/etc/httpd/ssl',
+}
+
+## copy openssl config file
+exec {'copy-openssl-config':
+    config => 'cp /etc/pki/tls/openssl.cnf /etc/httpd/ssl/',
+    refreshonly => true
 }
