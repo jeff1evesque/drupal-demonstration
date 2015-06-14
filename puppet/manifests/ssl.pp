@@ -52,7 +52,7 @@ exec {'assign-ssl-certificate':
 
 ## assign key in 'ssl.conf'
 exec {'assign-ssl-key':
-    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/conf.d\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
+    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['restart-httpd'],
 }
