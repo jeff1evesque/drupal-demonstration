@@ -1,3 +1,11 @@
+## variables
+$ssl_country  = 'US'
+$ssl_state    = 'VA'
+$ssl_city     = 'my_city'
+$ssl_org_name = 'my_organizational_name'
+$ssl_org_unit = 'my_organizational_unit'
+$ssl_cname    = 'my_company_name'
+
 ## define $PATH for all execs
 Exec{path => ['/bin/']}
 
@@ -10,20 +18,47 @@ package {'mod_ssl':
 ## create a 'ssl' directory
 file {'/etc/httpd/ssl/':
     ensure => "directory",
-    before => Exec['record-each-certificate'],
-    notify => Exec['record-each-certificate'],
+    before => Exec['create-ssl'],
+    notify => Exec['create-ssl'],
 }
 
-## create database to keep track of each signed certificate
-exec {'record-each-certificate':
-    command => "echo '100001' >serial && touch certindex.txt",
+## create ssl key, and certificate
+exec {'create-ssl':
+    command => 'openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj "/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}"',
     refreshonly => true,
-    notify =>
-    cwd => '/etc/httpd/ssl',
+    notify => Exec['adjust-iptables'],
 }
 
-## copy openssl config file
-exec {'copy-openssl-config':
-    config => 'cp /etc/pki/tls/openssl.cnf /etc/httpd/ssl/',
-    refreshonly => true
+## adjust iptables, which allows guest port 80 to be accessible on the host machine
+exec {'adjust-iptables':
+    command => 'sed "/\-A INPUT -m state --state NEW -m tcp -p tcp --dport 80/a -A INPUT -m state --state NEW -m tcp -p tcp --dport 443 -j ACCEPT" /etc/sysconfig/iptables',
+    refreshonly => true,
+    notify => Exec['restart-iptables'],
+}
+
+## restart iptables
+exec {'restart-iptables':
+    command => 'service iptables restart',
+    refreshonly => true,
+    notify => Exec['assign-ssl-certificate'],
+}
+
+## assign certificate in 'ssl.conf'
+exec {'assign-ssl-certificate':
+    command => 'sed "/\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.crt" /etc/httpd/conf.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
+    refreshonly => true,
+    notify => Exec['assign-ssl-key'],
+}
+
+## assign key in 'ssl.conf'
+exec {'assign-ssl-key':
+    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/cont.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
+    refreshonly => true,
+    notify => Exec['restart-httpd'],
+}
+
+## restart apache server
+exec {'restart-httpd':
+    command => 'service httpd restart',
+    refreshonly => true,
 }
