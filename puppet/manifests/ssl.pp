@@ -43,9 +43,9 @@ exec {'restart-iptables':
     notify => Exec['assign-ssl-certificate'],
 }
 
-## assign certificate in 'ssl.conf'
+## assign certificate in 'ssl.conf' (replace line)
 exec {'assign-ssl-certificate':
-    command => 'sed "/\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.crt" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
+    command => 'sed -i "/\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.crt" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
     refreshonly => true,
     notify => Exec['mv-ssl-cnf-1'],
 }
@@ -61,9 +61,9 @@ exec {'mv-ssl-cnf-1':
     notify => Exec['assign-ssl-key'],
 }
 
-## assign key in 'ssl.conf'
+## assign key in 'ssl.conf' (replace line)
 exec {'assign-ssl-key':
-    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
+    command => 'sed -i "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
     refreshonly => true,
     notify => Exec['mv-ssl-cnf-2'],
 }
