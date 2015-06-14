@@ -51,7 +51,7 @@ exec {'assign-ssl-certificate':
 }
 
 exec {'assign-ssl-key':
-    command => 'sed -i "s/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key/g" /etc/httpd/conf.d/ssl.conf',
+    command => 'sed -i "s/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/SSLCertificateKeyFile \/etc\/httpd\/ssl\/httpd.key/g" /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['restart-httpd'],
 }
