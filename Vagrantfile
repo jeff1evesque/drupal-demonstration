@@ -17,11 +17,16 @@ Vagrant.configure(2) do |config|
   # Define fully qualified domain name
   config.vm.hostname = "drupal-demonstration.com"
 
-  # Custom Manifest: execute puppet logic in 'default.pp'. Specifically, this
-  #                  file will install, and setup various configurations.
+  # Custom Manifest: general configuration
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "default.pp"
+  end
+
+  # Custom Manifest: ssl configuration
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file  = "ssl.pp"
   end
 
   # Disable automatic box update checking. If you disable this, then
