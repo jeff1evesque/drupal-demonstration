@@ -7,7 +7,7 @@ $ssl_org_unit = 'my_organizational_unit'
 $ssl_cname    = 'my_company_name'
 
 ## define $PATH for all execs
-Exec{path => ['/bin/']}
+Exec{path => ['/bin/', '/usr/bin/']}
 
 ## install 'mod_ssl'
 package {'mod_ssl':
