@@ -38,7 +38,7 @@ exec {'adjust-iptables':
 
 ## restart iptables
 exec {'restart-iptables':
-    command => 'service iptables restart && service httpd start',
+    command => 'service iptables restart',
     refreshonly => true,
     notify => Exec['assign-ssl-certificate'],
 }
