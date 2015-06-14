@@ -45,14 +45,35 @@ exec {'restart-iptables':
 
 ## assign certificate in 'ssl.conf'
 exec {'assign-ssl-certificate':
-    command => 'sed "/\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.crt" /etc/httpd/conf.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
+    command => 'sed "/\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.crt" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
+    refreshonly => true,
+    notify => Exec['mv-ssl-cnf-1'],
+}
+
+## move ssl.conf (part 1): an attempt to write the results directly to 'ssl.conf'
+#                          in the above 'assign certificate ..' step, results in
+#                          an empty 'ssl.conf' file. Therefore, the temporary
+#                          'ssl.conf.tmp', and this corresponding 'mv' step is
+#                          required.
+exec {'mv-ssl-cnf-1':
+    command => 'mv /vagrant/ssl.conf.tmp /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['assign-ssl-key'],
 }
 
 ## assign key in 'ssl.conf'
 exec {'assign-ssl-key':
-    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
+    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
+    refreshonly => true,
+    notify => Exec['restart-httpd'],
+}
+
+## move ssl.conf (part 2): an attempt to write the results directly to 'ssl.conf'
+#                          in the above 'assign key ..' step, results in an empty
+#                          'ssl.conf' file. Therefore, the temporary 'ssl.conf.tmp',
+#                          and this corresponding 'mv' step is required.
+exec {'mv-ssl-cnf-1':
+    command => 'mv /vagrant/ssl.conf.tmp /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['restart-httpd'],
 }
