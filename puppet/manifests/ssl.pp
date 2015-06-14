@@ -1,13 +1,13 @@
 ## variables
 $ssl_country  = 'US'
 $ssl_state    = 'VA'
-$ssl_city     = 'my_city'
-$ssl_org_name = 'my_organizational_name'
-$ssl_org_unit = 'my_organizational_unit'
-$ssl_cname    = 'my_company_name'
+$ssl_city     = 'city'
+$ssl_org_name = 'organizational name'
+$ssl_org_unit = 'organizational unit'
+$ssl_cname    = 'localhost.dev'
 
 ## define $PATH for all execs
-Exec{path => ['/bin/', '/usr/bin/']}
+Exec{path => ['/bin/', '/usr/bin/', '/sbin/']}
 
 ## install 'mod_ssl'
 package {'mod_ssl':
