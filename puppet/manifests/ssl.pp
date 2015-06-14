@@ -24,7 +24,7 @@ file {'/etc/httpd/ssl/':
 
 ## create ssl key, and certificate
 exec {'create-ssl':
-    command => 'openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj "/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}"',
+    command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
     refreshonly => true,
     notify => Exec['adjust-iptables'],
 }
@@ -52,7 +52,7 @@ exec {'assign-ssl-certificate':
 
 ## assign key in 'ssl.conf'
 exec {'assign-ssl-key':
-    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/cont.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
+    command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/conf.d\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['restart-httpd'],
 }
