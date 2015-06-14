@@ -4,7 +4,7 @@ $ssl_state    = 'VA'
 $ssl_city     = 'city'
 $ssl_org_name = 'organizational name'
 $ssl_org_unit = 'organizational unit'
-$ssl_cname    = 'localhost.dev'
+$ssl_cname    = 'localhost'
 
 ## define $PATH for all execs
 Exec{path => ['/bin/', '/usr/bin/', '/sbin/']}
