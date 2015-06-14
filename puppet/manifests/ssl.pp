@@ -29,9 +29,9 @@ exec {'create-ssl':
     notify => Exec['adjust-iptables'],
 }
 
-## adjust iptables, which allows guest port 80 to be accessible on the host machine
+## adjust iptables, which allows guest port 443 to be accessible on the host machine
 exec {'adjust-iptables':
-    command => 'sed "/\-A INPUT -m state --state NEW -m tcp -p tcp --dport 80/a -A INPUT -m state --state NEW -m tcp -p tcp --dport 443 -j ACCEPT" /etc/sysconfig/iptables',
+    command => 'sed -i "11i\-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT" /etc/sysconfig/iptables',
     refreshonly => true,
     notify => Exec['restart-iptables'],
 }
