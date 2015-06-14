@@ -38,42 +38,20 @@ exec {'adjust-iptables':
 
 ## restart iptables
 exec {'restart-iptables':
-    command => 'service iptables restart',
+    command => 'service iptables restart && service httpd start',
     refreshonly => true,
     notify => Exec['assign-ssl-certificate'],
 }
 
 ## assign certificate in 'ssl.conf' (replace line)
 exec {'assign-ssl-certificate':
-    command => 'sed -i "/\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.crt" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-ssl-cnf-1'],
-}
-
-## move ssl.conf (part 1): an attempt to write the results directly to 'ssl.conf'
-#                          in the above 'assign certificate ..' step, results in
-#                          an empty 'ssl.conf' file. Therefore, the temporary
-#                          'ssl.conf.tmp', and this corresponding 'mv' step is
-#                          required.
-exec {'mv-ssl-cnf-1':
-    command => 'mv /vagrant/ssl.conf.tmp /etc/httpd/conf.d/ssl.conf',
+    command => 'sed -i "s/\SSLCertificateFile \/etc\/pki\/tls\/certs\/localhost.crt/SSLCertificateFile \/etc\/httpd\/ssl\/httpd.crt/g" /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['assign-ssl-key'],
 }
 
-## assign key in 'ssl.conf' (replace line)
 exec {'assign-ssl-key':
-    command => 'sed -i "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-ssl-cnf-2'],
-}
-
-## move ssl.conf (part 2): an attempt to write the results directly to 'ssl.conf'
-#                          in the above 'assign key ..' step, results in an empty
-#                          'ssl.conf' file. Therefore, the temporary 'ssl.conf.tmp',
-#                          and this corresponding 'mv' step is required.
-exec {'mv-ssl-cnf-2':
-    command => 'mv /vagrant/ssl.conf.tmp /etc/httpd/conf.d/ssl.conf',
+    command => 'sed -i "s/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key/g" /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['restart-httpd'],
 }
