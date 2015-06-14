@@ -65,14 +65,14 @@ exec {'mv-ssl-cnf-1':
 exec {'assign-ssl-key':
     command => 'sed "/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/a SSLCertificateFile \/etc\/httpd\/ssl\/httpd.key" /etc/httpd/conf.d/ssl.conf > /vagrant/ssl.conf.tmp',
     refreshonly => true,
-    notify => Exec['restart-httpd'],
+    notify => Exec['mv-ssl-cnf-2'],
 }
 
 ## move ssl.conf (part 2): an attempt to write the results directly to 'ssl.conf'
 #                          in the above 'assign key ..' step, results in an empty
 #                          'ssl.conf' file. Therefore, the temporary 'ssl.conf.tmp',
 #                          and this corresponding 'mv' step is required.
-exec {'mv-ssl-cnf-1':
+exec {'mv-ssl-cnf-2':
     command => 'mv /vagrant/ssl.conf.tmp /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
     notify => Exec['restart-httpd'],
