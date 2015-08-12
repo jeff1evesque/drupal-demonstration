@@ -2,6 +2,10 @@
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
 $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
+$rpm_packages = ['http://rpms.famillecollet.com/enterprise/remi-release-6.rpm', 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm']
+$rpm_packages_size  = size($rpm_packages) - 1
+$rpm_files = ['remi-release-6*.rpm', 'epel-release-6*.rpm']
+$rpm_files_size  = size($rpm_files) - 1
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
@@ -200,7 +204,26 @@ exec {'mv-httpd-conf-htaccess-2':
 exec {'set-time-zone':
     command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
-    notify => Exec['restart-services'],
+    notify => Exec["build-rpm-package-${rpm_packages_size}"],
+}
+
+## download rpm packages
+each($rpm_packages) |$index, $package| {
+    exec {"build-rpm-package-${index}":
+        command => "wget $package",
+        before => File[remove-rpm-package-${rpm_files_size}],
+        refreshonly => true,
+        timeout => 1400,
+    }
+}
+
+## remove unnecessary rpm packages
+each($rpm_packages) |$index, $file| {
+    file {"remove-rpm-package-${index}":
+        path => "/vagrant/${file}",
+        purge => true,
+        notify => Exec['restart-services'],
+    }
 }
 
 ## restart services to allow PHP extensions to load properly (dom, gd)
