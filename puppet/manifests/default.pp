@@ -1,6 +1,5 @@
 ## variables
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
-$packages_guest_additions = ['gcc', 'kernel-devel']
 $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
 
@@ -9,13 +8,6 @@ Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
 
 ## packages: install general packages
 package {$packages_general:
-    ensure => present,
-    notify => Exec['start-services'],
-    before => Exec['start-services'],
-}
-
-# packages: install guest additions packages
-package {$packages_guest_additions:
     ensure => present,
     notify => Exec['start-services'],
     before => Exec['start-services'],
