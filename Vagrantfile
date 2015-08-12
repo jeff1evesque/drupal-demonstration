@@ -10,6 +10,23 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
+  ## Variables (ruby syntax)
+  required_plugins = %w(vagrant-vbguest)
+  plugin_installed = false
+
+  ## Install Vagrant Plugins
+  required_plugins.each do |plugin|
+    unless Vagrant.has_plugin? plugin
+      system "vagrant plugin install #{plugin}"
+      plugin_installed = true
+    end
+  end
+
+  ## Restart Vagrant: if new plugin installed
+  if plugin_installed == true
+    exec "vagrant #{ARGV.join(' ')}"
+  end
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "puppetlabs/centos-6.6-64-puppet"
