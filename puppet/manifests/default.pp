@@ -1,6 +1,6 @@
 ## variables
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
-$packages_guest_additions = ['gcc', 'kernel-devel-2.6.32-504.16.2.el6.x86_64']
+$packages_guest_additions = ['gcc', 'kernel-devel']
 $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
 
