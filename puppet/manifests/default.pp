@@ -211,9 +211,17 @@ exec {'set-time-zone':
 each($rpm_packages) |$index, $package| {
     exec {"build-rpm-package-${index}":
         command => "wget $package",
-        before => File[remove-rpm-package-${rpm_files_size}],
+        notify => File["install-rpm-package-${index}"],
         refreshonly => true,
         timeout => 1400,
+    }
+}
+
+## install rpm packages
+each($rpm_packages) |$index, $file| {
+    exec {"install-rpm-package-${index}":
+        command => "sudo rpm ${file}",
+        notify => File["remove-rpm-package-${index}"],
     }
 }
 
@@ -222,8 +230,16 @@ each($rpm_packages) |$index, $file| {
     file {"remove-rpm-package-${index}":
         path => "/vagrant/${file}",
         purge => true,
-        notify => Exec['restart-services'],
+        notify => Exec['pre-update-php'],
     }
+}
+
+## php pre-update : replace 'enabled=0', with 'enabled=1' between the starting
+#                           delimiter '[remi]', and ending delimiter '[remi-php55]'.
+exec {'pre-update-php':
+    command => 'awk "/[remi]/,/[remi-php55]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
+    refreshonly => true,
+    notify => Exec['restart-services'],
 }
 
 ## restart services to allow PHP extensions to load properly (dom, gd)
