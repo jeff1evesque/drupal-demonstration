@@ -4,7 +4,7 @@
 ## Declare puppet module repository
 forge "https://forge.puppetlabs.com"
 
-## Install Module: stdlib (apt dependency)
+## Install Module: stdlib
 mod 'stdlib',
   :git => "https://github.com/puppetlabs/puppetlabs-stdlib.git",
   :ref => "4.6.0"
