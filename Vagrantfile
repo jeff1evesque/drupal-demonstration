@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
   # https://docs.vagrantup.com.
 
   ## Variables (ruby syntax)
-  required_plugins = %w(vagrant-vbguest)
+  required_plugins = %w(vagrant-r10k vagrant-vbguest)
   plugin_installed = false
 
   ## Install Vagrant Plugins
@@ -36,9 +36,12 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = "drupal-demonstration.com"
 
   # Custom Manifest: general configuration
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "default.pp"
+    puppet.options        = ["--parser", "future"]
   end
 
   # Custom Manifest: ssl configuration
