@@ -218,7 +218,7 @@ each($rpm_packages) |$index, $package| {
 }
 
 ## install rpm packages
-each($rpm_packages) |$index, $file| {
+each($rpm_files) |$index, $file| {
     exec {"install-rpm-package-${index}":
         command => "sudo rpm ${file}",
         notify => File["remove-rpm-package-${index}"],
@@ -226,7 +226,7 @@ each($rpm_packages) |$index, $file| {
 }
 
 ## remove unnecessary rpm packages
-each($rpm_packages) |$index, $file| {
+each($rpm_files) |$index, $file| {
     file {"remove-rpm-package-${index}":
         path => "/vagrant/${file}",
         purge => true,
