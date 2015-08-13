@@ -2,8 +2,8 @@
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
 $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
-$rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
-$rpm_install_remi = 'remi-release-6*.rpm'
+$rpm_url_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
+$rpm_package_remi = 'remi-release-6*.rpm'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
@@ -200,7 +200,7 @@ exec {'set-time-zone':
 
 ## download rpm packages
 exec {"build-rpm-package-1":
-    command => "wget ${rpm_package_remi}",
+    command => "wget ${rpm_url_remi}",
     refreshonly => true,
     notify => Exec["install-rpm-package-1"],
     cwd => '/home/vagrant/',
@@ -211,7 +211,7 @@ exec {"build-rpm-package-1":
 #
 #  Note: the remi packages requires an already installed 'epel-release-6*.rpm' package.
 exec {"install-rpm-package-1":
-    command => "rpm -Uvh ${rpm_install_remi}",
+    command => "rpm -Uvh ${rpm_package_remi}",
     refreshonly => true,
     notify => File["remove-rpm-package"],
     cwd => '/home/vagrant/',
@@ -219,7 +219,7 @@ exec {"install-rpm-package-1":
 
 ## remove unnecessary rpm packages
 file {"remove-rpm-package":
-    path => "/home/vagrant/${file}",
+    path => "/home/vagrant/${rpm_package_remi}",
     purge => true,
     notify => Exec['update-php-1'],
 }
