@@ -205,6 +205,7 @@ each($rpm_packages) |$index, $package| {
         command => "wget $package",
         notify => Exec["install-rpm-package-${index}"],
         require => Exec['set-time-zone'],
+        cwd => '/vagrant/',
         timeout => 1400,
     }
 }
@@ -214,6 +215,7 @@ each($rpm_files) |$index, $file| {
     exec {"install-rpm-package-${index}":
         command => "rpm -Uvh ${file}",
         before => File["remove-rpm-package-${index}"],
+        cwd => '/vagrant/',
     }
 }
 
