@@ -204,7 +204,7 @@ exec {'set-time-zone':
 each($rpm_packages) |$index, $package| {
     exec {"build-rpm-package-${index}":
         command => "wget $package",
-        notify => File["install-rpm-package-${index}"],
+        notify => Exec["install-rpm-package-${rpm_files_size}"],
         refreshonly => true,
         timeout => 1400,
     }
@@ -214,7 +214,7 @@ each($rpm_packages) |$index, $package| {
 each($rpm_files) |$index, $file| {
     exec {"install-rpm-package-${index}":
         command => "sudo rpm ${file}",
-        notify => File["remove-rpm-package-${index}"],
+        notify => File["remove-rpm-package-${rpm_files_size}"],
     }
 }
 
