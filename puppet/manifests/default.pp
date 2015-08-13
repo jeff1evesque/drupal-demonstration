@@ -209,7 +209,7 @@ exec {'update-php-1':
 }
 
 ## php update (part 2): replace 'enabled=0', with 'enabled=1' between the starting
-#              delimiter '[remi]', and ending delimiter '[remi-php56]'.
+#                       delimiter '[remi]', and ending delimiter '[remi-php56]'.
 exec {'update-php-2':
     command => 'awk "/[remi-php56]/,/[remi-test]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
     refreshonly => true,
