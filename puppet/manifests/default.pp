@@ -214,7 +214,7 @@ each($rpm_packages) |$index, $package| {
 each($rpm_files) |$index, $file| {
     exec {"install-rpm-package-${index}":
         command => "rpm -Uvh ${file}",
-        notify => File["remove-rpm-package-${rpm_files_size}"],
+        before => File["remove-rpm-package-${rpm_files_size}"],
     }
 }
 
