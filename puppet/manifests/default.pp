@@ -197,15 +197,14 @@ exec {'mv-httpd-conf-htaccess-2':
 exec {'set-time-zone':
     command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
-    notify => Exec["build-rpm-package-${rpm_packages_size}"],
 }
 
 ## download rpm packages
 each($rpm_packages) |$index, $package| {
     exec {"build-rpm-package-${index}":
         command => "wget $package",
-        notify => Exec["install-rpm-package-${rpm_files_size}"],
-        refreshonly => true,
+        notify => Exec["install-rpm-package-${index}"],
+        require => Exec['set-time-zone'],
         timeout => 1400,
     }
 }
@@ -214,7 +213,7 @@ each($rpm_packages) |$index, $package| {
 each($rpm_files) |$index, $file| {
     exec {"install-rpm-package-${index}":
         command => "rpm -Uvh ${file}",
-        before => File["remove-rpm-package-${rpm_files_size}"],
+        before => File["remove-rpm-package-${index}"],
     }
 }
 
