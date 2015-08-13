@@ -4,7 +4,7 @@ $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
 $rpm_packages = ['http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm', 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm']
 $rpm_packages_size  = size($rpm_packages) - 1
-$rpm_files = ['remi-release-6*.rpm', 'epel-release-6*.rpm']
+$rpm_files = ['epel-release-6*.rpm', 'remi-release-6*.rpm']
 $rpm_files_size  = size($rpm_files) - 1
 
 ## define $PATH for all execs
