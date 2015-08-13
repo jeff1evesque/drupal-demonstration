@@ -51,13 +51,6 @@ exec {'update-yum':
 exec {'install-phpmyadmin':
     command => 'yum -y install phpmyadmin',
     refreshonly => true,
-    notify => Exec['install-guest-additions'],
-}
-
-## install guest additions (for centos) using installed EPEL repository
-exec {'install-guest-additions':
-    command => '/etc/init.d/vboxadd setup',
-    refreshonly => true,
     notify => Exec['define-errordocument-403'],
 }
 
