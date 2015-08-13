@@ -213,7 +213,7 @@ each($rpm_packages) |$index, $package| {
 ## install rpm packages
 each($rpm_files) |$index, $file| {
     exec {"install-rpm-package-${index}":
-        command => "rpm -Uvh ${file} -y",
+        command => "rpm -Uvh ${file}",
         before => File["remove-rpm-package-${index}"],
         cwd => '/vagrant/',
     }
