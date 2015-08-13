@@ -213,15 +213,19 @@ exec {"build-rpm-package-1":
 exec {"install-rpm-package-1":
     command => "rpm -Uvh ${rpm_package_remi}",
     refreshonly => true,
-    notify => File["remove-rpm-package"],
+    notify => Tidy["remove-rpm-package"],
     cwd => '/home/vagrant/',
 }
 
 ## remove unnecessary rpm packages
-file {"remove-rpm-package":
-    path => "/home/vagrant/${rpm_package_remi}",
-    purge => true,
+#
+#  @recurse, the number of directories to recursively operate on
+tidy {"remove-rpm-package":
+    path => "/home/vagrant/",
+    matches => [$rpm_package_remi],
+    recurse => 1,
     notify => Exec['update-php-1'],
+    require => Exec['install-rpm-package-1'],
 }
 
 ## update php (part 1): replace 'enabled=0', with 'enabled=1' between the starting
