@@ -197,41 +197,21 @@ exec {'mv-httpd-conf-htaccess-2':
 exec {'set-time-zone':
     command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
+    notify => Exec['update-php-1'],
 }
 
-## download rpm packages
-each($rpm_packages) |$index, $package| {
-    exec {"build-rpm-package-${index}":
-        command => "wget $package",
-        notify => Exec["install-rpm-package-${index}"],
-        require => Exec['set-time-zone'],
-        cwd => '/vagrant/',
-        timeout => 1400,
-    }
-}
-
-## install rpm packages
-each($rpm_files) |$index, $file| {
-    exec {"install-rpm-package-${index}":
-        command => "rpm -Uvh ${file}",
-        before => File["remove-rpm-package-${index}"],
-        cwd => '/vagrant/',
-    }
-}
-
-## remove unnecessary rpm packages
-each($rpm_files) |$index, $file| {
-    file {"remove-rpm-package-${index}":
-        path => "/vagrant/${file}",
-        purge => true,
-        notify => Exec['pre-update-php-1'],
-    }
-}
-
-## php pre-update (part 1): replace 'enabled=0', with 'enabled=1' between the starting
-#                           delimiter '[remi]', and ending delimiter '[remi-php56]'.
-exec {'pre-update-php-1':
+## update php (part 1): replace 'enabled=0', with 'enabled=1' between the starting
+#                       delimiter '[remi]', and ending delimiter '[remi-php56]'.
+exec {'update-php-1':
     command => 'awk "/[remi]/,/[remi-php56]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
+    refreshonly => true,
+    notify => Exec['update-php-2'],
+}
+
+## php update (part 2): replace 'enabled=0', with 'enabled=1' between the starting
+#              delimiter '[remi]', and ending delimiter '[remi-php56]'.
+exec {'update-php-2':
+    command => 'awk "/[remi-php56]/,/[remi-test]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
     refreshonly => true,
     notify => Exec['update-yum-php'],
 }
