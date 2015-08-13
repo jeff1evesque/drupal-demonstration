@@ -233,7 +233,15 @@ each($rpm_files) |$index, $file| {
 exec {'pre-update-php':
     command => 'awk "/[remi]/,/[remi-php55]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
     refreshonly => true,
+    notify => Exec['update-yum-php'],
+}
+
+## php update: update yum in order to install php
+exec {'update-yum-php':
+    command => 'yum -y update',
+    refreshonly => true,
     notify => Exec['restart-services'],
+    timeout => 450,
 }
 
 ## restart services to allow PHP extensions to load properly (dom, gd)
