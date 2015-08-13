@@ -216,7 +216,7 @@ exec {'update-php-2':
     notify => Exec['update-yum-php'],
 }
 
-## php update: update yum in order to install php
+## php update: update yum to update php
 exec {'update-yum-php':
     command => 'yum -y update',
     refreshonly => true,
