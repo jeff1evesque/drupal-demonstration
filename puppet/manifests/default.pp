@@ -2,10 +2,8 @@
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
 $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
-$rpm_packages = ['http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm', 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm']
-$rpm_packages_size  = size($rpm_packages) - 1
-$rpm_files = ['epel-release-6*.rpm', 'remi-release-6*.rpm']
-$rpm_files_size  = size($rpm_files) - 1
+$rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
+$rpm_install_remi = 'remi-release-6*.rpm'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
@@ -197,13 +195,44 @@ exec {'mv-httpd-conf-htaccess-2':
 exec {'set-time-zone':
     command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
+    notify => Exec['build-rpm-package-1'],
+}
+
+## download rpm packages
+exec {"build-rpm-package-1":
+    command => "wget ${rpm_package_remi}",
+    refreshonly => true,
+    notify => Exec["install-rpm-package-1"],
+    cwd => '/home/vagrant/',
+    timeout => 1400,
+}
+
+## install rpm remi package
+#
+#  Note: the remi packages requires an already installed 'epel-release-6*.rpm' package.
+exec {"install-rpm-package-1":
+    command => "rpm -Uvh ${rpm_install_remi}",
+    refreshonly => true,
+    notify => File["remove-rpm-package"],
+    cwd => '/home/vagrant/',
+}
+
+## remove unnecessary rpm packages
+file {"remove-rpm-package":
+    path => "/home/vagrant/${file}",
+    purge => true,
     notify => Exec['update-php-1'],
 }
 
 ## update php (part 1): replace 'enabled=0', with 'enabled=1' between the starting
 #                       delimiter '[remi]', and ending delimiter '[remi-php56]'.
 exec {'update-php-1':
-    command => 'awk "/[remi]/,/[remi-php56]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
+    command => 'awk "/[remi]/,/[remi-php56]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/vagrant/remi.repo',
+    refreshonly => true,
+    notify => Exec['mv-remi-repo-1'],
+}
+exec {'mv-remi-repo-1':
+    command => 'mv /home/vagrant/remi.repo /etc/yum.repos.d/remi.repo',
     refreshonly => true,
     notify => Exec['update-php-2'],
 }
@@ -211,12 +240,17 @@ exec {'update-php-1':
 ## php update (part 2): replace 'enabled=0', with 'enabled=1' between the starting
 #                       delimiter '[remi]', and ending delimiter '[remi-php56]'.
 exec {'update-php-2':
-    command => 'awk "/[remi-php56]/,/[remi-test]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
+    command => 'awk "/[remi-php56]/,/[remi-test]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/vagrant/remi.repo',
+    refreshonly => true,
+    notify => Exec['mv-epel-repo-2'],
+}
+exec {'mv-epel-repo-2':
+    command => 'mv /home/vagrant/remi.repo /etc/yum.repos.d/remi.repo',
     refreshonly => true,
     notify => Exec['update-yum-php'],
 }
 
-## php update: update yum to update php
+## php update: update yum for php
 exec {'update-yum-php':
     command => 'yum -y update',
     refreshonly => true,
