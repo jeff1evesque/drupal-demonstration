@@ -224,14 +224,14 @@ each($rpm_files) |$index, $file| {
     file {"remove-rpm-package-${index}":
         path => "/vagrant/${file}",
         purge => true,
-        notify => Exec['pre-update-php'],
+        notify => Exec['pre-update-php-1'],
     }
 }
 
-## php pre-update : replace 'enabled=0', with 'enabled=1' between the starting
-#                           delimiter '[remi]', and ending delimiter '[remi-php55]'.
-exec {'pre-update-php':
-    command => 'awk "/[remi]/,/[remi-php55]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
+## php pre-update (part 1): replace 'enabled=0', with 'enabled=1' between the starting
+#                           delimiter '[remi]', and ending delimiter '[remi-php56]'.
+exec {'pre-update-php-1':
+    command => 'awk "/[remi]/,/[remi-php56]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /etc/yum.repos.d/remi.repo',
     refreshonly => true,
     notify => Exec['update-yum-php'],
 }
