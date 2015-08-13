@@ -2,7 +2,7 @@
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
 $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
-$rpm_packages = ['http://rpms.famillecollet.com/enterprise/remi-release-6.rpm', 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm']
+$rpm_packages = ['http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm', 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm']
 $rpm_packages_size  = size($rpm_packages) - 1
 $rpm_files = ['remi-release-6*.rpm', 'epel-release-6*.rpm']
 $rpm_files_size  = size($rpm_files) - 1
