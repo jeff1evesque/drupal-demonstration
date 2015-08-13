@@ -213,7 +213,7 @@ each($rpm_packages) |$index, $package| {
 ## install rpm packages
 each($rpm_files) |$index, $file| {
     exec {"install-rpm-package-${index}":
-        command => "sudo rpm ${file}",
+        command => "rpm -Uvh ${file}",
         notify => File["remove-rpm-package-${rpm_files_size}"],
     }
 }
