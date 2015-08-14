@@ -3,3 +3,8 @@
 
 ## Declare puppet module repository
 forge "https://forge.puppetlabs.com"
+
+## Install Module: vcsrepo
+mod 'vcsrepo',
+  :git => "https://github.com/puppetlabs/puppetlabs-vcsrepo.git",
+  :ref => "1.3.0"
