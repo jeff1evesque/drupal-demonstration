@@ -22,7 +22,7 @@ vcsrepo {'/vagrant/build/opcache':
 ## packages: install opcache dependencies (yum)
 #
 #  Note: the required package 'php-devel' has already been installed via the
-#        remi repository.
+#        earlier downloaded, and installed remi repository.
 package {$opcache_dependencies:
     ensure => 'installed',
     provider => 'yum',
