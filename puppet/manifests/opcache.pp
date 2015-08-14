@@ -16,20 +16,16 @@ vcsrepo {'/vagrant/build/opcache':
     provider => git,
     source => 'https://github.com/zendtech/ZendOptimizerPlus',
     revision => 'v7.0.5',
-    before => Package["${opcache_dependencies}"],
-}
-
-## packages: install opcache dependencies (yum)
-#
-#  Note: the required package 'php-devel' has already been installed via the
-#        earlier downloaded, and installed remi repository.
-package {$opcache_dependencies:
-    ensure => 'installed',
-    provider => 'yum',
+    notify => Exec['prepare-opcache'],
     before => Exec['prepare-opcache'],
 }
 
 ## prepare opcache: prepare extension for compiling
+#
+#  Note: the opcache installation process requires two packages: 'php-devel',
+#        and 'gcc'. However, both have already been installed via the earlier
+#        downloaded, and installed remi repository, along with guest additions
+#        installation (via vagrant plugin).
 exec {'prepare-opcache':
     command => 'phpsize',
 	refreshonly => true,
