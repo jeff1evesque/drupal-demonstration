@@ -27,7 +27,7 @@ vcsrepo {'/vagrant/build/opcache':
 #        downloaded, and installed remi repository, along with guest additions
 #        installation (via vagrant plugin).
 exec {'prepare-opcache':
-    command => 'phpsize',
+    command => 'phpize',
 	refreshonly => true,
     notify => Exec['configure-opcache'],
     cwd => '/vagrant/build/opcache/',
