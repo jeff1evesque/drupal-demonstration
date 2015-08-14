@@ -2,7 +2,7 @@
 Exec {path => ['/usr/bin/']}
 
 ## variables
-$opcache_dependencies = ['php-devel', 'gcc']
+$opcache_dependencies = ['gcc']
 
 ## create '/vagrant/build/' directory
 file {'/vagrant/build/':
@@ -20,10 +20,13 @@ vcsrepo {'/vagrant/build/opcache':
 }
 
 ## packages: install opcache dependencies (yum)
+#
+#  Note: the required package 'php-devel' has already been installed via the
+#        remi repository.
 package {$opcache_dependencies:
     ensure => 'installed',
     provider => 'yum',
-    before => Package[$packages_general_npm],
+    before => Exec['prepare-opcache'],
 }
 
 ## prepare opcache: prepare extension for compiling
