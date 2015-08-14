@@ -1,9 +1,6 @@
 ## define $PATH for all execs
 Exec {path => ['/usr/bin/']}
 
-## variables
-$opcache_dependencies = ['gcc']
-
 ## create '/vagrant/build/' directory
 file {'/vagrant/build/':
     ensure => 'directory',
