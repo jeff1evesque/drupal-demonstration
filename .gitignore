@@ -8,3 +8,4 @@
 # Ignore the following directories
 .vagrant
 /log/
+/puppet/modules/
