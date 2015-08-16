@@ -8,6 +8,6 @@ file {'/vagrant/sites/all/themes/contrib/':
 vcsrepo {'/vagrant/sites/all/themes/contrib/bootstrap':
     ensure => present,
     provider => git,
-    source => 'http://cgit.drupalcode.org/bootstrap',
+    source => 'http://git.drupal.org/project/bootstrap.git',
     revision => '7.x-3.x',
 }
