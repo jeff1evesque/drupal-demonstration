@@ -56,6 +56,13 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file  = "ssl.pp"
   end
 
+  # Custom Manifest: add, and configure bootstrap theme
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.module_path    = "puppet/modules"
+    puppet.manifest_file  = "theme_bootstrap.pp"
+  end
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
