@@ -9,3 +9,4 @@
 .vagrant
 /log/
 /puppet/modules/
+/sites/all/themes/contrib/
