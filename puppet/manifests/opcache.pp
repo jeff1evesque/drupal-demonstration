@@ -13,6 +13,15 @@ vcsrepo {'/vagrant/build/opcache':
     provider => git,
     source => 'https://github.com/zendtech/ZendOptimizerPlus',
     revision => 'v7.0.5',
+    before => Package['php-devel'],
+}
+
+## install php-devel: required by 'phpize' command#
+#
+#  Note: the already installed 'gcc' package is also required by the 'phpize'
+#        command.
+package {'php-devel':
+    ensure => 'installed',
     notify => Exec['prepare-opcache'],
     before => Exec['prepare-opcache'],
 }
@@ -23,6 +32,9 @@ vcsrepo {'/vagrant/build/opcache':
 #        and 'gcc'. However, both have already been installed via the earlier
 #        downloaded, and installed remi repository, along with guest additions
 #        installation (via vagrant plugin).
+#
+#  Note: the 'phpize' command needs to be run in a directory containing the
+#        'config.m4' file. In this case, the clone '/opcache' directory.
 exec {'prepare-opcache':
     command => 'phpize',
 	refreshonly => true,
