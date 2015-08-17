@@ -1,5 +1,5 @@
 ## define $PATH for all execs
-Exec {path => ['/usr/bin/']}
+Exec {path => ['/usr/bin/', '/bin/']}
 
 ## create '/vagrant/build/' directory
 file {'/vagrant/build/':
@@ -16,7 +16,7 @@ vcsrepo {'/vagrant/build/opcache':
     before => Package['php-devel'],
 }
 
-## install php-devel: required by 'phpize' command#
+## install php-devel: required by 'phpize' command
 #
 #  Note: the already installed 'gcc' package is also required by the 'phpize'
 #        command.
