@@ -1,7 +1,7 @@
 ## create '/vagrant/sites/all/themes/contrib/' directory
 file {'/vagrant/sites/all/themes/contrib/':
     ensure => 'directory',
-    before => Vcsrepo['/vagrant/build/scikit-learn'],
+    before => Vcsrepo['/vagrant/sites/all/themes/contrib/bootstrap'],
 }
 
 ## download bootstrap theme
