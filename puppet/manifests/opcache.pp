@@ -37,14 +37,14 @@ package {'php-devel':
 #        'config.m4' file. In this case, the clone '/opcache' directory.
 exec {'prepare-opcache':
     command => 'phpize',
-	refreshonly => true,
+    refreshonly => true,
     notify => Exec['configure-opcache'],
     cwd => '/vagrant/build/opcache/',
 }
 
 ## configure opcache: configure the sources
 exec {'configure-opcache':
-    command => './configure --with-php-config=$(which php-config)',
+    command => "./configure --with-php-config=$(which php-config)",
     refreshonly => true,
     notify => Exec['compile-opcache'],
     cwd => '/vagrant/build/opcache/',
