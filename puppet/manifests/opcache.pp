@@ -1,5 +1,5 @@
 ## define $PATH for all execs
-Exec {path => ['/usr/bin/']}
+Exec {path => ['/usr/bin/', '/bin/']}
 
 ## create '/vagrant/build/' directory
 file {'/vagrant/build/':
