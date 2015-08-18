@@ -1,0 +1,20 @@
+The following are additional steps required, and cannot be automated via puppet:
+
+I. Varnish
+  a. Once varnish module has been enabled, add the following to 'settings.php':
+
+```php
+...
+  // Add Varnish as a cache bin.
+    $conf['cache_backends'][] = 'sites/all/modules/varnish/varnish.cache.inc';
+
+  // implement 'expire' module, be selective with what to cache / expire
+    //$conf['cache_class_external_varnish_page'] = 'VarnishCache';
+
+  // do not implement 'expire' module, not selective with expiration
+    $conf['cache_class_cache_page'] = 'VarnishCache';
+...
+```
+
+* Go to admin/config/development/varnish and configure your connection Varnish
+  appropriately. It should be pretty straight forward from here on.
