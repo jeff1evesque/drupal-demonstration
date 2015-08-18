@@ -170,3 +170,9 @@ ErrorDocument 502 /error.php
 ErrorDocument 503 /error.php
 ErrorDocument 504 /error.php
 ErrorDocument 505 /error.php
+
+## block access to build information
+<Files "build.txt">
+  Order Allow,Deny
+  Deny from all
+</Files>
