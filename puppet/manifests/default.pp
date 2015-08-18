@@ -270,6 +270,7 @@ exec {'update-yum-php':
 package {'php-opcache':
     ensure => present,
     notify => Exec['update-yum-php'],
+    before => Exec['update-yum-php'],
 }
 
 ## restart services to allow PHP extensions to load properly (dom, gd)
