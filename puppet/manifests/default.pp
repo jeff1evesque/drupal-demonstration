@@ -122,7 +122,7 @@ exec {'phpmyadmin-access-2':
 
 ## increase php memory limit (i.e. bootstrap 3 theme)
 exec {'php-memory-limit':
-    command => 'sed -i "s/memory_limit = 128M/memory_limit = 256M/g" /etc/php.ini',
+    command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/g" /etc/php.ini',
     refreshonly => true,
     notify => Exec['change-docroot'],
 }
