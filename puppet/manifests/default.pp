@@ -269,7 +269,6 @@ exec {'update-yum-php':
 ## install opcache
 package {'php-opcache':
     ensure => present,
-    refreshonly => true,
     notify => Exec['update-yum-php'],
 }
 
