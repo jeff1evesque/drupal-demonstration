@@ -5,14 +5,17 @@ I. Varnish
 
 ```php
 ...
-  // Add Varnish as a cache bin.
-    $conf['cache_backends'][] = 'sites/all/modules/varnish/varnish.cache.inc';
+// add Varnish as a cache bin.
+$conf['cache_backends'][] = 'sites/all/modules/varnish/varnish.cache.inc';
 
-  // implement 'expire' module, be selective with what to cache / expire
-    //$conf['cache_class_external_varnish_page'] = 'VarnishCache';
+// implement 'expire' module, be selective with what to cache / expire
+//$conf['cache_class_external_varnish_page'] = 'VarnishCache';
 
-  // do not implement 'expire' module, not selective with expiration
-    $conf['cache_class_cache_page'] = 'VarnishCache';
+// do not implement 'expire' module, not selective with expiration
+$conf['cache_class_cache_page'] = 'VarnishCache';
+
+// // drupal doesn't cache pages if hooks are implemented during bootstrap
+$conf['page_cache_invoke_hooks'] = FALSE;
 ...
 ```
 
