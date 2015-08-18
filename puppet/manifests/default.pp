@@ -117,6 +117,13 @@ exec {'phpmyadmin-access-1':
 exec {'phpmyadmin-access-2':
     command => 'sed -i "13i\Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
+    notify => Exec['php-memory-limit'],
+}
+
+## increase php memory limit (i.e. bootstrap 3 theme)
+exec {'php-memory-limit':
+    command => 'sed -i "s/memory_limit = 128M/memory_limit = 256M" /etc/php.ini',
+    refreshonly => true,
     notify => Exec['change-docroot'],
 }
 
