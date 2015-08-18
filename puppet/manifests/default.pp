@@ -1,7 +1,6 @@
 ## variables
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
 $drush_console_table = 'Console_Table-1.1.5'
-$time_zone = 'America/New_York'
 $rpm_url_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
 $rpm_package_remi = 'remi-release-6*.rpm'
 
@@ -188,13 +187,6 @@ exec {'allow-htaccess-2':
 exec {'mv-httpd-conf-htaccess-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
-    notify => Exec['set-time-zone'],
-}
-
-## define system timezone
-exec {'set-time-zone':
-    command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
-    refreshonly => true,
     notify => Exec['build-rpm-package-1'],
 }
 
@@ -255,8 +247,15 @@ exec {'mv-epel-repo-2':
 exec {'update-yum-php':
     command => 'yum -y update',
     refreshonly => true,
-    notify => Exec['restart-services'],
+    before => Package['php-opcache'],
     timeout => 450,
+}
+
+## install opcache
+package {'php-opcache':
+    ensure => present,
+    notify => Exec['restart-services'],
+    before => Exec['restart-services'],
 }
 
 ## restart services to allow PHP extensions to load properly (dom, gd)
