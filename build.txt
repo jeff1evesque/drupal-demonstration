@@ -1,4 +1,4 @@
-The following are additional steps required, and cannot be automated via puppet:
+The following are additional required steps that cannot be automated via puppet:
 
 I. Varnish
   a. Once varnish module has been enabled, add the following to 'settings.php':
