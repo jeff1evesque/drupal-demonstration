@@ -266,6 +266,13 @@ exec {'update-yum-php':
     timeout => 450,
 }
 
+## install opcache
+package {'php-opcache':
+    ensure => present,
+    refreshonly => true,
+    notify => Exec['update-yum-php'],
+}
+
 ## restart services to allow PHP extensions to load properly (dom, gd)
 exec {'restart-services':
     command => 'service httpd restart && service mysqld restart',
