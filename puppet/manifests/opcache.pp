@@ -66,6 +66,19 @@ exec {'update-yum-php':
 ## install opcache
 package {'php-opcache':
     ensure => present,
-    notify => Exec['restart-services'],
-    before => Exec['restart-services'],
+    before => File['/vagrant/build/'],
+}
+
+## create '/vagrant/build/' directory
+file {'/vagrant/build/':
+    ensure => 'directory',
+    before => Vcsrepo['/vagrant/build/opcache'],
+}
+
+## download opcacheGUI
+vcsrepo {'/vagrant/build/opcacheGUI':
+    ensure => present,
+    provider => git,
+    source => 'https://github.com/PeeHaa/OpCacheGUI',
+    revision => 'v1.0.1',
 }
