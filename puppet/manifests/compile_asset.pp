@@ -40,7 +40,7 @@ $compilers.each |Integer $index, String $compiler| {
     ## create asset directories
     file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_asset[$index]}/":
         ensure => 'directory',
-        before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_src[$index]}/"],
+        before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
     }
 
     ## create asset directories
