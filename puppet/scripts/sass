@@ -12,13 +12,13 @@ PATH="/usr/local/bin:$PATH"
 set -x; exec > /vagrant/log/sass_execution.log 2>&1
 
 
-# watch '/vagrant/src/scss/' subdirectory
-inotifywait /vagrant/src/scss/ -m -e close_write -e move -e create |
+# watch '/vagrant/sites/all/themes/custom/sample_theme/src/scss/' subdirectory
+inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/scss/ -m -e close_write -e move -e create |
   # Compile CSS
   while read path action file; do
     # filename (without 'last' extension)
     filename="${file%.*}"
 
     # compile with 'sass'
-    node-sass /vagrant/src/scss/"$file" /vagrant/web_interface/static/css/"$filename".min.css --output-style compressed
+    node-sass /vagrant/sites/all/themes/custom/sample_theme/src/scss/"$file" /vagrant/sites/all/themes/custom/sample_theme/asset/css/"$filename".min.css --output-style compressed
   done
