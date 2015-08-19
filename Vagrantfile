@@ -39,6 +39,10 @@ Vagrant.configure(2) do |config|
   # Define fully qualified domain name
   config.vm.hostname = "drupal-demonstration.com"
 
+  ## Run r10k
+  config.r10k.puppet_dir = 'puppet'
+  config.r10k.puppetfile_path = 'puppet/Puppetfile'
+
   # Custom Manifest: general configuration
   #
   #  Note: future parser allow array iteration in the puppet manifest
@@ -52,15 +56,15 @@ Vagrant.configure(2) do |config|
   # Custom Manifest: ssl configuration
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
-    puppet.module_path    = "puppet/modules"
     puppet.manifest_file  = "ssl.pp"
+    puppet.module_path    = "puppet/modules"
   end
 
   # Custom Manifest: add, and configure bootstrap theme
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
-    puppet.module_path    = "puppet/modules"
     puppet.manifest_file  = "theme_bootstrap.pp"
+    puppet.module_path    = "puppet/modules"
   end
 
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
@@ -69,6 +73,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "compile_asset.pp"
+    puppet.module_path    = "puppet/modules"
     puppet.options        = ["--parser", "future"]
   end
 
