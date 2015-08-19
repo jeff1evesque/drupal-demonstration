@@ -63,11 +63,13 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file  = "theme_bootstrap.pp"
   end
 
-  # Custom Manifest: add, and configure bootstrap theme
+  # Custom Manifest: add sass, uglifyjs, imagemin compilers
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
-    puppet.module_path    = "puppet/modules"
     puppet.manifest_file  = "compile_asset.pp"
+    puppet.options        = ["--parser", "future"]
   end
 
   # Disable automatic box update checking. If you disable this, then
