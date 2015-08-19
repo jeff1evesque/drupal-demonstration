@@ -25,6 +25,11 @@ package {$packages_npm:
     require => Package['npm'],
 }
 
+## create log directory
+file {'/vagrant/log/':
+    ensure => 'directory',
+}
+
 ## create source directory
 file {'/vagrant/sites/all/themes/custom/sample_theme/src/':
     ensure => 'directory',
