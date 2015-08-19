@@ -9,7 +9,7 @@ mod 'vcsrepo',
   :git => "https://github.com/puppetlabs/puppetlabs-vcsrepo.git",
   :ref => "1.3.0"
 
-## Install Module: stdlib (apt dependency)
+## Install Module: stdlib (nodejs dependency)
 mod 'stdlib',
   :git => "https://github.com/puppetlabs/puppetlabs-stdlib.git",
   :ref => "4.6.0"
