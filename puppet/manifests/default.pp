@@ -42,7 +42,7 @@ exec {'update-yum':
     command => 'yum -y update',
     refreshonly => true,
     notify => Exec['install-phpmyadmin'],
-    timeout => 450,
+    timeout => 750,
 }
 
 ## install phpmyadmin: requires the above 'add-epel', and 'update-yum'
@@ -263,7 +263,7 @@ exec {'update-yum-php':
     command => 'yum -y update',
     refreshonly => true,
     before => Package['php-opcache'],
-    timeout => 450,
+    timeout => 750,
 }
 
 ## install opcache
