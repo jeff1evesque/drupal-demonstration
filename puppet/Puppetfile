@@ -14,6 +14,11 @@ mod 'stdlib',
   :git => "https://github.com/puppetlabs/puppetlabs-stdlib.git",
   :ref => "4.6.0"
 
+## Install Module: wget (nodejs dependency)
+mod 'wget',
+  :git => "https://github.com/maestrodev/puppet-wget",
+  :ref => "v1.7.0"
+
 ## Install Module: nodejs
 mod 'nodejs',
   :git => "https://github.com/puppet-community/puppet-nodejs.git",
