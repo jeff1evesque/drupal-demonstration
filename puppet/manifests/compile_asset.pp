@@ -25,8 +25,24 @@ package {$packages_npm:
     require => Package['npm'],
 }
 
+## create source directory
+file {'/vagrant/sites/all/themes/custom/sample_theme/src/':
+    ensure => 'directory',
+}
+
+## create asset directory
+file {'/vagrant/sites/all/themes/custom/sample_theme/asset/':
+    ensure => 'directory',
+}
+
 ## dynamically create compilers
 $compilers.each |Integer $index, String $compiler| {
+    ## create asset directories
+    file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_asset[$index]}/":
+        ensure => 'directory',
+        before => File["/vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/"],
+    }
+
     ## create asset directories
     file {"/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/":
         ensure => 'directory',
