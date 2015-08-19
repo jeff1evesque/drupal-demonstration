@@ -262,7 +262,7 @@ exec {'mv-epel-repo-2':
 exec {'update-yum-php':
     command => 'yum -y update',
     refreshonly => true,
-    notify => Exec['restart-services'],
+    before => Package['php-opcache'],
     timeout => 450,
 }
 
