@@ -1,4 +1,5 @@
 ## include puppet modules
+include stdlib
 include nodejs
 
 ## define $PATH for all execs, and packages
