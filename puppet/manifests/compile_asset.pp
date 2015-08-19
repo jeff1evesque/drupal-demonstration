@@ -8,6 +8,21 @@ Exec {path => ['/usr/bin/', '/sbin/']}
 $compilers       = ['uglifyjs', 'sass', 'imagemin']
 $directory_src   = ['js', 'scss', 'img']
 $directory_asset = ['js', 'css', 'img']
+$packages_general = ['dos2unix', 'inotify-tools', 'ruby-devel']
+$packages_npm     = ['uglify-js', 'imagemin', 'node-sass']
+
+## packages: install general packages (apt, yum)
+package {$packages_general:
+    ensure => 'installed',
+    before => Package[$packages_general_pip],
+}
+
+## packages: install general packages (npm)
+package {$packages_npm:
+    ensure => 'present',
+    provider => 'npm',
+    require => Package['npm'],
+}
 
 ## dynamically create compilers
 $compilers.each |Integer $index, String $compiler| {
