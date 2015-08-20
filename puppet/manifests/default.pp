@@ -277,5 +277,4 @@ package {'php-opcache':
 exec {'restart-services':
     command => 'service httpd restart && service mysqld restart',
     refreshonly => true,
-    before => Notify['reminder'],
 }
