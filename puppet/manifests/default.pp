@@ -272,8 +272,3 @@ exec {'restart-services':
     refreshonly => true,
     before => Notify['reminder'],
 }
-
-## additional build reminders
-notify {'reminder':
-    message => 'Please review \'build.txt\' located in the repository root, regarding additional build requirements',
-}
