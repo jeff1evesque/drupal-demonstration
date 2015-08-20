@@ -5,12 +5,14 @@ include nodejs
 ## define $PATH for all execs, and packages
 Exec {path => ['/usr/bin/', '/sbin/']}
 
-## variables
-$compilers       = ['uglifyjs', 'sass', 'imagemin']
-$directory_src   = ['js', 'scss', 'img']
-$directory_asset = ['js', 'css', 'img']
+## variables: the order of the following array variables are important
+$compilers        = ['uglifyjs', 'sass', 'imagemin']
+$directory_src    = ['js', 'scss', 'img']
+$directory_asset  = ['js', 'css', 'img']
+$packages_npm     = ['uglify-js', 'node-sass', 'imagemin']
+
+## variables: the order of the following array variables are not important
 $packages_general = ['dos2unix', 'inotify-tools', 'ruby-devel']
-$packages_npm     = ['uglify-js', 'imagemin', 'node-sass']
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:
@@ -49,7 +51,7 @@ $compilers.each |Integer $index, String $compiler| {
     file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_asset[$index]}/":
         ensure => 'directory',
         before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
-        require => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
+        require => Package["${packages_general[$index]}"],
     }
 
     ## create asset directories
