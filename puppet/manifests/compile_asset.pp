@@ -15,24 +15,27 @@ $packages_npm     = ['uglify-js', 'imagemin', 'node-sass']
 ## packages: install general packages (apt, yum)
 package {$packages_general:
     ensure => 'installed',
-    before => Package[$packages_general_pip],
+    before => Package[$packages_npm],
 }
 
 ## packages: install general packages (npm)
 package {$packages_npm:
     ensure => 'present',
     provider => 'npm',
+    before => File['/vagrant/log/'],
     require => Package['npm'],
 }
 
 ## create log directory
 file {'/vagrant/log/':
     ensure => 'directory',
+    before => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
 }
 
 ## create source directory
 file {'/vagrant/sites/all/themes/custom/sample_theme/src/':
     ensure => 'directory',
+    before => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
 }
 
 ## create asset directory
@@ -46,6 +49,7 @@ $compilers.each |Integer $index, String $compiler| {
     file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_asset[$index]}/":
         ensure => 'directory',
         before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
+        require => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
     }
 
     ## create asset directories
@@ -78,17 +82,26 @@ $compilers.each |Integer $index, String $compiler| {
                    respawn
 
                    # required for permission to write to '/vagrant/' files (pre-stop stanza)
-                   setuid vagrant
-                   setgid vagrant
+                   #
+                   # Note: the following stanzas are not supported with current upstart 0.6.5.
+                   #       Specifically, upstart 1.4.x, or higher is required.
+                   #setuid vagrant
+                   #setgid vagrant
 
                    ## run upstart job as a background process
                    expect fork
 
                    ## start upstart job
                    #
-                   #  @chdir, change the current working directory
-                   chdir /vagrant/puppet/scripts/
-                   exec ./${compiler}
+                   #  @runuser, change the current user, since the above setuid, setgid stanzas
+                   #      are not supported, hence the below commented lines.
+                   script
+                   #    chdir /vagrant/puppet/scripts/
+                   #    exec ./${compiler}
+                       sudo runuser vagrant
+                       cd /vagrant/puppet/scripts/
+                       ./${compiler}
+                   end script
 
                    ## log start-up date
                    #
