@@ -22,10 +22,9 @@ package {$packages_general:
 
 ## packages: install general packages (npm)
 package {$packages_npm:
-    ensure => 'present',
+    ensure => 'installed',
     provider => 'npm',
     before => File['/vagrant/log/'],
-    require => Package['npm'],
 }
 
 ## create log directory
