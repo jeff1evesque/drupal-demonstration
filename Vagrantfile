@@ -63,7 +63,7 @@ Vagrant.configure(2) do |config|
     puppet.module_path    = "puppet/modules"
   end
 
-  ## Custom Manifest: ensure vagrant-mounted event
+  ## Custom Manifest: ensure 'vagrant-mounted' event fires
   #
   #  Note: future parser allow heredoc syntax in the puppet manifest (since puppet 3.5)
   config.vm.provision "puppet" do |puppet|
