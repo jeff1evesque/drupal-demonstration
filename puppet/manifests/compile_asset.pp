@@ -50,13 +50,14 @@ $compilers.each |Integer $index, String $compiler| {
     file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_asset[$index]}/":
         ensure => 'directory',
         before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
-        require => Package["${packages_general[$index]}"],
+        require => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
     }
 
     ## create asset directories
     file {"/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/":
         ensure => 'directory',
         before => File["${compiler}-startup-script"],
+        require => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
     }
 
     ## create startup script (heredoc syntax)
