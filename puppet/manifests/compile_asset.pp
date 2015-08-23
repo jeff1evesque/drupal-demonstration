@@ -12,7 +12,7 @@ $directory_asset  = ['js', 'css', 'img']
 $packages_npm     = ['uglify-js', 'node-sass', 'imagemin']
 
 ## variables: the order of the following array variables are not important
-$packages_general = ['dos2unix', 'inotify-tools', 'ruby-devel']
+$packages_general = ['inotify-tools', 'ruby-devel']
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:
