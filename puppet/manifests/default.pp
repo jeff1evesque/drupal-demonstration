@@ -1,5 +1,5 @@
 ## variables
-$packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd']
+$packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd', 'dos2unix']
 $drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
 $rpm_url_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
@@ -42,7 +42,7 @@ exec {'update-yum':
     command => 'yum -y update',
     refreshonly => true,
     notify => Exec['install-phpmyadmin'],
-    timeout => 450,
+    timeout => 750,
 }
 
 ## install phpmyadmin: requires the above 'add-epel', and 'update-yum'
@@ -122,7 +122,7 @@ exec {'phpmyadmin-access-2':
 
 ## increase php memory limit (i.e. bootstrap 3 theme)
 exec {'php-memory-limit':
-    command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/g" /etc/php.ini',
+    command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php.ini',
     refreshonly => true,
     notify => Exec['change-docroot'],
 }
@@ -263,7 +263,7 @@ exec {'update-yum-php':
     command => 'yum -y update',
     refreshonly => true,
     before => Package['php-opcache'],
-    timeout => 450,
+    timeout => 750,
 }
 
 ## install opcache
@@ -277,10 +277,4 @@ package {'php-opcache':
 exec {'restart-services':
     command => 'service httpd restart && service mysqld restart',
     refreshonly => true,
-    before => Notify['reminder'],
-}
-
-## additional build reminders
-notify {'reminder':
-    message => 'Please review \'build.txt\' located in the repository root, regarding additional build requirements',
 }
