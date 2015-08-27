@@ -52,17 +52,15 @@ file {"vagrant-startup-script":
 }
 
 ## dos2unix upstart: convert clrf (windows to linux) in case host machine is windows.
-#
-#  @notify, ensure the webserver service is started. This is similar to an exec statement, where the
-#      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
-#      'service' end point does not require the 'refreshonly' attribute.
 exec {"dos2unix-upstart-vagrant":
     command => 'dos2unix /etc/init/workaround-vagrant-bug-6074.conf',
-    notify  => Service['workaround-vagrant-bug-6074'],
+    notify  => Exec['workaround-vagrant-bug-6074'],
 }
 
-## start 'workaround-vagrant-bug-6074' job
-service {'workaround-vagrant-bug-6074':
-    ensure => 'running',
-    enable => 'true',
+## start 'workaround-vagrant-bug-6074' service
+#
+#  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
+#        'exec { ... }' stanza has been implemented (refer to github issue #189).
+exec {'workaround-vagrant-bug-6074':
+    command => 'sudo initctl start workaround-vagrant-bug-6074'
 }
