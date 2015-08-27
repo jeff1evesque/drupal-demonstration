@@ -2,7 +2,7 @@
 $mountpoint = '/vagrant/'
 
 ## define $PATH for all execs, and packages
-Exec {path => ['/usr/bin/']}
+Exec {path => ['/usr/bin/', '/sbin/']}
 
 ## create startup script: for 'vagrant-mounted' event
 file {"vagrant-startup-script":
@@ -58,10 +58,10 @@ file {"vagrant-startup-script":
 #      'service' end point does not require the 'refreshonly' attribute.
 exec {"dos2unix-upstart-vagrant":
     command => 'dos2unix /etc/init/workaround-vagrant-bug-6074.conf',
-#    notify  => Service['workaround-vagrant-bug-6074'],
+    notify  => Service['workaround-vagrant-bug-6074'],
 }
 
-## start 'workaround-vagrant-bug-6074' service
+## start 'workaround-vagrant-bug-6074' job
 service {'workaround-vagrant-bug-6074':
     ensure => 'running',
     enable => 'true',
