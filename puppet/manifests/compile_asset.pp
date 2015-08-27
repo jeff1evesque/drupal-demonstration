@@ -83,7 +83,7 @@ $compilers.each |Integer $index, String $compiler| {
                    ## restart upstart job continuously
                    respawn
 
-                   # required for permission to write to '/vagrant/' files (pre-stop stanza)
+                   # user:group file permission is vagrant:vagrant for entire repository
                    #
                    # Note: the following stanzas are not supported with current upstart 0.6.5.
                    #       Specifically, upstart 1.4.x, or higher is required.
