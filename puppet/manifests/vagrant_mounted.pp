@@ -25,12 +25,18 @@ file {"vagrant-startup-script":
 
                ## until successful mount, sleep with 1s delay, then emit 'vagrant-mounted' event
                #
+               #  @runuser, change the current user, since the above setuid, setgid stanzas
+               #      are not supported, hence the below commented lines.
+               #
                #  @-q, run 'mountpoint' silently
+               #
                #  @--no-wait, do not wait for the emit command to finish
+               #
                #  @MOUNTPOINT, specifies the environment variable to be included with the 'emit' event, where
                #      [key=value] being [MOUNTPOINT=${mountpoint}]. This allows the receiving process(es) to use
                #      the corresponding environment variable.
                script
+                   sudo runuser vagrant
                    until mountpoint -q ${mountpoint}; do sleep 1; done
                    /sbin/initctl emit --no-wait vagrant-mounted MOUNTPOINT=${mountpoint}
                end script
