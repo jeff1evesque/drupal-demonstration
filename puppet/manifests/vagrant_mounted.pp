@@ -18,6 +18,13 @@ file {"vagrant-startup-script":
                #  @filesystem, an event that fires after all filesystems have mounted
                start on filesystem
 
+               # user:group file permission is vagrant:vagrant for entire repository
+               #
+               # Note: the following stanzas are not supported with current upstart 0.6.5.
+               #       Specifically, upstart 1.4.x, or higher is required.
+               #setuid vagrant
+               #setgid vagrant
+
                ## block all jobs until the 'post-stop' event from this corresponding job has completed
                #     (short-lived). When the 'task' directive is absent, then all other jobs are blocked
                #     until the 'starting' event has completed (longer-lived).
