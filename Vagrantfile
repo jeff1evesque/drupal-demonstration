@@ -63,17 +63,6 @@ Vagrant.configure(2) do |config|
     puppet.module_path    = "puppet/modules"
   end
 
-  # Custom Manifest: add 'vagrant_mounted' event for webcompiler upstart
-  #                  script(s).
-  #
-  #  Note: future parser allow array iteration in the puppet manifest
-  config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "vagrant_mounted.pp"
-    puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
-  end
-
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
   #
   #  Note: future parser allow array iteration in the puppet manifest
