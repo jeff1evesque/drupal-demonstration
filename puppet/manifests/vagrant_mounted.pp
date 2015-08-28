@@ -15,8 +15,8 @@ file {"vagrant-startup-script":
                ## start job defined in this file after system services, and processes have already loaded
                #      (to prevent conflict).
                #
-               #  @filesystem, an event that fires after all filesystems have mounted
-               start on filesystem
+               #  @[2345], represents all configuration states with general linux, and networking access
+               start on runlevel [2345]
 
                # user:group file permission is vagrant:vagrant for entire repository
                #
@@ -24,11 +24,6 @@ file {"vagrant-startup-script":
                #       Specifically, upstart 1.4.x, or higher is required.
                #setuid vagrant
                #setgid vagrant
-
-               ## block all jobs until the 'post-stop' event from this corresponding job has completed
-               #     (short-lived). When the 'task' directive is absent, then all other jobs are blocked
-               #     until the 'starting' event has completed (longer-lived).
-               task
 
                ## until successful mount, sleep with 1s delay, then emit 'vagrant-mounted' event
                #
@@ -54,4 +49,14 @@ file {"vagrant-startup-script":
 ## dos2unix upstart: convert clrf (windows to linux) in case host machine is windows.
 exec {"dos2unix-upstart-vagrant":
     command => 'dos2unix /etc/init/workaround-vagrant-bug-6074.conf',
+    notify => Exec['workaround-vagrant-bug-6074'],
+}
+
+## start 'workaround-vagrant-bug-6074' service
+#
+#  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
+#        'exec { ... }' stanza has been implemented (refer to github issue #189).
+exec {'workaround-vagrant-bug-6074':
+    command => "initctl start workaround-vagrant-bug-6074",
+    refreshonly => true,
 }
