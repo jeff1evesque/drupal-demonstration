@@ -139,13 +139,15 @@ $compilers.each |Integer $index, String $compiler| {
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-bash-${compiler}":
         command => "dos2unix /vagrant/puppet/scripts/${compiler}",
-        notify  => Service["${compiler}"],
+        notify  => Exec["${compiler}"],
     }
 
     ## start ${compiler} service
-    service {"${compiler}":
-        ensure => 'running',
-        enable => 'true',
+    #
+    #  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
+    #        'exec { ... }' stanza has been implemented (refer to github issue #189).
+    exec {"${compiler}":
+        command => "initctl start ${compiler}",
         notify  => Exec["touch-${directory_src[$index]}-files"],
     }
 
