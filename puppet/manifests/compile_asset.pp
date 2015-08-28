@@ -161,7 +161,7 @@ $compilers.each |Integer $index, String $compiler| {
     #        will already exist before this 'inotifywait', since the '/vagrant' directory will already have been mounted
     #        on the initial build.
     exec {"touch-${directory_src[$index]}-files":
-        command => "touch /vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/*",
+        command => "if [ \"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/\" ]; then touch /vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/*; fi",
         refreshonly => true,
     }
 }
