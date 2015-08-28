@@ -130,6 +130,7 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"dos2unix-upstart-${compiler}":
         command => "dos2unix /etc/init/${compiler}.conf",
         notify  => Exec["dos2unix-bash-${compiler}"],
+        refreshonly => true,
     }
 
     ## dos2unix bash: convert clrf (windows to linux) in case host machine is windows.
@@ -140,6 +141,7 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"dos2unix-bash-${compiler}":
         command => "dos2unix /vagrant/puppet/scripts/${compiler}",
         notify  => Exec["${compiler}"],
+        refreshonly => true,
     }
 
     ## start ${compiler} service
@@ -149,6 +151,7 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"${compiler}":
         command => "initctl start ${compiler}",
         notify  => Exec["touch-${directory_src[$index]}-files"],
+        refreshonly => true,
     }
 
     ## touch source: ensure initial build compiles every source file
