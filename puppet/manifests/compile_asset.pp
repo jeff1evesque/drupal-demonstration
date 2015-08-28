@@ -140,8 +140,8 @@ $compilers.each |Integer $index, String $compiler| {
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-bash-${compiler}":
         command => "dos2unix /vagrant/puppet/scripts/${compiler}",
-        notify  => Exec["${compiler}"],
         refreshonly => true,
+        notify  => Exec["${compiler}"],
     }
 
     ## start ${compiler} service
@@ -150,8 +150,8 @@ $compilers.each |Integer $index, String $compiler| {
     #        'exec { ... }' stanza has been implemented (refer to github issue #189).
     exec {"${compiler}":
         command => "initctl start ${compiler}",
-        notify  => Exec["touch-${directory_src[$index]}-files"],
         refreshonly => true,
+        notify  => Exec["touch-${directory_src[$index]}-files"],
     }
 
     ## touch source: ensure initial build compiles every source file
