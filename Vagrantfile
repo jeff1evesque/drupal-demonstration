@@ -73,7 +73,7 @@ Vagrant.configure(2) do |config|
     puppet.options        = ["--parser", "future"]
   end
 
-  # Custom Manifest: ensure vagrant mounted event fires
+  # Custom Manifest: ensure 'vagrant_mounted' event fires
   #
   #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
