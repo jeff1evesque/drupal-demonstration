@@ -73,9 +73,8 @@ $compilers.each |Integer $index, String $compiler| {
                    ## start job defined in this file after system services, and processes have already loaded
                    #       (to prevent conflict).
                    #
-                   #  @vagrant-mounted, an event that executes after the shared folder is mounted
                    #  @[2345], represents all configuration states with general linux, and networking access
-                   start on (vagrant-mounted and runlevel [2345])
+                   start on vagrant-mounted
 
                    ## stop upstart job
                    stop on runlevel [!2345]
