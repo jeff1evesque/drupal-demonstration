@@ -3,7 +3,7 @@ include stdlib
 include nodejs
 
 ## define $PATH for all execs, and packages
-Exec {path => ['/usr/bin/', '/sbin/', '/bin/']}
+Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
 
 ## variables: the order of the following array variables are important
 $compilers        = ['uglifyjs', 'sass', 'imagemin']
