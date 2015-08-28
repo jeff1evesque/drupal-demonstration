@@ -33,7 +33,7 @@ file {"vagrant-startup-script":
                ## until successful mount, sleep with 1s delay, then emit 'vagrant-mounted' event
                #
                #  @runuser, change the current user, since the above setuid, setgid stanzas
-               #      are not supported, hence the below commented lines.
+               #      are not supported.
                #
                #  @-q, run 'mountpoint' silently
                #
@@ -54,13 +54,4 @@ file {"vagrant-startup-script":
 ## dos2unix upstart: convert clrf (windows to linux) in case host machine is windows.
 exec {"dos2unix-upstart-vagrant":
     command => 'dos2unix /etc/init/workaround-vagrant-bug-6074.conf',
-    notify  => Exec['workaround-vagrant-bug-6074'],
-}
-
-## start 'workaround-vagrant-bug-6074' service
-#
-#  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
-#        'exec { ... }' stanza has been implemented (refer to github issue #189).
-exec {'workaround-vagrant-bug-6074':
-    command => 'initctl start workaround-vagrant-bug-6074'
 }
