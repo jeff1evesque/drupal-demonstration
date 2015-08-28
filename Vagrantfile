@@ -73,6 +73,16 @@ Vagrant.configure(2) do |config|
     puppet.options        = ["--parser", "future"]
   end
 
+  # Custom Manifest: ensure vagrant mounted event fires
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file  = "vagrant_mounted.pp"
+    puppet.module_path    = "puppet/modules"
+    puppet.options        = ["--parser", "future"]
+  end
+
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
