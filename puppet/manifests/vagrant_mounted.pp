@@ -62,5 +62,5 @@ exec {"dos2unix-upstart-vagrant":
 #  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
 #        'exec { ... }' stanza has been implemented (refer to github issue #189).
 exec {'workaround-vagrant-bug-6074':
-    command => 'sudo initctl start workaround-vagrant-bug-6074'
+    command => 'initctl start workaround-vagrant-bug-6074'
 }
