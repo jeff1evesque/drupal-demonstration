@@ -47,7 +47,7 @@ file {'/vagrant/sites/all/themes/custom/sample_theme/asset/':
 ## dynamically create compilers
 $compilers.each |Integer $index, String $compiler| {
     ## create asset directories
-    file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_asset[$index]}/":
+    file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/":
         ensure => 'directory',
         before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
         require => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
