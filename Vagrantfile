@@ -56,13 +56,6 @@ Vagrant.configure(2) do |config|
     puppet.module_path    = "puppet/modules"
   end
 
-  # Custom Manifest: add, and configure bootstrap theme
-  config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "theme_bootstrap.pp"
-    puppet.module_path    = "puppet/modules"
-  end
-
   # Custom Manifest: ensure vagrant mounted event fires
   #
   #  Note: future parser allow array iteration in the puppet manifest
