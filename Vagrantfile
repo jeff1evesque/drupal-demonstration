@@ -32,12 +32,12 @@ Vagrant.configure(2) do |config|
   config.vm.box = "puppetlabs/centos-6.6-64-puppet"
   config.vm.box_version = "1.0.1"
 
+  # Define fully qualified domain name
+  config.vm.hostname = "drupal-demonstration.com"
+
   ## Run r10k
   config.r10k.puppet_dir = 'puppet'
   config.r10k.puppetfile_path = 'puppet/Puppetfile'
-
-  # Define fully qualified domain name
-  config.vm.hostname = "drupal-demonstration.com"
 
   # Custom Manifest: general configuration
   #
@@ -52,15 +52,35 @@ Vagrant.configure(2) do |config|
   # Custom Manifest: ssl configuration
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
-    puppet.module_path    = "puppet/modules"
     puppet.manifest_file  = "ssl.pp"
+    puppet.module_path    = "puppet/modules"
   end
 
   # Custom Manifest: add, and configure bootstrap theme
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = "puppet/manifests"
-    puppet.module_path    = "puppet/modules"
     puppet.manifest_file  = "theme_bootstrap.pp"
+    puppet.module_path    = "puppet/modules"
+  end
+
+  # Custom Manifest: ensure vagrant mounted event fires
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file  = "vagrant_mounted.pp"
+    puppet.module_path    = "puppet/modules"
+    puppet.options        = ["--parser", "future"]
+  end
+
+  # Custom Manifest: add sass, uglifyjs, imagemin compilers
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file  = "compile_asset.pp"
+    puppet.module_path    = "puppet/modules"
+    puppet.options        = ["--parser", "future"]
   end
 
   # Disable automatic box update checking. If you disable this, then
