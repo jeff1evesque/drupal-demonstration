@@ -166,5 +166,6 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"touch-${directory_src[$index]}-files":
         command => "if [ \"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/\" ]; then touch /vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/*; fi",
         refreshonly => true,
+        provider => shell,
     }
 }
