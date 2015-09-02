@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-## @core_update.py
-#  This file performs drupal core update
+## @core_update_2.py: this file performs drupal core update, and is generally
+#                     preferred over the 'core_update.py', which overwrites any
+#                     customized '.htaccess', or 'robots.txt'.
 import subprocess
 import os.path
 
