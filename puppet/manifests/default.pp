@@ -1,6 +1,5 @@
 ## variables
 $packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'php-pear', 'gd', 'dos2unix']
-$drush_console_table = 'Console_Table-1.1.5'
 $time_zone = 'America/New_York'
 $rpm_url_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
 $rpm_package_remi = 'remi-release-6*.rpm'
@@ -144,20 +143,6 @@ exec {'adjust-iptables':
 ## restart iptables
 exec {'restart-iptables':
     command => 'service iptables restart',
-    refreshonly => true,
-    notify => Exec['install-drush'],
-}
-
-## install drush
-exec {'install-drush':
-    command => 'pear channel-discover pear.drush.org && pear install drush/drush',
-    refreshonly => true,
-    notify => Exec['install-drush-dependency'],
-}
-
-## drush requirement: need to install Console_Table-x.x.x
-exec {'install-drush-dependency':
-    command => "pear install ${drush_console_table}",
     refreshonly => true,
     notify => Exec['allow-htaccess-1'],
 }
