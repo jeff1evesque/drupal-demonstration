@@ -30,7 +30,6 @@ Vagrant.configure(2) do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "puppetlabs/centos-7.2-64-puppet"
-  config.vm.box_version = "1.0.1"
 
   # Define fully qualified domain name
   config.vm.hostname = "drupal-demonstration.com"
