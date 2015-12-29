@@ -21,3 +21,8 @@ mod 'wget',
 mod 'nodejs',
   :git => "git@github.com:puppet-community/puppet-nodejs.git",
   :ref => "1.1.0"
+
+## Install Module: wget
+mod 'wget',
+  :git => "git@github.com:maestrodev/puppet-wget.git",
+  :ref => "v1.7.1"
