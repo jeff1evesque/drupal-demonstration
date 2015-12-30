@@ -42,10 +42,11 @@ Vagrant.configure(2) do |config|
   #
   #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "setup_database.pp"
-    puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
+    puppet.environment_path = 'puppet/environment'
+	puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = 'setup_database.pp'
   end
 
   # Custom Manifest: general configuration
