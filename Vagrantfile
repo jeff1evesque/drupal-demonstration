@@ -45,7 +45,6 @@ Vagrant.configure(2) do |config|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "default.pp"
     puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
   end
 
   # Custom Manifest: ssl configuration
@@ -62,7 +61,6 @@ Vagrant.configure(2) do |config|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "vagrant_mounted.pp"
     puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
   end
 
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
@@ -72,7 +70,6 @@ Vagrant.configure(2) do |config|
     puppet.manifests_path = "puppet/manifests"
     puppet.manifest_file  = "compile_asset.pp"
     puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
   end
 
   # Disable automatic box update checking. If you disable this, then
