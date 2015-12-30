@@ -35,7 +35,7 @@ class {'::mysql::server':
       table      => 'db_drupal.*',
       user       => 'authenticated@localhost',
     },
-    'provisioner@localhost/db_machine_learning.*'   => {
+    'provisioner@localhost/db_drupal.*'   => {
       ensure     => 'present',
       options    => ['GRANT'],
       privileges => ['CREATE'],
