@@ -8,6 +8,6 @@
 # Ignore the following directories
 .vagrant
 /log/
-/puppet/modules/
+/puppet/environment/development/modules/
 /sites/all/themes/contrib/
 /sites/all/themes/custom/sample_theme/asset/
