@@ -1,4 +1,4 @@
-$packages_general = ['git', 'httpd', 'mysql-server', 'php', 'php-mysql', 'gd', 'dos2unix']
+$packages_general = ['git', 'httpd', 'php', 'php-mysql', 'gd', 'dos2unix']
 $time_zone = 'America/New_York'
 $rpm_url_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
 $rpm_package_remi = 'remi-release-6*.rpm'
