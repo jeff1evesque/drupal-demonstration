@@ -38,6 +38,16 @@ Vagrant.configure(2) do |config|
   config.r10k.puppet_dir = 'puppet'
   config.r10k.puppetfile_path = 'puppet/Puppetfile'
 
+  # Custom Manifest: install, and configure database
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "puppet/manifests"
+    puppet.manifest_file  = "setup_database.pp"
+    puppet.module_path    = "puppet/modules"
+    puppet.options        = ["--parser", "future"]
+  end
+
   # Custom Manifest: general configuration
   #
   #  Note: future parser allow array iteration in the puppet manifest
