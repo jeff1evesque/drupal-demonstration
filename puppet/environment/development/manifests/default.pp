@@ -16,7 +16,7 @@ package {$packages_general:
 
 ## start apache, and mysql server: required for the initial time
 exec {'start-services':
-    command => 'service httpd start && service mysqld start',
+    command => 'service httpd start',
     refreshonly => true,
     notify => Exec['autostart-services'],
 }
