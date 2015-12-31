@@ -8,7 +8,7 @@ $drush_version = '8.0.0-rc4'
 #
 #  @timeout, override the default 'exec' timeout
 #  @verbose, verbose logging
-wget::fetch { "download Google's index":
+wget::fetch {'download-drush':
   source      => "https://github.com/drush-ops/drush/releases/download/${drush_version}/drush.phar",
   destination => '/tmp/drush.phar',
   timeout     => 0,
