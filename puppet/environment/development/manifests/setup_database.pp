@@ -51,14 +51,8 @@ class {'::mysql::server':
   }
 }
 
-## mysql::client: install, and configure mariadb-client
-class {'::mysql::client':
-  package_name => 'mariadb-client',
-  require      => Class['::mysql::server'],
-}
-
 ## mysql::bindings: install python-mariadb bindings
 class {'::mysql::bindings':
   python_enable => true,
-  require       => [Class['::mysql::client'], Class['::mysql::server']],
+  require       => Class['::mysql::server'],
 }
