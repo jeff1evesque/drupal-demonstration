@@ -11,16 +11,13 @@ $drush_version = '8.0.0-rc4'
 wget::fetch {'download-drush':
   source      => "https://github.com/drush-ops/drush/releases/download/${drush_version}/drush.phar",
   destination => '/tmp/drush.phar',
-  timeout     => 0,
   verbose     => false,
-  notify      => Exec['test-drush-install']
 }
 
 ## test drush install
 exec {'test-drush-install':
   command     => 'php drush.phar core-status',
   cwd         => '/tmp',
-  refreshonly => true,
   notify      => Exec['change-permission-drush'],
 }
 
