@@ -19,7 +19,7 @@ wget::fetch { "download Google's index":
 ## test drush install
 exec {'test-drush-install':
   command     => 'php drush.phar core-status',
-  cwd         => '/tmp/drush.phar',
+  cwd         => '/tmp',
   refreshonly => true,
   notify      => Exec['change-permission-drush'],
 }
