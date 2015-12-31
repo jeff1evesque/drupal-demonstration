@@ -129,19 +129,19 @@ exec {'php-memory-limit':
 exec {'change-docroot':
     command => 'sed -i "s/\/var\/www\/html/\/vagrant/g" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
-    notify => Exec['adjust-iptables'],
+    notify => Exec['adjust-firewalld'],
 }
 
-## adjust iptables, which allows guest port 80 to be accessible on the host machine
-exec {'adjust-iptables':
+## adjust firewalld, which allows guest port 80 to be accessible on the host machine
+exec {'adjust-firewalld':
     command => 'firewall-cmd --add-port=80/tcp --permanent',
     refreshonly => true,
-    notify => Exec['restart-iptables'],
+    notify => Exec['restart-firewalld'],
 }
 
-## restart iptables
-exec {'restart-iptables':
-    command => 'service iptables restart',
+## restart firewalld
+exec {'restart-firewalld':
+    command => 'firewall-cmd --reload',
     refreshonly => true,
     notify => Exec['allow-htaccess-1'],
 }
