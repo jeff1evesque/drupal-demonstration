@@ -9,20 +9,20 @@ Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
 ## packages: install general packages
 package {$packages_general:
     ensure => present,
-    notify => Exec['start-services'],
-    before => Exec['start-services'],
+    notify => Exec['start-httpd'],
+    before => Exec['start-httpd'],
 }
 
 ## start apache, and mysql server: required for the initial time
-exec {'start-services':
+exec {'start-httpd':
     command => 'service httpd start',
     refreshonly => true,
-    notify => Exec['autostart-services'],
+    notify => Exec['autostart-httpd'],
 }
 
-## autostart apache, and mysql server: this ensure apache, and mysql runs after reboot
-exec {'autostart-services':
-    command => 'chkconfig httpd on && chkconfig mysqld on',
+## autostart apache server: this ensure apache runs after reboot
+exec {'autostart-httpd':
+    command => 'chkconfig httpd on',
     refreshonly => true,
     notify => Exec['add-epel'],
 }
