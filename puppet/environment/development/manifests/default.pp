@@ -142,7 +142,7 @@ exec {'adjust-iptables':
 
 ## restart iptables
 exec {'restart-iptables':
-    command => 'service iptables restart',
+    command => 'firewall-cmd --reload',
     refreshonly => true,
     notify => Exec['allow-htaccess-1'],
 }
