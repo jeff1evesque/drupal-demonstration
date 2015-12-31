@@ -133,16 +133,16 @@ exec {'change-docroot':
     notify => Exec['adjust-iptables'],
 }
 
-## adjust iptables, which allows guest port 80 to be accessible on the host machine
+## adjust firewalld, which allows guest port 80 to be accessible on the host machine
 exec {'adjust-iptables':
     command => 'firewall-cmd --add-port=80/tcp --permanent',
     refreshonly => true,
     notify => Exec['restart-iptables'],
 }
 
-## restart iptables
+## restart firewalld
 exec {'restart-iptables':
-    command => 'service iptables restart',
+    command => 'firewall-cmd --reload',
     refreshonly => true,
     notify => Exec['allow-htaccess-1'],
 }
