@@ -134,7 +134,7 @@ exec {'change-docroot':
 
 ## adjust iptables, which allows guest port 80 to be accessible on the host machine
 exec {'adjust-iptables':
-    command => 'sed -i "11i\-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT" /etc/sysconfig/iptables',
+    command => 'firewall-cmd --add-port=80/tcp --permanent',
     refreshonly => true,
     notify => Exec['restart-iptables'],
 }
