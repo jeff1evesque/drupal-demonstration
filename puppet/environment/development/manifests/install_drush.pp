@@ -40,6 +40,6 @@ exec {'move-drush':
 
 ## enrich the bash startup file with completion and aliases
 exec {'initialize-drush':
-  command     => 'drush init',
+  command     => '/usr/local/bin/drush init',
   refreshonly => true,
 }
