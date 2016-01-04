@@ -24,7 +24,8 @@ exec {'test-drush-install':
 
 ## change permission for 'drush.phar'
 exec {'change-permission-drush':
-  command     => 'chmod u+x /tmp/drush.phar',
+  command     => 'chmod ug+x drush.phar',
+  cwd         => '/tmp',
   refreshonly => true,
   notify      => Exec['move-drush'],
 }
