@@ -33,6 +33,7 @@ exec {'change-permission-drush':
 ## move drush anywhere on $PATH, as 'drush', instead of 'drush.phar'
 exec {'move-drush':
   command     => 'mv drush.phar /usr/local/bin/drush',
+  cwd         => '/tmp',
   refreshonly => true,
   notify      => Exec['initialize-drush'],
 }
