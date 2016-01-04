@@ -253,12 +253,12 @@ exec {'update-yum-php':
 ## install opcache
 package {'php-opcache':
     ensure => present,
-    notify => Exec['restart-services'],
-    before => Exec['restart-services'],
+    notify => Exec['restart-httpd'],
+    before => Exec['restart-httpd'],
 }
 
-## restart services to allow PHP extensions to load properly (dom, gd)
-exec {'restart-services':
-    command => 'service httpd restart && service mysqld restart',
+## restart httpd to allow PHP extensions to load properly (dom, gd)
+exec {'restart-httpd':
+    command => 'service httpd restart',
     refreshonly => true,
 }
