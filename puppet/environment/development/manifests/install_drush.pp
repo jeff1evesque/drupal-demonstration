@@ -1,3 +1,6 @@
+## define $PATH for all execs
+Exec {path => ['/usr/bin/']}
+
 ## include puppet modules
 include wget
 
