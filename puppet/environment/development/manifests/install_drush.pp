@@ -4,20 +4,18 @@ include wget
 ## variables
 $drush_version = '8.0.0-rc4'
 
-## download drush: wget is a wrapper around the 'exec' function
-#
-#  @timeout, override the default 'exec' timeout
-#  @verbose, verbose logging
-wget::fetch {'download-drush':
-  source      => "https://github.com/drush-ops/drush/releases/download/${drush_version}/drush.phar",
-  destination => '/tmp/drush.phar',
-  verbose     => false,
+## manual 'wget' drush
+exec {'download-drush':
+  command => "wget https://github.com/drush-ops/drush/releases/download/${drush_version}/drush.phar",
+  cwd     => '/tmp',
+  notify  => Exec['test-drush-install'],
 }
 
 ## test drush install
 exec {'test-drush-install':
   command     => 'php drush.phar core-status',
   cwd         => '/tmp',
+  refreshonly => true,
   notify      => Exec['change-permission-drush'],
 }
 
