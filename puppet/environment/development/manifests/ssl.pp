@@ -26,19 +26,19 @@ file {'/etc/httpd/ssl/':
 exec {'create-ssl':
     command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
     refreshonly => true,
-    notify => Exec['adjust-iptables'],
+    notify => Exec['adjust-firewalld-ssl'],
 }
 
-## adjust iptables, which allows guest port 443 to be accessible on the host machine
-exec {'adjust-iptables':
-    command => 'sed -i "11i\-A INPUT -m state --state NEW -m tcp -p tcp --dport 443 -j ACCEPT" /etc/sysconfig/iptables',
+## adjust firewalld, which allows guest port 443 to be accessible on the host machine
+exec {'adjust-firewalld-ssl':
+    command => 'firewall-cmd --add-port=443/tcp --permanent',
     refreshonly => true,
-    notify => Exec['restart-iptables'],
+    notify => Exec['restart-firewalld-ssl'],
 }
 
-## restart iptables
-exec {'restart-iptables':
-    command => 'service iptables restart',
+## restart firewalld (ssl)
+exec {'restart-firewalld-ssl':
+    command => 'firewall-cmd --reload',
     refreshonly => true,
     notify => Exec['assign-ssl-certificate'],
 }
