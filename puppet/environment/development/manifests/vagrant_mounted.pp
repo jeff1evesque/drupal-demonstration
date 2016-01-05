@@ -9,8 +9,8 @@ file {"vagrant-startup-script":
     path    => "/etc/init/workaround-vagrant-bug-6074.conf",
     ensure  => 'present',
     content => @("EOT"),
-               #!upstart
-               description 'workaround for https://github.com/mitchellh/vagrant/issues/6074'
+               [Unit]
+               Description=workaround for https://github.com/mitchellh/vagrant/issues/6074
 
                ## start job defined in this file after system services, and processes have already loaded
                #      (to prevent conflict).
