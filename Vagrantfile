@@ -35,66 +35,69 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = "drupal-demonstration.com"
 
   ## Run r10k
-  config.r10k.puppet_dir = 'puppet'
-  config.r10k.puppetfile_path = 'puppet/Puppetfile'
+  config.r10k.puppet_dir = 'puppet/environment/development'
+  config.r10k.puppetfile_path = 'puppet/environment/development/Puppetfile'
 
   # Custom Manifest: install, and configure database
   #
   #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "setup_database.pp"
-    puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
+    puppet.environment_path = 'puppet/environment'
+	puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = 'setup_database.pp'
   end
 
   # Custom Manifest: general configuration
-  #
-  #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "default.pp"
-    puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
+    puppet.environment_path = 'puppet/environment'
+	puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = 'default.pp'
+  end
+
+  # Custom Manifest: install drush
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+	puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = 'install_drush.pp'
   end
 
   # Custom Manifest: ssl configuration
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "ssl.pp"
-    puppet.module_path    = "puppet/modules"
+    puppet.environment_path = 'puppet/environment'
+	puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = 'ssl.pp'
   end
 
   # Custom Manifest: ensure vagrant mounted event fires
-  #
-  #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "vagrant_mounted.pp"
-    puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
+    puppet.environment_path = 'puppet/environment'
+	puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = 'vagrant_mounted.pp'
   end
 
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
-  #
-  #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "compile_asset.pp"
-    puppet.module_path    = "puppet/modules"
-    puppet.options        = ["--parser", "future"]
+    puppet.environment_path = 'puppet/environment'
+	puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = 'compile_asset.pp'
   end
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
-
-  # Create a forwarded port mapping which allows access to a specific port
-  # within the machine from a port on the host machine. In the example below,
-  # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 80, host: 6060
-  config.vm.network "forwarded_port", guest: 443, host: 6161
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
