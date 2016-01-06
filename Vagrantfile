@@ -43,7 +43,7 @@ Vagrant.configure(2) do |config|
   #  Note: future parser allow array iteration in the puppet manifest
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
-	puppet.environment      = 'development'
+    puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
     puppet.manifest_file    = 'setup_database.pp'
@@ -52,7 +52,7 @@ Vagrant.configure(2) do |config|
   # Custom Manifest: general configuration
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
-	puppet.environment      = 'development'
+    puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
     puppet.manifest_file    = 'default.pp'
@@ -61,7 +61,7 @@ Vagrant.configure(2) do |config|
   # Custom Manifest: install drush
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
-	puppet.environment      = 'development'
+    puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
     puppet.manifest_file    = 'install_drush.pp'
@@ -70,7 +70,7 @@ Vagrant.configure(2) do |config|
   # Custom Manifest: ssl configuration
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
-	puppet.environment      = 'development'
+    puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
     puppet.manifest_file    = 'ssl.pp'
@@ -79,7 +79,7 @@ Vagrant.configure(2) do |config|
   # Custom Manifest: ensure vagrant mounted event fires
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
-	puppet.environment      = 'development'
+    puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
     puppet.manifest_file    = 'vagrant_mounted.pp'
@@ -88,7 +88,7 @@ Vagrant.configure(2) do |config|
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
-	puppet.environment      = 'development'
+    puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
     puppet.manifest_file    = 'compile_asset.pp'
