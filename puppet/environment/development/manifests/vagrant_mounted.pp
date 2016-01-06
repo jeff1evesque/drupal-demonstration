@@ -10,9 +10,11 @@ file {"vagrant-systemd-script":
     ensure  => 'present',
     content => @("EOT"),
                [Unit]
-               Description=workaround for https://github.com/mitchellh/vagrant/issues/6074
+               Description=emit event after shared directory is mounted
+               Documentation=https://github.com/mitchellh/vagrant/issues/6074
 
                [Service]
+               Type=idle
 
                # user:group file permission is vagrant:vagrant for entire repository
                #
