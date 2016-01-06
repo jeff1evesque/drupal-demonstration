@@ -9,10 +9,22 @@ file {"vagrant-systemd-script":
     path    => "/etc/systemd/service/workaround-vagrant-bug-6074.service",
     ensure  => 'present',
     content => @("EOT"),
+               ## Unit (optional): metadata for the unit (this entire file).
+               #
+               #  @Description (recommended), string describing the unit,
+               #      intended to show descriptive information of the unit.
+               #  @Documentation (optional), space separated lists of URI's
+               #      referencing documentation for this unit, or its
+               #      configuration.
                [Unit]
                Description=emit event after shared directory is mounted
                Documentation=https://github.com/mitchellh/vagrant/issues/6074
 
+               ## Service (required): the service configuration.
+               #
+               #  @Type (recommended), configures the process start-up type for
+               #      this service unit. Specifically, 'idle' delays the
+               #      corresponding service until all jobs have dispatched.
                [Service]
                Type=idle
 
