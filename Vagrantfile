@@ -76,15 +76,6 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file    = 'ssl.pp'
   end
 
-  # Custom Manifest: ensure vagrant mounted event fires
-  config.vm.provision "puppet" do |puppet|
-    puppet.environment_path = 'puppet/environment'
-    puppet.environment      = 'development'
-    puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = 'puppet/environment/development/modules'
-    puppet.manifest_file    = 'vagrant_mounted.pp'
-  end
-
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
