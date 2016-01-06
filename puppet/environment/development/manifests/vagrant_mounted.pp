@@ -56,6 +56,6 @@ exec {"dos2unix-upstart-vagrant":
 #
 #  @enabled, ensures service starts (also on successive reboot)
 service {'workaround-vagrant-bug-6074':
-    enabled => true,
+    enable   => true,
     provider => systemd,
 }
