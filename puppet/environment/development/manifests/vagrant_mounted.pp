@@ -26,27 +26,21 @@ file {"vagrant-systemd-script":
                #      this service unit. Specifically, 'idle' delays the
                #      corresponding service until all jobs have dispatched.
                #  @User (optional), run service as specified user.
+               #  @ExecStart (optional), command to run when the unit is
+               #      started.
+               #
+               #  @-q, run 'mountpoint' silently
+               #  @--no-wait, do not wait for the emit command to finish
+               #  @MOUNTPOINT, specifies the environment variable to be
+               #      included with the 'emit' event, where [key=value] being
+               #      [MOUNTPOINT=${mountpoint}]. This allows the receiving
+               #      process(es) to use the corresponding environment
+               #      variable.
                [Service]
                Type=idle
                User=vagrant
-
-               ## until successful mount, sleep with 1s delay, then emit 'vagrant-mounted' event
-               #
-               #  @runuser, change the current user, since the above setuid, setgid stanzas
-               #      are not supported.
-               #
-               #  @-q, run 'mountpoint' silently
-               #
-               #  @--no-wait, do not wait for the emit command to finish
-               #
-               #  @MOUNTPOINT, specifies the environment variable to be included with the 'emit' event, where
-               #      [key=value] being [MOUNTPOINT=${mountpoint}]. This allows the receiving process(es) to use
-               #      the corresponding environment variable.
-               script
-                   sudo runuser vagrant
-                   until mountpoint -q ${mountpoint}; do sleep 1; done
-                   /sbin/initctl emit --no-wait vagrant-mounted MOUNTPOINT=${mountpoint}
-               end script
+               ExecStart=until mountpoint -q ${mountpoint}; do sleep 1; done
+               ExecStart=/sbin/initctl emit --no-wait vagrant-mounted MOUNTPOINT=${mountpoint}
                | EOT
                notify  => Exec["dos2unix-upstart-vagrant"],
 }
