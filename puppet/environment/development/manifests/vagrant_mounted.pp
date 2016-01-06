@@ -4,19 +4,15 @@ $mountpoint = '/vagrant/'
 ## define $PATH for all execs, and packages
 Exec {path => ['/usr/bin/', '/sbin/']}
 
-## create startup script: for 'vagrant-mounted' event
-file {"vagrant-startup-script":
-    path    => "/etc/init/workaround-vagrant-bug-6074.conf",
+## create systemd script: for 'vagrant-mounted' event
+file {"vagrant-systemd-script":
+    path    => "/etc/systemd/service/workaround-vagrant-bug-6074.service",
     ensure  => 'present',
     content => @("EOT"),
                [Unit]
                Description=workaround for https://github.com/mitchellh/vagrant/issues/6074
 
-               ## start job defined in this file after system services, and processes have already loaded
-               #      (to prevent conflict).
-               #
-               #  @[2345], represents all configuration states with general linux, and networking access
-               start on runlevel [2345]
+               [Service]
 
                # user:group file permission is vagrant:vagrant for entire repository
                #
