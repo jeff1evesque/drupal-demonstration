@@ -48,14 +48,14 @@ file {"vagrant-systemd-script":
 ## dos2unix upstart: convert clrf (windows to linux) in case host machine is windows.
 exec {"dos2unix-upstart-vagrant":
     command => 'dos2unix /etc/init/workaround-vagrant-bug-6074.conf',
-    notify => Exec['workaround-vagrant-bug-6074'],
+    refreshonly => true,
+    before => Service['workaround-vagrant-bug-6074'],
 }
 
 ## start 'workaround-vagrant-bug-6074' service
 #
-#  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
-#        'exec { ... }' stanza has been implemented (refer to github issue #189).
-exec {'workaround-vagrant-bug-6074':
-    command => "initctl start workaround-vagrant-bug-6074",
-    refreshonly => true,
+#  @enabled, ensures service starts (also on successive reboot)
+service {'workaround-vagrant-bug-6074':
+    enabled => true,
+    provider => systemd,
 }
