@@ -25,15 +25,10 @@ file {"vagrant-systemd-script":
                #  @Type (recommended), configures the process start-up type for
                #      this service unit. Specifically, 'idle' delays the
                #      corresponding service until all jobs have dispatched.
+               #  @User (optional), run service as specified user.
                [Service]
                Type=idle
-
-               # user:group file permission is vagrant:vagrant for entire repository
-               #
-               # Note: the following stanzas are not supported with current upstart 0.6.5.
-               #       Specifically, upstart 1.4.x, or higher is required.
-               #setuid vagrant
-               #setgid vagrant
+               User=vagrant
 
                ## until successful mount, sleep with 1s delay, then emit 'vagrant-mounted' event
                #
