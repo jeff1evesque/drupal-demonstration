@@ -14,6 +14,9 @@ $packages_npm     = ['uglify-js', 'node-sass', 'imagemin']
 ## variables: the order of the following array variables are not important
 $packages_general = ['inotify-tools', 'ruby-devel']
 
+## variables
+$environment      = 'development'
+
 ## packages: install general packages (apt, yum)
 package {$packages_general:
     ensure => 'installed',
@@ -124,7 +127,7 @@ $compilers.each |Integer $index, String $compiler| {
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-bash-${compiler}":
-        command => "dos2unix /vagrant/puppet/scripts/${compiler}",
+        command => "dos2unix /vagrant/puppet/environment/${environment}/scripts/${compiler}",
         refreshonly => true,
         notify  => Service["${compiler}"],
     }
