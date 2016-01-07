@@ -1,6 +1,9 @@
 ## include puppet modules
 include stdlib
-include nodejs
+
+class { 'nodejs':
+  repo_url_suffix => 'node_5.x',
+}
 
 ## define $PATH for all execs, and packages
 Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
