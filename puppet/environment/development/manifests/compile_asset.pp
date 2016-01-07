@@ -6,16 +6,16 @@ include nodejs
 Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
 
 ## variables: the order of the following array variables are important
-$compilers        = ['uglifyjs', 'sass', 'imagemin']
-$directory_src    = ['js', 'scss', 'img']
-$directory_asset  = ['js', 'css', 'img']
-$packages_npm     = ['uglify-js', 'node-sass', 'imagemin']
+$compilers         = ['uglifyjs', 'sass', 'imagemin']
+$directory_src     = ['js', 'scss', 'img']
+$directory_asset   = ['js', 'css', 'img']
+$packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
 
 ## variables: the order of the following array variables are not important
-$packages_general = ['inotify-tools', 'ruby-devel']
+$packages_general  = ['inotify-tools', 'ruby-devel']
 
 ## variables
-$environment      = 'development'
+$build_environment = 'development'
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:
