@@ -113,7 +113,7 @@ $compilers.each |Integer $index, String $compiler| {
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-upstart-${compiler}":
-        command => "dos2unix /etc/init/${compiler}.conf",
+        command => "dos2unix /etc/systemd/service/${compiler}.conf",
         notify  => Exec["dos2unix-bash-${compiler}"],
         refreshonly => true,
     }
@@ -137,6 +137,14 @@ $compilers.each |Integer $index, String $compiler| {
         command => "initctl start ${compiler}",
         refreshonly => true,
         notify  => Exec["touch-${directory_src[$index]}-files"],
+    }
+
+    ## start webcompiler service(s)
+    #
+    #  @enabled, ensures service starts (also on successive reboot)
+    service {$compiler:
+        enable   => true,
+        provider => systemd,
     }
 
     ## touch source: ensure initial build compiles every source file.
