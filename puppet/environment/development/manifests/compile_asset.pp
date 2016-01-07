@@ -64,59 +64,45 @@ $compilers.each |Integer $index, String $compiler| {
     #
     #  @("EOT"), the use double quotes on the end tag, allows variable interpolation within the puppet heredoc.
     file {"${compiler}-startup-script":
-        path    => "/etc/init/${compiler}.conf",
+        path    => "/etc/systemd/service/${compiler}.service",
         ensure  => 'present',
         content => @("EOT"),
-                   #!upstart
-                   description 'start ${compiler}'
-
-                   ## start job defined in this file after system services, and processes have already loaded
-                   #       (to prevent conflict).
+                   ## Unit (optional): metadata for the unit (this entire file).
                    #
-                   #  @[2345], represents all configuration states with general linux, and networking access
-                   start on vagrant-mounted
+                   #  @Description (recommended), string describing the unit,
+                   #      intended to show descriptive information of the unit.
+                   #  @Documentation (optional), space separated lists of URI's
+                   #      referencing documentation for this unit, or its
+                   #      configuration.
+                   #  @RequiresMountsFor (optional), adds dependencies of type
+                   #      'Requires=', and 'After=' for mount units required to
+                   #      access the specified path.
+                   [Unit]
+                   Description=define service to run corresponding bash script to compile source files
+                   Documentation=https://github.com/jeff1evesque/drupal-demonstration/issues/248
+                   RequiresMountsFor=/vagrant
 
-                   ## stop upstart job
-                   stop on runlevel [!2345]
-
-                   ## restart upstart job continuously
-                   respawn
-
-                   # user:group file permission is vagrant:vagrant for entire repository
+                   ## Service (required): the service configuration.
                    #
-                   # Note: the following stanzas are not supported with current upstart 0.6.5.
-                   #       Specifically, upstart 1.4.x, or higher is required.
-                   #setuid vagrant
-                   #setgid vagrant
-
-                   ## run upstart job as a background process
-                   expect fork
-
-                   ## start upstart job
-                   #
-                   #  @runuser, change the current user, since the above setuid, setgid stanzas
-                   #      are not supported, hence the below commented lines.
-                   script
-                   #    chdir /vagrant/puppet/scripts/
-                   #    exec ./${compiler}
-                       sudo runuser vagrant
-                       cd /vagrant/puppet/scripts/
-                       ./${compiler}
-                   end script
-
-                   ## log start-up date
+                   #  @Type (recommended), configures the process start-up type for
+                   #      this service unit. Specifically, 'forking' runs the
+                   #      corresponding service in the background.
+                   #  @User (optional), run service as specified user.
+                   #  @Restart (optional), restart service, when the service
+                   #      process exits, is killed, or a timeout is reached.
+                   #  @ExecStart (optional), command to run when the unit is
+                   #      started.
+                   #  @ExecStop (optional), command to run when the unit
+                   #      stopped.
                    #
                    #  @[`date`], current date script executed
-                   pre-start script
-                       echo "[`date`] ${compiler} service watcher starting" >> /vagrant/log/${compiler}.log 
-                   end script
-
-                   ## log shut-down date, remove process id from log before '/vagrant' is unmounted
-                   #
-                   #  @[`date`], current date script executed
-                   pre-stop script
-                       echo "[`date`] ${compiler} watcher stopping" >> /vagrant/log/${compiler}.log
-                   end script
+                   [Service]
+                   Type=forking
+                   User=vagrant
+                   Restart=true
+                   ExecStart=(cd /vagrant/puppet/scripts/ && ./${compiler})
+                   ExecStart=echo "[`date`] ${compiler} service watcher started" >> /vagrant/log/${compiler}.log
+                   ExecStop=echo "[`date`] ${compiler} watcher stopping" >> /vagrant/log/${compiler}.log
                    | EOT
                notify  => Exec["dos2unix-upstart-${compiler}"],
         }
