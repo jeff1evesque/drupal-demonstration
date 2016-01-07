@@ -5,7 +5,7 @@ mod 'vcsrepo',
 
 ## Install Module: gpg (nodejs dependency)
 mod 'puppet-gpg_key',
-  :git => "git@github.com:treydock/puppet-gpg_key"
+  :git => "git@github.com:treydock/puppet-gpg_key.git"
   
 ## Install Module: stdlib (nodejs dependency)
 mod 'stdlib',
@@ -14,18 +14,13 @@ mod 'stdlib',
 
 ## Install Module: wget (nodejs dependency)
 mod 'wget',
-  :git => "git@github.com:maestrodev/puppet-wget",
-  :ref => "v1.7.0"
+  :git => "git@github.com:maestrodev/puppet-wget.git",
+  :ref => "v1.7.1"
 
 ## Install Module: nodejs
 mod 'nodejs',
   :git => "git@github.com:puppet-community/puppet-nodejs.git",
-  :ref => "1.1.0"
-
-## Install Module: wget
-mod 'wget',
-  :git => "git@github.com:maestrodev/puppet-wget.git",
-  :ref => "v1.7.1"
+  :ref => "1.2.0"
 
 ## Install Module: mysql (to be used for mariadb)
 mod 'mysql',
