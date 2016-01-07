@@ -13,6 +13,7 @@ $packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
 
 ## variables: the order of the following array variables are not important
 $packages_general  = ['inotify-tools', 'ruby-devel']
+$directory_systemd = ['/etc/', '/etc/systemd/', '/etc/systemd/vagrant/']
 
 ## variables
 $build_environment = 'development'
@@ -32,6 +33,12 @@ package {$packages_npm:
 
 ## create log directory
 file {'/vagrant/log/':
+    ensure => 'directory',
+    before => File[$directory_systemd],
+}
+
+## create directory to store systemd scripts
+file {$directory_systemd:
     ensure => 'directory',
     before => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
 }
@@ -67,7 +74,7 @@ $compilers.each |Integer $index, String $compiler| {
     #
     #  @("EOT"), the use double quotes on the end tag, allows variable interpolation within the puppet heredoc.
     file {"${compiler}-startup-script":
-        path    => "/etc/systemd/service/${compiler}.service",
+        path    => "/etc/systemd/vagrant/${compiler}.service",
         ensure  => 'present',
         content => @("EOT"),
                    ## Unit (optional): metadata for the unit (this entire file).
