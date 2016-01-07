@@ -126,17 +126,7 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"dos2unix-bash-${compiler}":
         command => "dos2unix /vagrant/puppet/scripts/${compiler}",
         refreshonly => true,
-        notify  => Exec["${compiler}"],
-    }
-
-    ## start ${compiler} service
-    #
-    #  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
-    #        'exec { ... }' stanza has been implemented (refer to github issue #189).
-    exec {"${compiler}":
-        command => "initctl start ${compiler}",
-        refreshonly => true,
-        notify  => Exec["touch-${directory_src[$index]}-files"],
+        notify  => Service["${compiler}"],
     }
 
     ## start webcompiler service(s)
