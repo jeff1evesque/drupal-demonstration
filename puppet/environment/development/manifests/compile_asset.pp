@@ -99,8 +99,6 @@ $compilers.each |Integer $index, String $compiler| {
                    #  @User (optional), run service as specified user.
                    #  @Restart (optional), restart service, when the service
                    #      process exits, is killed, or a timeout is reached.
-                   #  @WorkingDirectory (optional), set the directory for the
-                   #      executed process(es).
                    #  @ExecStart (optional), command to run when the unit is
                    #      started.
                    #
@@ -109,7 +107,6 @@ $compilers.each |Integer $index, String $compiler| {
                    Type=forking
                    User=vagrant
                    Restart=true
-                   WorkingDirectory=/vagrant/puppet/scripts
                    ExecStart=/vagrant/puppet/scripts/${compiler}
                    | EOT
                notify  => Exec["dos2unix-upstart-${compiler}"],
@@ -134,15 +131,18 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"dos2unix-bash-${compiler}":
         command => "dos2unix /vagrant/puppet/environment/${environment}/scripts/${compiler}",
         refreshonly => true,
-        notify  => Service["${compiler}"],
+        notify  => Exec["${compiler}"],
     }
 
-    ## start webcompiler service(s)
+    ## start ${compiler} service
     #
-    #  @enabled, ensures service starts (also on successive reboot)
-    service {$compiler:
-        enable   => true,
-        provider => systemd,
+    #  Note: the 'service { ... }' stanza does not start the system service.
+    #        Therefore, the following 'exec { ... }' stanza has been
+    #        implemented (refer to github issue #189).
+    exec {"${compiler}":
+        command => "systemctl enable ${compiler}",
+        refreshonly => true,
+        notify  => Exec["touch-${directory_src[$index]}-files"],
     }
 
     ## touch source: ensure initial build compiles every source file.
