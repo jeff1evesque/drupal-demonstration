@@ -71,7 +71,7 @@ $compilers.each |Integer $index, String $compiler| {
 
     ## create startup script (heredoc syntax)
     #
-    #  @("EOT"), the use double quotes on the end tag, allows variable interpolation within the puppet heredoc.
+    #  @("EOT"), double quotes on the end tag, allows variable interpolation within the puppet heredoc.
     file {"${compiler}-startup-script":
         path    => "/etc/systemd/system/${compiler}.service",
         ensure  => 'present',
