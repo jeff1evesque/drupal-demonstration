@@ -55,7 +55,7 @@ file {'/vagrant/sites/all/themes/custom/sample_theme/asset/':
 
 ## dynamically create compilers
 $compilers.each |Integer $index, String $compiler| {
-    ## create asset directories
+    ## create source directories
     file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/":
         ensure => 'directory',
         before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
@@ -73,7 +73,7 @@ $compilers.each |Integer $index, String $compiler| {
     #
     #  @("EOT"), the use double quotes on the end tag, allows variable interpolation within the puppet heredoc.
     file {"${compiler}-startup-script":
-        path    => "/etc/systemd/vagrant/${compiler}.service",
+        path    => "/etc/systemd/system/${compiler}.service",
         ensure  => 'present',
         content => @("EOT"),
                    ## Unit (optional): metadata for the unit (this entire file).
@@ -99,19 +99,18 @@ $compilers.each |Integer $index, String $compiler| {
                    #  @User (optional), run service as specified user.
                    #  @Restart (optional), restart service, when the service
                    #      process exits, is killed, or a timeout is reached.
+                   #  @WorkingDirectory (optional), set the directory for the
+                   #      executed process(es).
                    #  @ExecStart (optional), command to run when the unit is
                    #      started.
-                   #  @ExecStop (optional), command to run when the unit
-                   #      stopped.
                    #
                    #  @[`date`], current date script executed
                    [Service]
                    Type=forking
                    User=vagrant
                    Restart=true
-                   ExecStart=(cd /vagrant/puppet/scripts/ && ./${compiler})
-                   ExecStart=echo "[`date`] ${compiler} service watcher started" >> /vagrant/log/${compiler}.log
-                   ExecStop=echo "[`date`] ${compiler} watcher stopping" >> /vagrant/log/${compiler}.log
+                   WorkingDirectory=/vagrant/puppet/scripts
+                   ExecStart=/vagrant/puppet/scripts/${compiler}
                    | EOT
                notify  => Exec["dos2unix-upstart-${compiler}"],
         }
