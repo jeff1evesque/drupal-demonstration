@@ -121,7 +121,7 @@ $compilers.each |Integer $index, String $compiler| {
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-upstart-${compiler}":
-        command => "dos2unix /etc/systemd/service/${compiler}.service",
+        command => "dos2unix /etc/systemd/system/${compiler}.service",
         notify  => Exec["dos2unix-bash-${compiler}"],
         refreshonly => true,
     }
