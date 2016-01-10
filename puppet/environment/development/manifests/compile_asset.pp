@@ -109,6 +109,7 @@ $compilers.each |Integer $index, String $compiler| {
                    Restart=true
                    ExecStart=/vagrant/puppet/scripts/${compiler}
                    | EOT
+               mode    => 770,
                notify  => Exec["dos2unix-upstart-${compiler}"],
         }
 
