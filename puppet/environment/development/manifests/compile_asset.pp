@@ -12,12 +12,6 @@ Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
 #
 #  Note: hash iteration is done alphabetically.
 $compilers = {
-    browserify => {
-        src       => 'jsx',
-        asset     => 'js',
-        asset_dir => true,
-        src_dir   => true,
-    },
     imagemin   => {
         src   => 'img',
         asset => 'img',
