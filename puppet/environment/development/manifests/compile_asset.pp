@@ -35,6 +35,7 @@ $compilers = {
 ## variables: general build
 $packages_general  = ['inotify-tools', 'ruby-devel']
 $packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
+$build_environment = 'development'
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:
@@ -124,18 +125,18 @@ $compilers.each |String $compiler, Hash $resource| {
                    Type=simple
                    User=vagrant
                    Restart=always
-                   ExecStart=/vagrant/puppet/environment/development/scripts/${compiler}
+                   ExecStart=/vagrant/puppet/environment/${build_environment}/scripts/${compiler}
                    | EOT
                mode    => '770',
-               notify  => Exec["dos2unix-upstart-${compiler}"],
+               notify  => Exec["dos2unix-systemd-${compiler}"],
         }
 
-    ## dos2unix upstart: convert clrf (windows to linux) in case host machine is windows.
+    ## dos2unix systemd: convert clrf (windows to linux) in case host machine is windows.
     #
     #  @notify, ensure the webserver service is started. This is similar to an exec statement, where the
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
-    exec {"dos2unix-upstart-${compiler}":
+    exec {"dos2unix-systemd-${compiler}":
         command => "dos2unix /etc/systemd/system/${compiler}.service",
         notify  => Exec["dos2unix-bash-${compiler}"],
         refreshonly => true,
@@ -147,7 +148,7 @@ $compilers.each |String $compiler, Hash $resource| {
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-bash-${compiler}":
-        command => "dos2unix /vagrant/puppet/environment/${environment}/scripts/${compiler}",
+        command => "dos2unix /vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
         refreshonly => true,
         notify  => Service[$compiler],
     }
