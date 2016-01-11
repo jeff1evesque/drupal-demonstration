@@ -101,8 +101,6 @@ $compilers.each |Integer $index, String $compiler| {
                    #      process exits, is killed, or a timeout is reached.
                    #  @ExecStart (optional), command to run when the unit is
                    #      started.
-                   #
-                   #  @[`date`], current date script executed
                    [Service]
                    Type=simple
                    User=vagrant
