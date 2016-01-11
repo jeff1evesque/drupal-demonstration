@@ -95,7 +95,8 @@ $compilers.each |Integer $index, String $compiler| {
                    #
                    #  @Type (recommended), configures the process start-up type for
                    #      this service unit. Specifically, 'forking' runs the
-                   #      corresponding service in the background.
+                   #      corresponding service in the background, and only allows
+                   #      one 'ExecStartPre' statement.
                    #  @User (optional), run service as specified user.
                    #  @Restart (optional), restart service, when the service
                    #      process exits, is killed, or a timeout is reached.
@@ -106,7 +107,7 @@ $compilers.each |Integer $index, String $compiler| {
                    [Service]
                    Type=forking
                    User=vagrant
-                   ExecStart=/usr/bin/bash -c '/vagrant/puppet/scripts/${compiler}'
+                   ExecStart=/vagrant/puppet/environment/development/scripts/${compiler}
                    | EOT
                mode    => '770',
                notify  => Exec["dos2unix-upstart-${compiler}"],
