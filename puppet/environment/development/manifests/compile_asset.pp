@@ -94,9 +94,8 @@ $compilers.each |Integer $index, String $compiler| {
                    ## Service (required): the service configuration.
                    #
                    #  @Type (recommended), configures the process start-up type for
-                   #      this service unit. Specifically, 'forking' runs the
-                   #      corresponding service in the background, and only allows
-                   #      one 'ExecStartPre' statement.
+                   #      this service unit. Specifically, 'simple' defines the
+                   #      process configured with 'ExecStart' is the main process.
                    #  @User (optional), run service as specified user.
                    #  @Restart (optional), restart service, when the service
                    #      process exits, is killed, or a timeout is reached.
@@ -105,7 +104,7 @@ $compilers.each |Integer $index, String $compiler| {
                    #
                    #  @[`date`], current date script executed
                    [Service]
-                   Type=forking
+                   Type=simple
                    User=vagrant
                    Restart=always
                    ExecStart=/vagrant/puppet/environment/development/scripts/${compiler}
