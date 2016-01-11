@@ -133,16 +133,18 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"dos2unix-bash-${compiler}":
         command => "dos2unix /vagrant/puppet/environment/${environment}/scripts/${compiler}",
         refreshonly => true,
-        notify  => Exec["${compiler}"],
+        notify  => Exec["start-${compiler}"],
     }
 
     ## start ${compiler} service
     #
+    #  @enable, ensure service is booted next time system is started.
+    #
     #  Note: the 'service { ... }' stanza does not start the system service.
     #        Therefore, the following 'exec { ... }' stanza has been
     #        implemented (refer to github issue #189).
-    exec {"${compiler}":
-        command => "systemctl enable ${compiler}",
+    exec {"start-${compiler}":
+        command => "systemctl enable ${compiler} && systemctl start ${compiler}",
         refreshonly => true,
         notify  => Exec["touch-${directory_src[$index]}-files"],
     }
