@@ -5,7 +5,7 @@
 
 
 # Pre-Pathing: allow 'sass' command
-PATH="/usr/local/bin:$PATH"
+PATH="/usr/lib:$PATH"
 
 
 # track execution of script
@@ -13,12 +13,19 @@ set -x; exec > /vagrant/log/sass_execution.log 2>&1
 
 
 # watch '/vagrant/sites/all/themes/custom/sample_theme/src/scss/' subdirectory
-inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/scss/ -m -e close_write -e move -e create |
+inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/scss/ -m -e close_write -e move --format %f |
   # Compile CSS
-  while read path action file; do
+  while read -r file; do
+    # get last `.` occurence as starting extension
+    extension=${file##*.}
     # filename (without 'last' extension)
     filename="${file%.*}"
 
-    # compile with 'sass'
-    node-sass /vagrant/sites/all/themes/custom/sample_theme/src/scss/"$file" /vagrant/sites/all/themes/custom/sample_theme/asset/css/"$filename".min.css --output-style compressed
+    if [ "$extension" = 'scss' ]
+    then
+
+      # compile with 'sass'
+      node-sass /vagrant/sites/all/themes/custom/sample_theme/src/scss/"$file" /vagrant/sites/all/themes/custom/sample_theme/asset/css/"$filename".min.css --output-style compressed
+
+    fi
   done
