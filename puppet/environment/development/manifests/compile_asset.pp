@@ -95,7 +95,7 @@ $compilers.each |Integer $index, String $compiler| {
                    #
                    #  @Type (recommended), configures the process start-up type for
                    #      this service unit. Specifically, 'simple' defines the
-                   #      process configured with 'ExecStart' is the main process.
+                   #      process configured with 'ExecStart' as the main process.
                    #  @User (optional), run service as specified user.
                    #  @Restart (optional), restart service, when the service
                    #      process exits, is killed, or a timeout is reached.
