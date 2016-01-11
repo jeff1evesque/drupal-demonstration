@@ -5,17 +5,44 @@ include stdlib
 Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
 
 ## variables: the order of the following array variables are important
-$compilers         = ['uglifyjs', 'sass', 'imagemin']
-$directory_src     = ['js', 'scss', 'img']
-$directory_asset   = ['js', 'css', 'img']
-$packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
-
-## variables: the order of the following array variables are not important
-$packages_general  = ['inotify-tools', 'ruby-devel']
-$directory_systemd = ['/etc/', '/etc/systemd/', '/etc/systemd/vagrant/']
+## variables
+#
+#  @asset_dir, indicate whether to create corresponding asset directory.
+#
+#  @src_dir, indicate whether to create corresponding source directory.
+#
+#  Note: hash iteration is done alphabetically.
+$compilers = {
+    browserify => {
+        src       => 'jsx',
+        asset     => 'js',
+        asset_dir => true,
+        src_dir   => true,
+    },
+    imagemin   => {
+        src   => 'img',
+        asset => 'img',
+        asset_dir => true,
+        src_dir   => true,
+    },
+    sass       => {
+        src       => 'scss',
+        asset     => 'css',
+        asset_dir => true,
+        src_dir   => true,
+    },
+    uglifyjs   => {
+        src       => 'js',
+        asset     => 'js',
+        asset_dir => false,
+        src_dir   => false,
+    }
+}
 
 ## variables
 $build_environment = 'development'
+$packages_general  = ['inotify-tools', 'ruby-devel']
+$packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:
@@ -36,12 +63,6 @@ file {'/vagrant/log/':
     before => File[$directory_systemd],
 }
 
-## create directory to store systemd scripts
-file {$directory_systemd:
-    ensure => 'directory',
-    before => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
-}
-
 ## create source directory
 file {'/vagrant/sites/all/themes/custom/sample_theme/src/':
     ensure => 'directory',
@@ -54,19 +75,25 @@ file {'/vagrant/sites/all/themes/custom/sample_theme/asset/':
 }
 
 ## dynamically create compilers
-$compilers.each |Integer $index, String $compiler| {
-    ## create source directories
-    file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/":
-        ensure => 'directory',
-        before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
-        require => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
+$compilers.each |String $compiler, Hash $resource| {
+    ## variables
+    $check_files = "if [ \"$(ls -A /vagrant/src/${resource['src']}/)\" ];"
+    $touch_files = "then touch /vagrant/src/${resource['src']}/*; fi"
+
+    ## create asset directories (if not exist)
+    if ($resource['asset_dir']) {
+        file {"/vagrant/sites/all/themes/custom/sample_theme/asset/${resource['asset']}/":
+            ensure => 'directory',
+            before => File["${compiler}-startup-script"],
+        }
     }
 
-    ## create asset directories
-    file {"/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/":
-        ensure => 'directory',
-        before => File["${compiler}-startup-script"],
-        require => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
+    ## create src directories (if not exist)
+    if ($resource['src_dir']) {
+        file {"/vagrant/sites/all/themes/custom/sample_theme/src/${resource['src']}/":
+            ensure => 'directory',
+            before => File["${compiler}-startup-script"],
+        }
     }
 
     ## create startup script (heredoc syntax)
@@ -130,35 +157,30 @@ $compilers.each |Integer $index, String $compiler| {
     exec {"dos2unix-bash-${compiler}":
         command => "dos2unix /vagrant/puppet/environment/${environment}/scripts/${compiler}",
         refreshonly => true,
-        notify  => Exec["start-${compiler}"],
+        notify  => Service[$compiler],
     }
 
     ## start ${compiler} service
-    #
-    #  @enable, ensure service is booted next time system is started.
-    #
-    #  Note: the 'service { ... }' stanza does not start the system service.
-    #        Therefore, the following 'exec { ... }' stanza has been
-    #        implemented (refer to github issue #189).
-    exec {"start-${compiler}":
-        command => "systemctl enable ${compiler} && systemctl start ${compiler}",
-        refreshonly => true,
-        notify  => Exec["touch-${directory_src[$index]}-files"],
+    service {$compiler:
+        ensure => 'running',
+        enable => true,
+        notify => Exec["touch-${resource['src']}-files"],
     }
 
     ## touch source: ensure initial build compiles every source file.
     #
     #  @touch, changes the modification time to the current system time.
     #
-    #  Note: the current inotifywait implementation watches close_write, move, and create. However, the
-    #        source files will already exist before this 'inotifywait', since the '/vagrant' directory
-    #        will already have been mounted on the initial build.
+    #  Note: the current inotifywait implementation watches close_write, move,
+    #        and create. However, the source files will already exist before
+    #        this 'inotifywait', since the '/vagrant' directory will already
+    #        have been mounted on the initial build.
     #
-    #  Note: every 'command' implementation checks if directory is nonempty, then touch all files in the
-	#        directory, respectively.
-    exec {"touch-${directory_src[$index]}-files":
-        command => "if [ `ls -A /vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/` ]; then touch /vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/*; fi",
+    #  Note: every 'command' implementation checks if directory is nonempty,
+    #        then touch all files in the directory, respectively.
+    exec {"touch-${resource['src']}-files":
+        command     => "${check_files} ${touch_files}",
         refreshonly => true,
-        provider => shell,
+        provider    => shell,
     }
 }
