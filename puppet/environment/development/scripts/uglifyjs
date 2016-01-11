@@ -5,7 +5,7 @@
 
 
 # Pre-Pathing: allow 'uglifyjs' command
-PATH="/usr/local/bin:$PATH"
+PATH="/usr/lib:$PATH"
 
 
 # track execution of script
@@ -13,12 +13,20 @@ set -x; exec > /vagrant/log/uglifyjs_execution.log 2>&1
 
 
 # watch '/vagrant/sites/all/themes/custom/sample_theme/src/js/' subdirectory
-inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/js/ -m -e close_write -e move -e create |
+inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/js/ -m -e close_write -e move --format %f |
   # Minify Javascript
-  while read path action file; do
-    # filename (without 'last' extension)
-    filename="${file%.*}"
+  while read -r file; do
 
-    # minifiy with 'uglifyjs'
-    uglifyjs -c --output /vagrant/sites/all/themes/custom/sample_theme/asset/js/"$filename".min.js /vagrant/sites/all/themes/custom/sample_theme/src/js/"$file"
+      # get last `.` occurence as starting extension
+      extension=${file##*.}
+      # filename (without 'last' extension)
+      filename="${file%.*}"
+
+      if [ "$extension" = 'js' ]
+      then
+
+        # minifiy with 'uglifyjs'
+        uglifyjs -c --output /vagrant/sites/all/themes/custom/sample_theme/asset/js/"$filename".min.js /vagrant/sites/all/themes/custom/sample_theme/src/js/"$file"
+
+      fi
   done
