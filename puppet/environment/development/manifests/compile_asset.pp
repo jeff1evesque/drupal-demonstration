@@ -4,8 +4,7 @@ include stdlib
 ## define $PATH for all execs, and packages
 Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
 
-## variables: the order of the following array variables are important
-## variables
+## variables: for webcompiler directory structure build
 #
 #  @asset_dir, indicate whether to create corresponding asset directory.
 #
@@ -39,8 +38,7 @@ $compilers = {
     }
 }
 
-## variables
-$build_environment = 'development'
+## variables: general build
 $packages_general  = ['inotify-tools', 'ruby-devel']
 $packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
 
