@@ -107,7 +107,7 @@ $compilers.each |Integer $index, String $compiler| {
                    [Service]
                    Type=forking
                    User=vagrant
-                   Restart=on
+                   Restart=always
                    ExecStart=/vagrant/puppet/environment/development/scripts/${compiler}
                    | EOT
                mode    => '770',
