@@ -106,8 +106,7 @@ $compilers.each |Integer $index, String $compiler| {
                    [Service]
                    Type=forking
                    User=vagrant
-                   Restart=true
-                   ExecStart=/vagrant/puppet/scripts/${compiler}
+                   ExecStart=/usr/bin/bash -c '/vagrant/puppet/scripts/${compiler}'
                    | EOT
                mode    => '770',
                notify  => Exec["dos2unix-upstart-${compiler}"],
