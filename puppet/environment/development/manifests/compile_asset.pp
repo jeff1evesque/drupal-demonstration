@@ -27,8 +27,8 @@ $compilers = {
     uglifyjs   => {
         src       => 'js',
         asset     => 'js',
-        asset_dir => false,
-        src_dir   => false,
+        asset_dir => true,
+        src_dir   => true,
     }
 }
 
