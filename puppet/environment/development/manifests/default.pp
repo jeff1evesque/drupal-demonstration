@@ -4,7 +4,7 @@ class { 'nodejs':
 }
 
 ## variables
-$packages_general = ['git', 'httpd', 'php', 'php-mysql', 'gd', 'dos2unix']
+$packages_general = ['git', 'httpd', 'gd', 'dos2unix']
 $time_zone = 'America/New_York'
 
 ## define $PATH for all execs
@@ -142,16 +142,9 @@ exec {'mv-httpd-conf-htaccess-2':
 exec {'set-time-zone':
     command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
     refreshonly => true,
-    notify => Exec['update-yum-php'],
+    notify => Exec['restart-httpd'],
 }
 
-## php update: update yum for php
-exec {'update-yum-php':
-    command => 'yum -y update',
-    refreshonly => true,
-    before => Package['php-opcache'],
-    timeout => 750,
-}
 
 ## restart httpd to allow PHP extensions to load properly (dom, gd)
 exec {'restart-httpd':
