@@ -36,6 +36,8 @@ $compilers = {
 $packages_general  = ['inotify-tools', 'ruby-devel']
 $packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
 $build_environment = 'development'
+$path_source       = '/vagrant/sites/all/themes/custom/sample_theme/src'
+$path_asset        = '/vagrant/sites/all/themes/custom/sample_theme/asset'
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:
@@ -57,25 +59,25 @@ file {'/vagrant/log/':
 }
 
 ## create source directory
-file {'/vagrant/sites/all/themes/custom/sample_theme/src/':
+file {$path_source:
     ensure => 'directory',
-    before => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
+    before => File[$path_asset],
 }
 
 ## create asset directory
-file {'/vagrant/sites/all/themes/custom/sample_theme/asset/':
+file {$path_asset:
     ensure => 'directory',
 }
 
 ## dynamically create compilers
 $compilers.each |String $compiler, Hash $resource| {
     ## variables
-    $check_files = "if [ \"$(ls -A /vagrant/src/${resource['src']}/)\" ];"
-    $touch_files = "then touch /vagrant/src/${resource['src']}/*; fi"
+    $check_files = "if [ \"$(ls -A ${path_source}/${resource['src']}/)\" ];"
+    $touch_files = "then echo 'stuff' >> /vagrant/jeff.txt; fi"
 
     ## create asset directories (if not exist)
     if ($resource['asset_dir']) {
-        file {"/vagrant/sites/all/themes/custom/sample_theme/asset/${resource['asset']}/":
+        file {"${path_asset}/${resource['asset']}/":
             ensure => 'directory',
             before => File["${compiler}-startup-script"],
         }
@@ -83,7 +85,7 @@ $compilers.each |String $compiler, Hash $resource| {
 
     ## create src directories (if not exist)
     if ($resource['src_dir']) {
-        file {"/vagrant/sites/all/themes/custom/sample_theme/src/${resource['src']}/":
+        file {"${path_source}/${resource['src']}/":
             ensure => 'directory',
             before => File["${compiler}-startup-script"],
         }
