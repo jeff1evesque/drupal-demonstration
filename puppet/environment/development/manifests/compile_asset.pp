@@ -155,7 +155,7 @@ $compilers.each |String $compiler, Hash $resource| {
         notify  => Service[$compiler],
     }
 
-    ## start webcompiler service(s)
+    ## start compiler service(s)
     service {$compiler:
         ensure => 'running',
         enable => true,
