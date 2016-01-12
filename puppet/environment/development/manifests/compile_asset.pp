@@ -73,7 +73,7 @@ file {$path_asset:
 $compilers.each |String $compiler, Hash $resource| {
     ## variables
     $check_files = "if [ \"$(ls -A ${path_source}/${resource['src']}/)\" ];"
-    $touch_files = "then touch /vagrant/src/${resource['src']}/*; fi"
+    $touch_files = "then touch ${path_source}/${resource['src']}/*; fi"
 
     ## create asset directories (if not exist)
     if ($resource['asset_dir']) {
