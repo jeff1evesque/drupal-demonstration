@@ -1,11 +1,40 @@
 ## include puppet modules
-class {'php':
-  version => '5.6',
+include wget
+
+# variables
+$rpm_package_epel = 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm'
+$rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-7.rpm'
+$php_packages     = ['php', 'php-gd', 'php-mysql', php-mcrypt']
+
+## define $PATH for all execs
+Exec {path => ['/usr/bin/']}
+
+## download rpm package(s)
+exec {'download-rpm-package':
+    command => "wget ${rpm_package_epel} && wget ${rpm_package_remi}",
+    notify => Exec['install-rpm-package'],
+    cwd => '/home/vagrant/',
+}
+
+## install rpm package(s)
+exec {'install-rpm-package':
+    command => "rpm -Uvh ${rpm_package_epel} && rpm -Uvh ${rpm_package_remi}",
+    refreshonly => true,
+    notify => Exec['remove-rpm-package'],
+    cwd => '/home/vagrant/',
+}
+
+## remove unnecessary rpm packages
+exec {'remove-rpm-package':
+    command => 'rm *.rpm',
+    refreshonly => true,
+    notify => Exec['add-epel'],
+    cwd => '/home/vagrant/',
 }
 
 ## add EPEL Repository, which allows 'phpmyadmin' to be installed
 exec {'add-epel':
-    command => "yum -y install epel-release --enablerepo=extras",
+    command => 'yum -y install epel-release --enablerepo=extras',
     refreshonly => true,
     notify => Exec['update-yum'],
     timeout => 450,
@@ -23,7 +52,26 @@ exec {'update-yum':
 exec {'install-phpmyadmin':
     command => 'yum -y install phpmyadmin',
     refreshonly => true,
+    notify => Exec['enable-php-56-repo'],
+}
+
+## enable repo to install php 5.6
+exec {'enable-php-56-repo-1':
+    command => 'awk "/[remi-php56]/,/[remi-test]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/vagrant/remi.tmp',
+    refreshonly => true,
+    notify => Exec['enable-php-56-repo-2'],
+}
+exec {'enable-php-56-repo-2':
+    command => 'mv /home/vagrant/remi.tmp /etc/yum.repos.d/remi.repo',
+    refreshonly => true,
+    before => Package[$php_packages],
+}
+
+## install php
+package {$php_packages:
+    ensure => present,
     notify => Exec['phpmyadmin-access-1'],
+    before => Exec['phpmyadmin-access-1'],
 }
 
 ## allow phpmyadmin access from guest VM to host (part 1)
