@@ -153,13 +153,6 @@ exec {'update-yum-php':
     timeout => 750,
 }
 
-## install opcache
-package {'php-opcache':
-    ensure => present,
-    notify => Exec['restart-httpd'],
-    before => Exec['restart-httpd'],
-}
-
 ## restart httpd to allow PHP extensions to load properly (dom, gd)
 exec {'restart-httpd':
     command => 'service httpd restart',
