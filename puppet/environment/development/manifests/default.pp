@@ -6,8 +6,6 @@ class { 'nodejs':
 ## variables
 $packages_general = ['git', 'httpd', 'php', 'php-mysql', 'gd', 'dos2unix']
 $time_zone = 'America/New_York'
-$rpm_url_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
-$rpm_package_remi = 'remi-release-6*.rpm'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
@@ -29,29 +27,6 @@ exec {'start-httpd':
 ## autostart apache server: this ensure apache runs after reboot
 exec {'autostart-httpd':
     command => 'chkconfig httpd on',
-    refreshonly => true,
-    notify => Exec['add-epel'],
-}
-
-## add EPEL Repository, which allows 'phpmyadmin' to be installed
-exec {'add-epel':
-    command => "yum -y install epel-release --enablerepo=extras",
-    refreshonly => true,
-    notify => Exec['update-yum'],
-    timeout => 450,
-}
-
-## update yum using the added EPEL repository
-exec {'update-yum':
-    command => 'yum -y update',
-    refreshonly => true,
-    notify => Exec['install-phpmyadmin'],
-    timeout => 750,
-}
-
-## install phpmyadmin: requires the above 'add-epel', and 'update-yum'
-exec {'install-phpmyadmin':
-    command => 'yum -y install phpmyadmin',
     refreshonly => true,
     notify => Exec['define-errordocument-403'],
 }
@@ -102,31 +77,6 @@ exec {'remove-comment-errordocument-2':
 }
 exec {'mv-httpd-conf-comment-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['phpmyadmin-access-1'],
-}
-
-## allow phpmyadmin access from guest VM to host (part 1)
-#
-#  Note: this segment appends directly below <Directory /usr/share/phpMyAdmin/>
-exec {'phpmyadmin-access-1':
-    command => 'sed -i "12i\Order allow,deny" /etc/httpd/conf.d/phpMyAdmin.conf',
-    refreshonly => true,
-    notify => Exec['phpmyadmin-access-2'],
-}
-
-## allow phpmyadmin access from guest VM to host (part 2)
-#
-#  Note: this segment appends directly below (part 1)
-exec {'phpmyadmin-access-2':
-    command => 'sed -i "13i\Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
-    refreshonly => true,
-    notify => Exec['php-memory-limit'],
-}
-
-## increase php memory limit (i.e. bootstrap 3 theme)
-exec {'php-memory-limit':
-    command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php.ini',
     refreshonly => true,
     notify => Exec['change-docroot'],
 }
