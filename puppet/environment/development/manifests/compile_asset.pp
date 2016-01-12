@@ -1,18 +1,43 @@
 ## include puppet modules
 include stdlib
-include nodejs
 
 ## define $PATH for all execs, and packages
 Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
 
-## variables: the order of the following array variables are important
-$compilers        = ['uglifyjs', 'sass', 'imagemin']
-$directory_src    = ['js', 'scss', 'img']
-$directory_asset  = ['js', 'css', 'img']
-$packages_npm     = ['uglify-js', 'node-sass', 'imagemin']
+## variables: for webcompiler directory structure build
+#
+#  @asset_dir, indicate whether to create corresponding asset directory.
+#
+#  @src_dir, indicate whether to create corresponding source directory.
+#
+#  Note: hash iteration is done alphabetically.
+$compilers = {
+    imagemin   => {
+        src   => 'img',
+        asset => 'img',
+        asset_dir => true,
+        src_dir   => true,
+    },
+    sass       => {
+        src       => 'scss',
+        asset     => 'css',
+        asset_dir => true,
+        src_dir   => true,
+    },
+    uglifyjs   => {
+        src       => 'js',
+        asset     => 'js',
+        asset_dir => true,
+        src_dir   => true,
+    }
+}
 
-## variables: the order of the following array variables are not important
-$packages_general = ['inotify-tools', 'ruby-devel']
+## variables: general build
+$packages_general  = ['inotify-tools', 'ruby-devel']
+$packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
+$build_environment = 'development'
+$path_source       = '/vagrant/sites/all/themes/custom/sample_theme/src'
+$path_asset        = '/vagrant/sites/all/themes/custom/sample_theme/asset'
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:
@@ -30,104 +55,91 @@ package {$packages_npm:
 ## create log directory
 file {'/vagrant/log/':
     ensure => 'directory',
-    before => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
+    before => File[$directory_systemd],
 }
 
 ## create source directory
-file {'/vagrant/sites/all/themes/custom/sample_theme/src/':
+file {$path_source:
     ensure => 'directory',
-    before => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
+    before => File[$path_asset],
 }
 
 ## create asset directory
-file {'/vagrant/sites/all/themes/custom/sample_theme/asset/':
+file {$path_asset:
     ensure => 'directory',
 }
 
 ## dynamically create compilers
-$compilers.each |Integer $index, String $compiler| {
-    ## create asset directories
-    file {"/vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/":
-        ensure => 'directory',
-        before => File["/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/"],
-        require => File['/vagrant/sites/all/themes/custom/sample_theme/src/'],
+$compilers.each |String $compiler, Hash $resource| {
+    ## variables
+    $check_files = "if [ \"$(ls -A ${path_source}/${resource['src']}/)\" ];"
+    $touch_files = "then touch ${path_source}/${resource['src']}/*; fi"
+
+    ## create asset directories (if not exist)
+    if ($resource['asset_dir']) {
+        file {"${path_asset}/${resource['asset']}/":
+            ensure => 'directory',
+            before => File["${compiler}-startup-script"],
+        }
     }
 
-    ## create asset directories
-    file {"/vagrant/sites/all/themes/custom/sample_theme/asset/${directory_asset[$index]}/":
-        ensure => 'directory',
-        before => File["${compiler}-startup-script"],
-        require => File['/vagrant/sites/all/themes/custom/sample_theme/asset/'],
+    ## create src directories (if not exist)
+    if ($resource['src_dir']) {
+        file {"${path_source}/${resource['src']}/":
+            ensure => 'directory',
+            before => File["${compiler}-startup-script"],
+        }
     }
 
     ## create startup script (heredoc syntax)
     #
-    #  @("EOT"), the use double quotes on the end tag, allows variable interpolation within the puppet heredoc.
+    #  @("EOT"), double quotes on the end tag, allows variable interpolation within the puppet heredoc.
     file {"${compiler}-startup-script":
-        path    => "/etc/init/${compiler}.conf",
+        path    => "/etc/systemd/system/${compiler}.service",
         ensure  => 'present',
         content => @("EOT"),
-                   #!upstart
-                   description 'start ${compiler}'
-
-                   ## start job defined in this file after system services, and processes have already loaded
-                   #       (to prevent conflict).
+                   ## Unit (optional): metadata for the unit (this entire file).
                    #
-                   #  @[2345], represents all configuration states with general linux, and networking access
-                   start on vagrant-mounted
+                   #  @Description (recommended), string describing the unit,
+                   #      intended to show descriptive information of the unit.
+                   #  @Documentation (optional), space separated lists of URI's
+                   #      referencing documentation for this unit, or its
+                   #      configuration.
+                   #  @RequiresMountsFor (optional), adds dependencies of type
+                   #      'Requires=', and 'After=' for mount units required to
+                   #      access the specified path.
+                   [Unit]
+                   Description=define service to run corresponding bash script to compile source files
+                   Documentation=https://github.com/jeff1evesque/drupal-demonstration/issues/248
+                   RequiresMountsFor=/vagrant
 
-                   ## stop upstart job
-                   stop on runlevel [!2345]
-
-                   ## restart upstart job continuously
-                   respawn
-
-                   # user:group file permission is vagrant:vagrant for entire repository
+                   ## Service (required): the service configuration.
                    #
-                   # Note: the following stanzas are not supported with current upstart 0.6.5.
-                   #       Specifically, upstart 1.4.x, or higher is required.
-                   #setuid vagrant
-                   #setgid vagrant
-
-                   ## run upstart job as a background process
-                   expect fork
-
-                   ## start upstart job
-                   #
-                   #  @runuser, change the current user, since the above setuid, setgid stanzas
-                   #      are not supported, hence the below commented lines.
-                   script
-                   #    chdir /vagrant/puppet/scripts/
-                   #    exec ./${compiler}
-                       sudo runuser vagrant
-                       cd /vagrant/puppet/scripts/
-                       ./${compiler}
-                   end script
-
-                   ## log start-up date
-                   #
-                   #  @[`date`], current date script executed
-                   pre-start script
-                       echo "[`date`] ${compiler} service watcher starting" >> /vagrant/log/${compiler}.log 
-                   end script
-
-                   ## log shut-down date, remove process id from log before '/vagrant' is unmounted
-                   #
-                   #  @[`date`], current date script executed
-                   pre-stop script
-                       echo "[`date`] ${compiler} watcher stopping" >> /vagrant/log/${compiler}.log
-                   end script
+                   #  @Type (recommended), configures the process start-up type for
+                   #      this service unit. Specifically, 'simple' defines the
+                   #      process configured with 'ExecStart' as the main process.
+                   #  @User (optional), run service as specified user.
+                   #  @Restart (optional), restart service, when the service
+                   #      process exits, is killed, or a timeout is reached.
+                   #  @ExecStart (optional), command to run when the unit is
+                   #      started.
+                   [Service]
+                   Type=simple
+                   User=vagrant
+                   Restart=always
+                   ExecStart=/vagrant/puppet/environment/${build_environment}/scripts/${compiler}
                    | EOT
-               notify  => Exec["dos2unix-upstart-${compiler}"],
+               mode    => '770',
+               notify  => Exec["dos2unix-systemd-${compiler}"],
         }
 
-    ## dos2unix upstart: convert clrf (windows to linux) in case host machine is windows.
+    ## dos2unix systemd: convert clrf (windows to linux) in case host machine is windows.
     #
     #  @notify, ensure the webserver service is started. This is similar to an exec statement, where the
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
-    exec {"dos2unix-upstart-${compiler}":
-        command => "dos2unix /etc/init/${compiler}.conf",
+    exec {"dos2unix-systemd-${compiler}":
+        command => "dos2unix /etc/systemd/system/${compiler}.service",
         notify  => Exec["dos2unix-bash-${compiler}"],
         refreshonly => true,
     }
@@ -138,34 +150,32 @@ $compilers.each |Integer $index, String $compiler| {
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-bash-${compiler}":
-        command => "dos2unix /vagrant/puppet/scripts/${compiler}",
+        command => "dos2unix /vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
         refreshonly => true,
-        notify  => Exec["${compiler}"],
+        notify  => Service[$compiler],
     }
 
-    ## start ${compiler} service
-    #
-    #  Note: the 'service { ... }' stanza yields a syntax error. Therefore, the following
-    #        'exec { ... }' stanza has been implemented (refer to github issue #189).
-    exec {"${compiler}":
-        command => "initctl start ${compiler}",
-        refreshonly => true,
-        notify  => Exec["touch-${directory_src[$index]}-files"],
+    ## start compiler service(s)
+    service {$compiler:
+        ensure => 'running',
+        enable => true,
+        notify => Exec["touch-${resource['src']}-files"],
     }
 
     ## touch source: ensure initial build compiles every source file.
     #
     #  @touch, changes the modification time to the current system time.
     #
-    #  Note: the current inotifywait implementation watches close_write, move, and create. However, the
-    #        source files will already exist before this 'inotifywait', since the '/vagrant' directory
-    #        will already have been mounted on the initial build.
+    #  Note: the current inotifywait implementation watches close_write, move,
+    #        and create. However, the source files will already exist before
+    #        this 'inotifywait', since the '/vagrant' directory will already
+    #        have been mounted on the initial build.
     #
-    #  Note: every 'command' implementation checks if directory is nonempty, then touch all files in the
-	#        directory, respectively.
-    exec {"touch-${directory_src[$index]}-files":
-        command => "if [ `ls -A /vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/` ]; then touch /vagrant/sites/all/themes/custom/sample_theme/src/${directory_src[$index]}/*; fi",
+    #  Note: every 'command' implementation checks if directory is nonempty,
+    #        then touch all files in the directory, respectively.
+    exec {"touch-${resource['src']}-files":
+        command     => "${check_files} ${touch_files}",
         refreshonly => true,
-        provider => shell,
+        provider    => shell,
     }
 }

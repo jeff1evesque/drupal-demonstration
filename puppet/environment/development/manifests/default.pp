@@ -1,3 +1,9 @@
+## include puppet modules
+class { 'nodejs':
+  repo_url_suffix => 'node_5.x',
+}
+
+## variables
 $packages_general = ['git', 'httpd', 'php', 'php-mysql', 'gd', 'dos2unix']
 $time_zone = 'America/New_York'
 $rpm_url_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-6.rpm'
