@@ -57,7 +57,7 @@ exec {'install-phpmyadmin':
 
 ## enable repo to install php 5.6
 exec {'enable-php-56-repo-1':
-    command => 'awk "/[remi-php56]/,/[remi-test]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/vagrant/remi.tmp',
+    command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/vagrant/remi.tmp',
     refreshonly => true,
     notify => Exec['enable-php-56-repo-2'],
 }
