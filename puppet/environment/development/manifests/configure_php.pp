@@ -52,7 +52,7 @@ exec {'update-yum':
 exec {'install-phpmyadmin':
     command => 'yum -y install phpmyadmin',
     refreshonly => true,
-    notify => Exec['enable-php-56-repo'],
+    notify => Exec['enable-php-56-repo-1'],
 }
 
 ## enable repo to install php 5.6
