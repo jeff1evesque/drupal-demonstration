@@ -97,7 +97,7 @@ $compilers.each |String $compiler, Hash $resource| {
     file {"${compiler}-startup-script":
         path    => "/etc/systemd/system/${compiler}.service",
         ensure  => 'present',
-        content => template('/vagrant/puppet/template/webcompilers.erb'),
+        content => template('/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb'),
                mode    => '770',
                notify  => Exec["dos2unix-systemd-${compiler}"],
         }
