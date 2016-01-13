@@ -58,6 +58,6 @@ exec {'assign-ssl-key':
 
 ## restart apache server
 exec {'restart-httpd':
-    command => 'service httpd restart',
+    command => 'systemctl restart httpd',
     refreshonly => true,
 }
