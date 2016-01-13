@@ -13,21 +13,13 @@ Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
 ## packages: install general packages
 package {$packages_general:
     ensure => present,
-    notify => Exec['start-httpd'],
-    before => Exec['start-httpd'],
+    before => Service['httpd'],
 }
 
-## start apache, and mysql server: required for the initial time
-exec {'start-httpd':
-    command => 'service httpd start',
-    refreshonly => true,
-    notify => Exec['autostart-httpd'],
-}
-
-## autostart apache server: this ensure apache runs after reboot
-exec {'autostart-httpd':
-    command => 'chkconfig httpd on',
-    refreshonly => true,
+## start compiler service(s), and ensure always running
+service {'httpd':
+    ensure => 'running',
+    enable => true,
     notify => Exec['define-errordocument-403'],
 }
 
@@ -148,6 +140,6 @@ exec {'set-time-zone':
 
 ## restart httpd to allow PHP extensions to load properly (dom, gd)
 exec {'restart-httpd':
-    command => 'service httpd restart',
+    command => 'systemctl restart httpd',
     refreshonly => true,
 }

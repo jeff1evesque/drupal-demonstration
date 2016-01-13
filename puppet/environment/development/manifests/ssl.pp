@@ -53,11 +53,11 @@ exec {'assign-ssl-certificate':
 exec {'assign-ssl-key':
     command => 'sed -i "s/\SSLCertificateKeyFile \/etc\/pki\/tls\/private\/localhost.key/SSLCertificateKeyFile \/etc\/httpd\/ssl\/httpd.key/g" /etc/httpd/conf.d/ssl.conf',
     refreshonly => true,
-    notify => Exec['restart-httpd'],
+    notify => Exec['restart-httpd-2'],
 }
 
 ## restart apache server
-exec {'restart-httpd':
-    command => 'service httpd restart',
+exec {'restart-httpd-2':
+    command => 'systemctl restart httpd',
     refreshonly => true,
 }
