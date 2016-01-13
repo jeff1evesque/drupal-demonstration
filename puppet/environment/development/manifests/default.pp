@@ -16,7 +16,7 @@ package {$packages_general:
     before => Service['httpd'],
 }
 
-## start compiler service(s)
+## start compiler service(s), and ensure always running
 service {'httpd':
     ensure => 'running',
     enable => true,
