@@ -4,7 +4,7 @@ include wget
 # variables
 $rpm_package_epel = 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm'
 $rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-7.rpm'
-$php_packages     = ['php', 'php-gd', 'php-mysql', 'php-mcrypt']
+$php_packages     = ['php', 'php-gd', 'php-mcrypt']
 
 ## define $PATH for all execs
 Exec {path => ['/usr/bin/']}
