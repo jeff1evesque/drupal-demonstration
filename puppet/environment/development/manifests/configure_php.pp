@@ -78,7 +78,7 @@ package {$php_packages:
 #
 #  Note: this segment appends directly below <Directory /usr/share/phpMyAdmin/>
 exec {'phpmyadmin-access-1':
-    command => 'sed -i "12i\Order allow,deny" /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'sed -i "/<Directory \/usr\/share\/phpMyAdmin\/>/a \   Order allow,deny" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-2'],
 }
@@ -87,7 +87,7 @@ exec {'phpmyadmin-access-1':
 #
 #  Note: this segment appends directly below (part 1)
 exec {'phpmyadmin-access-2':
-    command => 'sed -i "13i\Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'sed -i "/<Directory \/usr\/share\/phpMyAdmin\/>/a \   Allow from all" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['php-memory-limit'],
 }
