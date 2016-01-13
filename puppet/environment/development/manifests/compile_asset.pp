@@ -91,44 +91,13 @@ $compilers.each |String $compiler, Hash $resource| {
         }
     }
 
-    ## create startup script (heredoc syntax)
+    ## create systemd webcompiler service(s)
     #
     #  @("EOT"), double quotes on the end tag, allows variable interpolation within the puppet heredoc.
     file {"${compiler}-startup-script":
         path    => "/etc/systemd/system/${compiler}.service",
         ensure  => 'present',
-        content => @("EOT"),
-                   ## Unit (optional): metadata for the unit (this entire file).
-                   #
-                   #  @Description (recommended), string describing the unit,
-                   #      intended to show descriptive information of the unit.
-                   #  @Documentation (optional), space separated lists of URI's
-                   #      referencing documentation for this unit, or its
-                   #      configuration.
-                   #  @RequiresMountsFor (optional), adds dependencies of type
-                   #      'Requires=', and 'After=' for mount units required to
-                   #      access the specified path.
-                   [Unit]
-                   Description=define service to run corresponding bash script to compile source files
-                   Documentation=https://github.com/jeff1evesque/drupal-demonstration/issues/248
-                   RequiresMountsFor=/vagrant
-
-                   ## Service (required): the service configuration.
-                   #
-                   #  @Type (recommended), configures the process start-up type for
-                   #      this service unit. Specifically, 'simple' defines the
-                   #      process configured with 'ExecStart' as the main process.
-                   #  @User (optional), run service as specified user.
-                   #  @Restart (optional), restart service, when the service
-                   #      process exits, is killed, or a timeout is reached.
-                   #  @ExecStart (optional), command to run when the unit is
-                   #      started.
-                   [Service]
-                   Type=simple
-                   User=vagrant
-                   Restart=always
-                   ExecStart=/vagrant/puppet/environment/${build_environment}/scripts/${compiler}
-                   | EOT
+        content => template('/vagrant/puppet/template/webcompilers.erb'),
                mode    => '770',
                notify  => Exec["dos2unix-systemd-${compiler}"],
         }
