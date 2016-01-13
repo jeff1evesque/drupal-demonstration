@@ -1,4 +1,3 @@
-<%= @compiler %>
 ## Unit (optional): metadata for the unit (this entire file).
 #
 #  @Description (recommended), string describing the unit, intended to show
@@ -25,4 +24,4 @@ RequiresMountsFor=/vagrant
 Type=simple
 User=vagrant
 Restart=always
-ExecStart=/vagrant/puppet/environment/${build_environment}/scripts/${compiler}
+ExecStart=/vagrant/puppet/environment/<%= @build_environment %>/scripts/<%= @compiler %>
