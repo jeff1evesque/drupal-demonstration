@@ -119,7 +119,7 @@ $compilers.each |String $compiler, Hash $resource| {
     #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
     #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-bash-${compiler}":
-        command => "dos2unix /vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
+        command => "dos2unix /vagrant/puppet/environment/${build_environment}/template/${compiler}",
         refreshonly => true,
         notify  => Service[$compiler],
     }
