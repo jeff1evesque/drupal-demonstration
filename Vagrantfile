@@ -58,6 +58,17 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file    = 'default.pp'
   end
 
+  ## Custom Manifest: install, and configure php (required before drush)
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.manifest_file    = "configure_php.pp"
+  end
+
   # Custom Manifest: install drush
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
