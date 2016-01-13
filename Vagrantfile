@@ -46,7 +46,7 @@ Vagrant.configure(2) do |config|
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
-    puppet.manifest_file    = 'setup_database.pp'
+    puppet.manifest_file    = 'configure_database.pp'
   end
 
   # Custom Manifest: general configuration
@@ -75,7 +75,7 @@ Vagrant.configure(2) do |config|
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
-    puppet.manifest_file    = 'install_drush.pp'
+    puppet.manifest_file    = 'configure_drush.pp'
   end
 
   # Custom Manifest: ssl configuration
@@ -84,7 +84,7 @@ Vagrant.configure(2) do |config|
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
-    puppet.manifest_file    = 'ssl.pp'
+    puppet.manifest_file    = 'configure_ssl.pp'
   end
 
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
@@ -93,7 +93,7 @@ Vagrant.configure(2) do |config|
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
     puppet.module_path      = 'puppet/environment/development/modules'
-    puppet.manifest_file    = 'compile_asset.pp'
+    puppet.manifest_file    = 'configure_compilers.pp'
   end
 
   # Disable automatic box update checking. If you disable this, then
