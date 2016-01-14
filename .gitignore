@@ -1,13 +1,13 @@
 # Ignore configuration files that may contain sensitive information.
-/sites/*/settings*.php
+/webroot/sites/*/settings*.php
 
 # Ignore paths that contain user-generated content.
-/sites/*/files
-/sites/*/private
+/webroot/sites/*/files
+/webroot/sites/*/private
 
 # Ignore the following directories
 .vagrant
 /log/
 /puppet/environment/development/modules/
-/sites/all/themes/contrib/
-/sites/all/themes/custom/sample_theme/asset/
+/webroot/sites/all/themes/contrib/
+/webroot/sites/all/themes/custom/sample_theme/asset/
