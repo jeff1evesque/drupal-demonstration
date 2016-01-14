@@ -31,7 +31,7 @@ class {'::mysql::server':
     'authenticated@localhost/db_drupal.*' => {
       ensure     => 'present',
       options    => ['GRANT'],
-      privileges => ['INSERT', 'DELETE', 'UPDATE', 'SELECT'],
+      privileges => ['INSERT', 'DELETE', 'UPDATE', 'SELECT', 'CREATE', 'DROP'],
       table      => 'db_drupal.*',
       user       => 'authenticated@localhost',
     },
