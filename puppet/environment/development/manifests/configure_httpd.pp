@@ -73,9 +73,9 @@ exec {'mv-httpd-conf-comment-2':
     notify => Exec['change-docroot'],
 }
 
-## change docroot: point docroot to mounted '/vagrant' directory
+## change docroot: point docroot to mounted '/vagrant/webroot' directory
 exec {'change-docroot':
-    command => 'sed -i "s/\/var\/www\/html/\/vagrant/g" /etc/httpd/conf/httpd.conf',
+    command => 'sed -i "s/\/var\/www\/html/\/vagrant\/webroot/g" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['adjust-firewalld'],
 }
