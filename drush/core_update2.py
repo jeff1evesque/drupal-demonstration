@@ -7,10 +7,10 @@ import subprocess
 import os.path
 
 ## Variables
-htaccess        = '/vagrant/.htaccess'
-htaccess_backup = '/vagrant/_htaccess'
-robots          = '/vagrant/robots.txt'
-robots_backup   = '/vagrant/_robots.txt'
+htaccess        = '/vagrant/webroot/.htaccess'
+htaccess_backup = '/vagrant/webroot/_htaccess'
+robots          = '/vagrant/webroot/robots.txt'
+robots_backup   = '/vagrant/webroot/_robots.txt'
 
 ## Backup '.htaccess', 'robots.txt'
 if os.path.isfile(htaccess):
