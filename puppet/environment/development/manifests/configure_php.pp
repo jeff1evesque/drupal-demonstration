@@ -100,10 +100,10 @@ exec {'phpmyadmin-comment-require-4':
 #
 #  Note: this segment appends directly below 'Require ip ::1'
 #
-#  Note: the below 'sed' command is missing '^' before in "/Require", since it
-#        is not an exact match, and there will be preceeding space characters.
+#  Note: the spacing in '/^     #Require' corresponds to the above defined
+#        stanza 'phpmyadmin-comment-require-3'.
 exec {'phpmyadmin-access':
-    command => 'sed -i "/Require ip ::1$/a \       Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'sed -i "/^     #Require ip ::1$/a \     Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['php-memory-limit'],
 }
