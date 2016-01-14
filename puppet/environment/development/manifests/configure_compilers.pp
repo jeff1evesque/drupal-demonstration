@@ -103,10 +103,6 @@ $compilers.each |String $compiler, Hash $resource| {
         }
 
     ## dos2unix systemd: convert clrf (windows to linux) in case host machine is windows.
-    #
-    #  @notify, ensure the webserver service is started. This is similar to an exec statement, where the
-    #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
-    #      'service' end point does not require the 'refreshonly' attribute.
     exec {"dos2unix-systemd-${compiler}":
         command => "dos2unix /etc/systemd/system/${compiler}.service",
         notify  => Exec["dos2unix-bash-${compiler}"],
