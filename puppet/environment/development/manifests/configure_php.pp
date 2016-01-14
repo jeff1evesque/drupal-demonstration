@@ -108,7 +108,7 @@ exec {'phpmyadmin-access-1':
     notify => Exec['phpmyadmin-access-2'],
 }
 exec {'phpmyadmin-access-2':
-    command => 'mv /home/vagrant/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'mv /home/vagrant/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['php-memory-limit'],
 }
