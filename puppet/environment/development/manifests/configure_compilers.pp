@@ -36,8 +36,8 @@ $compilers = {
 $packages_general  = ['inotify-tools', 'ruby-devel']
 $packages_npm      = ['uglify-js', 'node-sass', 'imagemin']
 $build_environment = 'development'
-$path_source       = '/vagrant/sites/all/themes/custom/sample_theme/src'
-$path_asset        = '/vagrant/sites/all/themes/custom/sample_theme/asset'
+$path_source       = '/vagrant/src'
+$path_asset        = '/vagrant/webroot/sites/all/themes/custom/sample_theme/asset'
 
 ## packages: install general packages (apt, yum)
 package {$packages_general:

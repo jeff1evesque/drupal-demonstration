@@ -25,7 +25,7 @@ service {'httpd':
 
 ## define errordocument for 403 'bad request'
 exec {'define-errordocument-403':
-    command => 'sed "/\ErrorDocument 402/a ErrorDocument 400 \/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    command => 'sed "/\ErrorDocument 402/a ErrorDocument 400 \/webroot\/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
     notify => Exec['mv-httpd-conf-403'],
 }
@@ -51,7 +51,7 @@ exec {'mv-httpd-conf-comment-1':
 
 ## define errordocument for 400 'bad request'
 exec {'define-http-400':
-    command => 'sed "/\\#ErrorDocument 402/a ErrorDocument 400 \/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    command => 'sed "/\\#ErrorDocument 402/a ErrorDocument 400 \/webroot\/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
     notify => Exec['mv-httpd-conf-400'],
 }
@@ -63,7 +63,7 @@ exec {'mv-httpd-conf-400':
 
 ## remove comment (part 2): remove line after 'ErrorDocument 400 /error.php'.
 exec {'remove-comment-errordocument-2':
-    command => 'sed -e "/ErrorDocument 400 \/error.php/{N;s/\n.*//;}" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
+    command => 'sed -e "/ErrorDocument 400 \/webroot\/error.php/{N;s/\n.*//;}" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
     refreshonly => true,
     notify => Exec['mv-httpd-conf-comment-2'],
 }
@@ -73,9 +73,9 @@ exec {'mv-httpd-conf-comment-2':
     notify => Exec['change-docroot'],
 }
 
-## change docroot: point docroot to mounted '/vagrant' directory
+## change docroot: point docroot to mounted '/vagrant/webroot' directory
 exec {'change-docroot':
-    command => 'sed -i "s/\/var\/www\/html/\/vagrant/g" /etc/httpd/conf/httpd.conf',
+    command => 'sed -i "s/\/var\/www\/html/\/vagrant\/webroot/g" /etc/httpd/conf/httpd.conf',
     refreshonly => true,
     notify => Exec['adjust-firewalld'],
 }
