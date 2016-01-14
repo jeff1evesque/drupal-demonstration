@@ -76,7 +76,7 @@ package {$php_packages:
 
 ## allow phpmyadmin access from guest VM to host (part 1)
 #
-#  Note: this segment appends directly below <Directory /usr/share/phpMyAdmin/>
+#  Note: this segment appends directly below 'Require ip ::1'
 exec {'phpmyadmin-access-1':
     command => 'sed -i "/^Require ip ::1$/a \       Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
