@@ -76,34 +76,39 @@ package {$php_packages:
 
 ## allow phpmyadmin access: comment out unnecessary 'require' statements
 exec {'phpmyadmin-comment-require-1':
-    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip 127.0.0.1/) \$0 = \"     #Require ip 127.0.0.1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.tmp',
+    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip 127.0.0.1/) \$0 = \"       #Require ip 127.0.0.1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.tmp',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-2'],
 }
 exec {'phpmyadmin-comment-require-2':
     command => 'mv /home/vagrant/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
-    before => Exec['phpmyadmin-comment-require-3'],
+    notify => Exec['phpmyadmin-comment-require-3'],
 }
 exec {'phpmyadmin-comment-require-3':
-    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip ::1/) \$0 = \"     #Require ip ::1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.tmp',
+    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip ::1/) \$0 = \"       #Require ip ::1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.tmp',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-4'],
 }
 exec {'phpmyadmin-comment-require-4':
     command => 'mv /home/vagrant/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
-    before => Exec['phpmyadmin-access'],
+    notify => Exec['phpmyadmin-access-1'],
 }
 
 ## allow phpmyadmin access from guest VM to host (part 1)
 #
 #  Note: this segment appends directly below 'Require ip ::1'
 #
-#  Note: the spacing in '/^     #Require' corresponds to the above defined
+#  Note: the spacing in '/^       #Require' corresponds to the above defined
 #        stanza 'phpmyadmin-comment-require-3'.
-exec {'phpmyadmin-access':
-    command => 'sed -i "/^     #Require ip ::1$/a \     Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf',
+exec {'phpmyadmin-access-1':
+    command => 'sed "/^       #Require ip ::1/a \     Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.conf',
+    refreshonly => true,
+    notify => Exec['phpmyadmin-access-2'],
+}
+exec {'phpmyadmin-access-2':
+    command => 'mv /home/vagrant/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['php-memory-limit'],
 }
