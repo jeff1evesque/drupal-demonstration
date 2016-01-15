@@ -9,5 +9,4 @@
 .vagrant
 /log/
 /puppet/environment/development/modules/
-/webroot/sites/all/themes/contrib/
 /webroot/sites/all/themes/custom/sample_theme/asset/
