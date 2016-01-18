@@ -7,10 +7,11 @@ import subprocess
 import os.path
 
 ## Variables
-htaccess        = '/vagrant/webroot/.htaccess'
-htaccess_backup = '/vagrant/webroot/_htaccess'
-robots          = '/vagrant/webroot/robots.txt'
-robots_backup   = '/vagrant/webroot/_robots.txt'
+webroot         = '/vagrant/webroot/'
+htaccess        = webroot + '.htaccess'
+htaccess_backup = webroot + '_htaccess'
+robots          = webroot + 'robots.txt'
+robots_backup   = webroot + '_robots.txt'
 
 ## Backup '.htaccess', 'robots.txt'
 if os.path.isfile(htaccess):
@@ -19,8 +20,8 @@ if os.path.isfile(robots):
   subprocess.check_call(['mv', robots, robots_backup])
 
 ## Core Update: update to latest stable core
-subprocess.check_call(['drush', '-y', 'rf'])
-subprocess.check_call(['drush', 'up', '-y', 'drupal'])
+subprocess.check_call(['drush', '-y', 'rf', '-r', webroot])
+subprocess.check_call(['drush', 'up', 'drupal', '-y', '-r', webroot])
 
 ## Restore '.htaccess', 'robots.txt'
 if os.path.isfile(htaccess_backup):
