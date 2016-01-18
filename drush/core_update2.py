@@ -19,8 +19,7 @@ if os.path.isfile(robots):
   subprocess.check_call(['mv', robots, robots_backup])
 
 ## Core Update: update to latest stable core
-subprocess.check_call(['drush', '-y', 'rf'])
-subprocess.check_call(['drush', 'up', '-y', 'drupal'])
+subprocess.check_call(['drush', 'up', '-y', 'drupal'], cwd='/vagrant/webroot/')
 
 ## Restore '.htaccess', 'robots.txt'
 if os.path.isfile(htaccess_backup):
