@@ -78,7 +78,7 @@ package {$php_packages:
 exec {'enable-opcache':
     command => 'printf "\nzend_extension=opcache.so" >> /etc/php.ini',
     refreshonly => true,
-    notify => notify => Exec['phpmyadmin-comment-require-1'],
+    notify => Exec['phpmyadmin-comment-require-1'],
 }
 
 ## allow phpmyadmin access: comment out unnecessary 'require' statements
