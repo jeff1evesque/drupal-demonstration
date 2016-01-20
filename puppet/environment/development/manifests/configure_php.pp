@@ -4,7 +4,7 @@ include wget
 # variables
 $rpm_package_epel = 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm'
 $rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-7.rpm'
-$php_packages     = ['php', 'php-gd', 'php-mcrypt']
+$php_packages     = ['php', 'php-gd', 'php-mcrypt', 'php-opcache']
 
 ## define $PATH for all execs
 Exec {path => ['/usr/bin/']}
@@ -70,8 +70,15 @@ exec {'enable-php-56-repo-2':
 ## install php
 package {$php_packages:
     ensure => present,
+    notify => Exec['enable-opcache'],
+    before => Exec['enable-opcache'],
+}
+
+## enable opcache
+exec {'enable-opcache':
+    command => 'printf "\nzend_extension=opcache.so" >> /etc/php.ini',
+    refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-1'],
-    before => Exec['phpmyadmin-comment-require-1'],
 }
 
 ## allow phpmyadmin access: comment out unnecessary 'require' statements
