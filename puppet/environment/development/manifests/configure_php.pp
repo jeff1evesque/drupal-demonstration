@@ -70,8 +70,15 @@ exec {'enable-php-56-repo-2':
 ## install php
 package {$php_packages:
     ensure => present,
-    notify => Exec['phpmyadmin-comment-require-1'],
-    before => Exec['phpmyadmin-comment-require-1'],
+    notify => Exec['enable-opcache'],
+    before => Exec['enable-opcache'],
+}
+
+## enable opcache
+exec {'enable-opcache':
+    command => 'printf "\nzend_extension=opcache.so" >> /etc/php.ini',
+    refreshonly => true,
+    notify => notify => Exec['phpmyadmin-comment-require-1'],
 }
 
 ## allow phpmyadmin access: comment out unnecessary 'require' statements
