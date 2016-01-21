@@ -25,7 +25,7 @@ inotifywait /vagrant/src/scss/ -m -e close_write -e move --format %f |
     then
 
       # compile with 'sass'
-      node-sass /vagrant/src/scss/"$file" /vagrant/sites/all/themes/custom/sample_theme/asset/css/"$filename".min.css --output-style compressed
+      node-sass /vagrant/src/scss/"$file" /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/css/"$filename".min.css --output-style compressed
 
     fi
   done
