@@ -15,8 +15,8 @@ PATH="/usr/lib:$PATH"
 set -x; exec > /vagrant/log/imagemin_execution.log 2>&1
 
 
-# watch '/vagrant/sites/all/themes/custom/sample_theme/src/img/' subdirectory
-inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/img/ -m -e close_write -e move --format %f |
+# watch '/vagrant/src/img/' subdirectory
+inotifywait /vagrant/src/img/ -m -e close_write -e move --format %f |
   # Minify Images
   while read -r file; do
     # filename (without directory path)
@@ -26,8 +26,8 @@ inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/img/ -m -e close_w
 
     # minify with 'imagemin'
     if [ "$file_extension" = 'gif' ]; then
-      cp /vagrant/sites/all/themes/custom/sample_theme/src/img/"$file" /vagrant/sites/all/themes/custom/sample_theme/asset/img/"$filename"
+      cp /vagrant/src/img/"$file" /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/img/"$filename"
     else
-      imagemin /vagrant/sites/all/themes/custom/sample_theme/src/img/"$file" > /vagrant/sites/all/themes/custom/sample_theme/asset/img/"$filename"
+      imagemin /vagrant/src/img/"$file" > /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/img/"$filename"
     fi
   done
