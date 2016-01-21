@@ -12,8 +12,8 @@ PATH="/usr/lib:$PATH"
 set -x; exec > /vagrant/log/uglifyjs_execution.log 2>&1
 
 
-# watch '/vagrant/sites/all/themes/custom/sample_theme/src/js/' subdirectory
-inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/js/ -m -e close_write -e move --format %f |
+# watch '/vagrant/src/js/' subdirectory
+inotifywait /vagrant/src/js/ -m -e close_write -e move --format %f |
   # Minify Javascript
   while read -r file; do
 
@@ -26,7 +26,7 @@ inotifywait /vagrant/sites/all/themes/custom/sample_theme/src/js/ -m -e close_wr
       then
 
         # minifiy with 'uglifyjs'
-        uglifyjs -c --output /vagrant/sites/all/themes/custom/sample_theme/asset/js/"$filename".min.js /vagrant/sites/all/themes/custom/sample_theme/src/js/"$file"
+        uglifyjs -c --output /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/js/"$filename".min.js /vagrant/src/js/"$file"
 
       fi
   done
