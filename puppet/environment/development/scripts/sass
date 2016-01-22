@@ -21,7 +21,7 @@ inotifywait /vagrant/src/scss/ -m -e close_write -e move --format %f |
     # filename (without 'last' extension)
     filename="${file%.*}"
 
-    if [ "$extension" = 'scss' ] && [ "$filename" != '_*' ]
+    if [ "$extension" = 'scss' ] && [ "${file:0:1}" != '_' ]
     then
 
       # compile with 'sass'
