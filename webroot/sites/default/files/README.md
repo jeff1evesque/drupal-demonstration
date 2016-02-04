@@ -1,0 +1,1 @@
+This directory contains files upload through the drupal instance.

@@ -36,8 +36,8 @@ Vagrant.configure(2) do |config|
 
   ## Create a forwarded port mapping which allows access to a specific port
   #  within the machine from a port on the host machine.
-  config.vm.network "forwarded_port", guest: 80, host: 8585
-  config.vm.network "forwarded_port", guest: 443, host: 8686
+  config.vm.network "forwarded_port", guest: 80, host: 6585
+  config.vm.network "forwarded_port", guest: 443, host: 6686
 
   ## Run r10k
   config.r10k.puppet_dir = 'puppet/environment/development'
@@ -115,11 +115,23 @@ Vagrant.configure(2) do |config|
   # your network.
   # config.vm.network "public_network"
 
-  # Share an additional folder to the guest VM. The first argument is
-  # the path on the host to the actual folder. The second argument is
-  # the path on the guest to mount the folder. And the optional third
-  # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  ## set general project ownership, and permission
+  config.vm.synced_folder './', '/vagrant',
+    owner: 'vagrant',
+    group: 'vagrant',
+    mount_options: ['dmode=755', 'fmode=664']
+
+  ## set permission for drupal 'settings*.php'
+  config.vm.synced_folder './src/default', '/vagrant/webroot/sites/default',
+    owner: 'vagrant',
+    group: 'vagrant',
+    mount_options: ['dmode=755', 'fmode=444']
+
+  ## allow 'sites/default/files/' to be writeable for drupal install
+  config.vm.synced_folder './webroot/sites/default/files', '/vagrant/webroot/sites/default/files',
+    owner: 'vagrant',
+    group: 'vagrant',
+    mount_options: ['dmode=775', 'fmode=775']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
