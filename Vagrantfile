@@ -115,7 +115,7 @@ Vagrant.configure(2) do |config|
   # your network.
   # config.vm.network "public_network"
 
-  ## set general project root owner, and permission
+  ## set general project ownership, and permission
   config.vm.synced_folder './', '/vagrant',
     owner: 'vagrant',
     group: 'vagrant',
