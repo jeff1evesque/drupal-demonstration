@@ -122,7 +122,7 @@ Vagrant.configure(2) do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
   config.vm.synced_folder './', '/vagrant',
     owner: 'vagrant',
-    group: 'www-data',
+    group: 'vagrant',
     mount_options: ['dmode=775,fmode=664']
 
   # Provider-specific configuration so you can fine-tune various
