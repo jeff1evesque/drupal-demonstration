@@ -124,14 +124,6 @@ Vagrant.configure(2) do |config|
     owner: 'vagrant',
     group: 'vagrant',
     mount_options: ['dmode=775,fmode=664']
-  config.vm.synced_folder './', '/vagrant/webroot/sites/default',
-    owner: 'vagrant',
-    group: 'vagrant',
-    mount_options: ['dmode=755,fmode=444']
-  config.vm.synced_folder './', '/vagrant/webroot/sites/default/files',
-    owner: 'vagrant',
-    group: 'vagrant',
-    mount_options: ['dmode=755,fmode=744']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
