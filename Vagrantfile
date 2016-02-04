@@ -36,8 +36,8 @@ Vagrant.configure(2) do |config|
 
   ## Create a forwarded port mapping which allows access to a specific port
   #  within the machine from a port on the host machine.
-  config.vm.network "forwarded_port", guest: 80, host: 8585
-  config.vm.network "forwarded_port", guest: 443, host: 8686
+  config.vm.network "forwarded_port", guest: 80, host: 6585
+  config.vm.network "forwarded_port", guest: 443, host: 6686
 
   ## Run r10k
   config.r10k.puppet_dir = 'puppet/environment/development'
@@ -120,6 +120,10 @@ Vagrant.configure(2) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder './', '/vagrant',
+    owner: 'vagrant',
+    group: 'www-data',
+    mount_options: ['dmode=775,fmode=664']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
