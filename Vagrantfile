@@ -124,13 +124,13 @@ Vagrant.configure(2) do |config|
   ## set permission for drupal 'settings*.php'
   config.vm.synced_folder './src/default', '/vagrant/webroot/sites/default',
     owner: 'vagrant',
-    group: 'vagrant',
-    mount_options: ['dmode=755', 'fmode=444']
+    group: 'apache',
+    mount_options: ['dmode=775', 'fmode=444']
 
   ## allow 'sites/default/files/' to be writeable for drupal install
   config.vm.synced_folder './webroot/sites/default/files', '/vagrant/webroot/sites/default/files',
     owner: 'vagrant',
-    group: 'vagrant',
+    group: 'apache',
     mount_options: ['dmode=775', 'fmode=775']
 
   # Provider-specific configuration so you can fine-tune various
