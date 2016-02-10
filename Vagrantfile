@@ -31,6 +31,9 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "puppetlabs/centos-7.2-64-puppet"
 
+  ## pty used during provisioning (i.e. vagrant base box)
+  config.ssh.pty = true
+
   ## ssh
   config.ssh.private_key_path = './centos7x/.ssh/private'
   config.ssh.username = 'provisioner'
