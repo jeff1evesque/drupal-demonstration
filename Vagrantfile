@@ -31,6 +31,11 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "puppetlabs/centos-7.2-64-puppet"
 
+  ## ssh
+  config.ssh.private_key_path = './centos7x/.ssh/private'
+  config.ssh.username = 'provisioner'
+  config.ssh.password = 'vagrant-provision'
+
   # Define fully qualified domain name
   config.vm.hostname = "drupal-demonstration.com"
 
@@ -117,21 +122,27 @@ Vagrant.configure(2) do |config|
 
   ## set general project ownership, and permission
   config.vm.synced_folder './', '/vagrant',
-    owner: 'vagrant',
-    group: 'vagrant',
+    owner: 'provisioner',
+    group: 'provisioner',
     mount_options: ['dmode=755', 'fmode=664']
 
   ## set permission for drupal 'settings*.php'
   config.vm.synced_folder './src/default', '/vagrant/webroot/sites/default',
-    owner: 'vagrant',
+    owner: 'provisioner',
     group: 'apache',
     mount_options: ['dmode=775', 'fmode=444']
 
   ## allow 'sites/default/files/' to be writeable for drupal install
   config.vm.synced_folder './webroot/sites/default/files', '/vagrant/webroot/sites/default/files',
-    owner: 'vagrant',
+    owner: 'provisioner',
     group: 'apache',
     mount_options: ['dmode=775', 'fmode=775']
+
+  ## share ssh key
+  config.vm.synced_folder './centos7x/.ssh', '~/.ssh',
+    owner: 'provisioner',
+    group: 'apache',
+    mount_options: ['dmode=770', 'fmode=664']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
