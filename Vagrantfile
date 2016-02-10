@@ -29,7 +29,16 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "puppetlabs/centos-7.2-64-puppet"
+  config.vm.box = 'jeff1evesque/centos7x'
+  config.vm.box_version = '1.0.0'
+
+  ## pty used during provisioning (i.e. vagrant base box)
+  config.ssh.pty = true
+
+  ## ssh
+  config.ssh.private_key_path = './centos7x/.ssh/private'
+  config.ssh.username = 'provisioner'
+  config.ssh.password = 'vagrant-provision'
 
   # Define fully qualified domain name
   config.vm.hostname = "drupal-demonstration.com"
@@ -117,19 +126,19 @@ Vagrant.configure(2) do |config|
 
   ## set general project ownership, and permission
   config.vm.synced_folder './', '/vagrant',
-    owner: 'vagrant',
-    group: 'vagrant',
+    owner: 'provisioner',
+    group: 'provisioner',
     mount_options: ['dmode=755', 'fmode=664']
 
   ## set permission for drupal 'settings*.php'
   config.vm.synced_folder './src/default', '/vagrant/webroot/sites/default',
-    owner: 'vagrant',
+    owner: 'provisioner',
     group: 'apache',
     mount_options: ['dmode=775', 'fmode=444']
 
   ## allow 'sites/default/files/' to be writeable for drupal install
   config.vm.synced_folder './webroot/sites/default/files', '/vagrant/webroot/sites/default/files',
-    owner: 'vagrant',
+    owner: 'provisioner',
     group: 'apache',
     mount_options: ['dmode=775', 'fmode=775']
 
