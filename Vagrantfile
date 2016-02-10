@@ -146,7 +146,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder './centos7x/.ssh', '~/.ssh',
     owner: 'provisioner',
     group: 'apache',
-    mount_options: ['dmode=770', 'fmode=664']
+    mount_options: ['dmode=770', 'fmode=660']
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
