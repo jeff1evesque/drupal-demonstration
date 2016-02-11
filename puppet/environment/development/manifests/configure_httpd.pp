@@ -6,7 +6,7 @@ class { 'nodejs':
 ## variables
 $packages_general = ['git', 'httpd', 'gd', 'dos2unix']
 $time_zone = 'America/New_York'
-$selinux_policy_dir = '/vagrant/rhel7x'
+$selinux_policy_dir = '/vagrant/centos7x'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
