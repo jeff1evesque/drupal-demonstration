@@ -55,7 +55,7 @@ exec {'enable-php-56-repo-1':
     notify => Exec['enable-php-56-repo-2'],
 }
 exec {'enable-php-56-repo-2':
-    command => 'mv /home/provisioner/remi.tmp /etc/yum.repos.d/remi.repo',
+    command => "mv ${working_dir}/remi.tmp /etc/yum.repos.d/remi.repo",
     refreshonly => true,
     before => Package[$php_packages],
 }
@@ -81,7 +81,7 @@ exec {'phpmyadmin-comment-require-1':
     notify => Exec['phpmyadmin-comment-require-2'],
 }
 exec {'phpmyadmin-comment-require-2':
-    command => 'mv /home/provisioner/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => "mv ${working_dir}/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf",
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-3'],
 }
@@ -91,7 +91,7 @@ exec {'phpmyadmin-comment-require-3':
     notify => Exec['phpmyadmin-comment-require-4'],
 }
 exec {'phpmyadmin-comment-require-4':
-    command => 'mv /home/provisioner/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => "mv ${working_dir}/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf",
     refreshonly => true,
     notify => Exec['phpmyadmin-access-1'],
 }
@@ -108,7 +108,7 @@ exec {'phpmyadmin-access-1':
     notify => Exec['phpmyadmin-access-2'],
 }
 exec {'phpmyadmin-access-2':
-    command => 'mv /home/provisioner/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => "mv ${working_dir}/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf",
     refreshonly => true,
     notify => Exec['phpmyadmin-system-context'],
 }
