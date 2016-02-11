@@ -47,7 +47,7 @@ exec {'initialize-drush':
 
 ## define drush alias
 exec {'drush-alias':
-  command => 'echo "alias drush=\"sudo /usr/local/bin/drush\"" >> /home/nccoe_web/.bashrc',
+  command => 'echo "alias drush=\"sudo /usr/local/bin/drush\"" >> /home/provisioner/.bashrc',
   refreshonly => true,
   notify => Exec['reload-bash-startup-config'],
 }
