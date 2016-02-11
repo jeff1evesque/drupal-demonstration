@@ -13,7 +13,7 @@ Exec {path => ['/usr/bin/']}
 exec {'download-rpm-package':
     command => "wget ${rpm_package_epel} && wget ${rpm_package_remi}",
     notify => Exec['install-rpm-package'],
-    cwd => '/home/vagrant/',
+    cwd => '/home/provisioner/',
 }
 
 ## install rpm package(s)
@@ -21,7 +21,7 @@ exec {'install-rpm-package':
     command => "rpm -Uvh ${rpm_package_epel} && rpm -Uvh ${rpm_package_remi}",
     refreshonly => true,
     notify => Exec['remove-rpm-package'],
-    cwd => '/home/vagrant/',
+    cwd => '/home/provisioner/',
 }
 
 ## remove unnecessary rpm packages
@@ -29,7 +29,7 @@ exec {'remove-rpm-package':
     command => 'rm *.rpm',
     refreshonly => true,
     notify => Exec['add-epel'],
-    cwd => '/home/vagrant/',
+    cwd => '/home/provisioner/',
 }
 
 ## add EPEL Repository, which allows 'phpmyadmin' to be installed
@@ -57,12 +57,12 @@ exec {'install-phpmyadmin':
 
 ## enable repo to install php 5.6
 exec {'enable-php-56-repo-1':
-    command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/vagrant/remi.tmp',
+    command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/provisioner/remi.tmp',
     refreshonly => true,
     notify => Exec['enable-php-56-repo-2'],
 }
 exec {'enable-php-56-repo-2':
-    command => 'mv /home/vagrant/remi.tmp /etc/yum.repos.d/remi.repo',
+    command => 'mv /home/provisioner/remi.tmp /etc/yum.repos.d/remi.repo',
     refreshonly => true,
     before => Package[$php_packages],
 }
@@ -83,22 +83,22 @@ exec {'enable-opcache':
 
 ## allow phpmyadmin access: comment out unnecessary 'require' statements
 exec {'phpmyadmin-comment-require-1':
-    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip 127.0.0.1/) \$0 = \"       #Require ip 127.0.0.1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.tmp',
+    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip 127.0.0.1/) \$0 = \"       #Require ip 127.0.0.1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/provisioner/phpMyAdmin.tmp',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-2'],
 }
 exec {'phpmyadmin-comment-require-2':
-    command => 'mv /home/vagrant/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'mv /home/provisioner/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-3'],
 }
 exec {'phpmyadmin-comment-require-3':
-    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip ::1/) \$0 = \"       #Require ip ::1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.tmp',
+    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip ::1/) \$0 = \"       #Require ip ::1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/provisioner/phpMyAdmin.tmp',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-4'],
 }
 exec {'phpmyadmin-comment-require-4':
-    command => 'mv /home/vagrant/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'mv /home/provisioner/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-1'],
 }
@@ -110,12 +110,12 @@ exec {'phpmyadmin-comment-require-4':
 #  Note: the spacing in '/^       #Require' corresponds to the above defined
 #        stanza 'phpmyadmin-comment-require-3'.
 exec {'phpmyadmin-access-1':
-    command => 'sed "/^       #Require ip ::1/a \     Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf > /home/vagrant/phpMyAdmin.conf',
+    command => 'sed "/^       #Require ip ::1/a \     Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf > /home/provisioner/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-2'],
 }
 exec {'phpmyadmin-access-2':
-    command => 'mv /home/vagrant/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'mv /home/provisioner/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['php-memory-limit'],
 }
