@@ -1,5 +1,5 @@
 ## define $PATH for all execs
-Exec {path => ['/usr/bin/', '/usr/local']}
+Exec {path => ['/usr/bin/', '/usr/local/']}
 
 ## include puppet modules
 include wget
@@ -38,8 +38,23 @@ exec {'move-drush':
   notify      => Exec['initialize-drush'],
 }
 
-## enrich the bash startup file with completion and aliases
+## enrich the bash startup file with completion
 exec {'initialize-drush':
   command     => '/usr/local/bin/drush init',
   refreshonly => true,
+  notify      => Exec['drush-alias'],
+}
+
+## define drush alias
+exec {'drush-alias':
+  command => 'echo "alias drush=\"sudo /usr/local/bin/drush\"" >> /home/provisioner/.bashrc',
+  refreshonly => true,
+  notify => Exec['reload-bash-startup-config'],
+}
+
+## reload bash startup files
+exec {'reload-bash-startup-config':
+  command => 'source ~/.bashrc',
+  refreshonly => true,
+  provider => 'shell',
 }
