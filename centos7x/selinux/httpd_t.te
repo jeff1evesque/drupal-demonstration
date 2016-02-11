@@ -11,7 +11,7 @@ require {
 	type postfix_spool_t;
 	class sock_file { write getattr };
 	class tcp_socket name_connect;
-	class dir { setattr read create write remove_name add_name };
+	class dir { write rmdir setattr read remove_name create add_name };
 	class file { rename setattr read create write getattr open };
 	class unix_stream_socket connectto;
 }
@@ -31,5 +31,5 @@ allow httpd_t postfix_spool_t:file { read write getattr open };
 #!!!! This avc can be allowed using one of the these booleans:
 #     nis_enabled, httpd_can_network_connect
 allow httpd_t unreserved_port_t:tcp_socket name_connect;
-allow httpd_t vmblock_t:dir { read write create add_name setattr };
-allow httpd_t vmblock_t:file { read write getattr open setattr };
+allow httpd_t vmblock_t:dir { write rmdir setattr read remove_name create add_name };
+allow httpd_t vmblock_t:file { write getattr setattr read create open };
