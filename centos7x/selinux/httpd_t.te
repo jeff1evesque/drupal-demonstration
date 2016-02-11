@@ -1,0 +1,35 @@
+
+module httpd_t 1.0;
+
+require {
+	type postfix_etc_t;
+	type vmblock_t;
+	type postfix_public_t;
+	type unreserved_port_t;
+	type httpd_t;
+	type postfix_master_t;
+	type postfix_spool_t;
+	class sock_file { write getattr };
+	class tcp_socket name_connect;
+	class dir { write rmdir setattr read remove_name create add_name };
+	class file { rename setattr read create write getattr open };
+	class unix_stream_socket connectto;
+}
+
+#============= httpd_t ==============
+allow httpd_t postfix_etc_t:file { read getattr open };
+
+#!!!! This avc can be allowed using the boolean 'daemons_enable_cluster_mode'
+allow httpd_t postfix_master_t:unix_stream_socket connectto;
+allow httpd_t postfix_public_t:sock_file { write getattr };
+allow httpd_t postfix_spool_t:dir { write remove_name add_name };
+allow httpd_t postfix_spool_t:file { rename create setattr };
+
+#!!!! This avc can be allowed using the boolean 'httpd_can_sendmail'
+allow httpd_t postfix_spool_t:file { read write getattr open };
+
+#!!!! This avc can be allowed using one of the these booleans:
+#     nis_enabled, httpd_can_network_connect
+allow httpd_t unreserved_port_t:tcp_socket name_connect;
+allow httpd_t vmblock_t:dir { write rmdir setattr read remove_name create add_name };
+allow httpd_t vmblock_t:file { write getattr setattr read create open };
