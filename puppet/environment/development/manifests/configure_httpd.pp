@@ -8,7 +8,7 @@ $packages_general = ['git', 'httpd', 'gd', 'dos2unix']
 $time_zone = 'America/New_York'
 
 ## define $PATH for all execs
-Exec {path => ['/sbin/', '/usr/bin/', '/bin/']}
+Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
 ## packages: install general packages
 package {$packages_general:
@@ -127,6 +127,22 @@ exec {'allow-htaccess-2':
 exec {'mv-httpd-conf-htaccess-2':
     command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
     refreshonly => true,
+    before => File['httpd-conf-permission'],
+}
+
+## reset permission on httpd.conf
+file {'httpd-conf-permission':
+    path => '/etc/httpd/conf/httpd.conf',
+    mode => '644',
+    owner => root,
+    group => root,
+    notify => Exec['httpd-system-context'],
+}
+
+## reset system context on httpd.conf (needed for selinux)
+exec {'httpd-system-context':
+    command => 'restorecon /etc/httpd/conf/httpd.conf',
+    refreshonly => true,
     notify => Exec['set-time-zone'],
 }
 
@@ -136,7 +152,6 @@ exec {'set-time-zone':
     refreshonly => true,
     notify => Exec['restart-httpd'],
 }
-
 
 ## restart httpd to allow PHP extensions to load properly (dom, gd)
 exec {'restart-httpd':
