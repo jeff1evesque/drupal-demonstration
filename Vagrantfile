@@ -134,7 +134,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder './src/default', '/vagrant/webroot/sites/default',
     owner: 'provisioner',
     group: 'apache',
-    mount_options: ['dmode=775', 'fmode=444']
+    mount_options: ['dmode=775', 'fmode=664']
 
   ## allow 'sites/default/files/' to be writeable for drupal install
   config.vm.synced_folder './webroot/sites/default/files', '/vagrant/webroot/sites/default/files',
