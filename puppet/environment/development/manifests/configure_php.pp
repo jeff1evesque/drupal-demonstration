@@ -5,15 +5,16 @@ include wget
 $rpm_package_epel = 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm'
 $rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-7.rpm'
 $php_packages     = ['php', 'php-gd', 'php-mcrypt', 'php-opcache']
+$working_dir      = '/home/provisioner'
 
 ## define $PATH for all execs
-Exec {path => ['/usr/bin/']}
+Exec {path => ['/usr/bin/', '/usr/sbin/']}
 
 ## download rpm package(s)
 exec {'download-rpm-package':
     command => "wget ${rpm_package_epel} && wget ${rpm_package_remi}",
     notify => Exec['install-rpm-package'],
-    cwd => '/home/provisioner/',
+    cwd => "${working_dir}",
 }
 
 ## install rpm package(s)
@@ -21,23 +22,15 @@ exec {'install-rpm-package':
     command => "rpm -Uvh ${rpm_package_epel} && rpm -Uvh ${rpm_package_remi}",
     refreshonly => true,
     notify => Exec['remove-rpm-package'],
-    cwd => '/home/provisioner/',
+    cwd => "${working_dir}",
 }
 
 ## remove unnecessary rpm packages
 exec {'remove-rpm-package':
     command => 'rm *.rpm',
     refreshonly => true,
-    notify => Exec['add-epel'],
-    cwd => '/home/provisioner/',
-}
-
-## add EPEL Repository, which allows 'phpmyadmin' to be installed
-exec {'add-epel':
-    command => 'yum -y install epel-release --enablerepo=extras',
-    refreshonly => true,
     notify => Exec['update-yum'],
-    timeout => 450,
+    cwd => "${working_dir}",
 }
 
 ## update yum using the added EPEL repository
@@ -57,12 +50,12 @@ exec {'install-phpmyadmin':
 
 ## enable repo to install php 5.6
 exec {'enable-php-56-repo-1':
-    command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/provisioner/remi.tmp',
+    command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/nccoe_web/remi.tmp',
     refreshonly => true,
     notify => Exec['enable-php-56-repo-2'],
 }
 exec {'enable-php-56-repo-2':
-    command => 'mv /home/provisioner/remi.tmp /etc/yum.repos.d/remi.repo',
+    command => 'mv /home/nccoe_web/remi.tmp /etc/yum.repos.d/remi.repo',
     refreshonly => true,
     before => Package[$php_packages],
 }
@@ -83,22 +76,22 @@ exec {'enable-opcache':
 
 ## allow phpmyadmin access: comment out unnecessary 'require' statements
 exec {'phpmyadmin-comment-require-1':
-    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip 127.0.0.1/) \$0 = \"       #Require ip 127.0.0.1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/provisioner/phpMyAdmin.tmp',
+    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip 127.0.0.1/) \$0 = \"       #Require ip 127.0.0.1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/nccoe_web/phpMyAdmin.tmp',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-2'],
 }
 exec {'phpmyadmin-comment-require-2':
-    command => 'mv /home/provisioner/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'mv /home/nccoe_web/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-3'],
 }
 exec {'phpmyadmin-comment-require-3':
-    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip ::1/) \$0 = \"       #Require ip ::1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/provisioner/phpMyAdmin.tmp',
+    command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip ::1/) \$0 = \"       #Require ip ::1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/nccoe_web/phpMyAdmin.tmp',
     refreshonly => true,
     notify => Exec['phpmyadmin-comment-require-4'],
 }
 exec {'phpmyadmin-comment-require-4':
-    command => 'mv /home/provisioner/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'mv /home/nccoe_web/phpMyAdmin.tmp /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-1'],
 }
@@ -110,12 +103,19 @@ exec {'phpmyadmin-comment-require-4':
 #  Note: the spacing in '/^       #Require' corresponds to the above defined
 #        stanza 'phpmyadmin-comment-require-3'.
 exec {'phpmyadmin-access-1':
-    command => 'sed "/^       #Require ip ::1/a \     Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf > /home/provisioner/phpMyAdmin.conf',
+    command => 'sed "/^       #Require ip ::1/a \     Require all granted" /etc/httpd/conf.d/phpMyAdmin.conf > /home/nccoe_web/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['phpmyadmin-access-2'],
 }
 exec {'phpmyadmin-access-2':
-    command => 'mv /home/provisioner/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf',
+    command => 'mv /home/nccoe_web/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf',
+    refreshonly => true,
+    notify => Exec['phpmyadmin-system-context'],
+}
+
+## reset system context on phpMyAdmin.conf (needed for selinux)
+exec {'phpmyadmin-system-context':
+    command => 'restorecon /etc/httpd/conf.d/phpMyAdmin.conf',
     refreshonly => true,
     notify => Exec['php-memory-limit'],
 }
