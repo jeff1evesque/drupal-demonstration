@@ -1,7 +1,9 @@
 # Drupal Demonstration
 
 This repository is a simple demonstration of a virtualized environment,
-tailored for drupal, within a Centos 7x operating system.
+ tailored for drupal, within a Centos 7x operating system.  Installation,
+ and information regarding user accounts needed to ssh into the vagrant
+ box can be found below.
 
 ## Contributing
 
