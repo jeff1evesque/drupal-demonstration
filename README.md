@@ -2,8 +2,9 @@
 
 This repository is a simple demonstration of a virtualized environment,
  tailored for drupal, within a Centos 7x operating system.  Installation,
- and information regarding user accounts needed to ssh into the vagrant
- box can be found below.
+ and information regarding [user accounts](https://github.com/jeff1evesque/drupal-demonstration#ssh)
+ needed to ssh into the [vagrant box](https://github.com/jeff1evesque/drupal-demonstration#vagrant-box)
+ can be found below.
 
 ## Contributing
 
@@ -209,7 +210,8 @@ In addition, the ssh key-pair implements the passphrase:
 
 ### Vagrant Box
 
-This repository implements a custom vagrant base box, created from a minimal
- centos 7x iso, with a custom selinux [policy module](https://github.com/mitchellh/vagrant/issues/6970)
+This repository implements a custom vagrant base box, created from a centos 7x
+ [minimal iso](http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso),
+ with a custom selinux [policy module](https://github.com/mitchellh/vagrant/issues/6970)
  enabled, to allow drupal pages to be served.  The exact [details](https://atlas.hashicorp.com/jeff1evesque/boxes/centos7x)
  of the vagrant box can be located on the corresponding atlas repository page.
