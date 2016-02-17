@@ -39,5 +39,4 @@ exec {'enable-httpd-selinux-policy':
 ## packages: install general packages
 package {$packages_general:
     ensure => present,
-    before => Service['httpd'],
 }
