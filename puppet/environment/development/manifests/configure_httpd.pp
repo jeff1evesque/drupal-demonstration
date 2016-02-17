@@ -3,6 +3,10 @@ class { 'nodejs':
   repo_url_suffix => 'node_5.x',
 }
 
+class { 'apache':
+  default_vhost => false,
+}
+
 ## variables
 $packages_general = ['git', 'httpd', 'gd', 'dos2unix']
 $time_zone = 'America/New_York'
@@ -10,6 +14,13 @@ $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
+
+apache::vhost { 'drupal.demonstration.com':
+  docroot          => '/var/www/html/vagrant/webroot',
+  docroot_owner    => 'apache',
+  docroot_group    => 'apache',
+  fallbackresource => '/webroot/error.php',
+}
 
 ## system context: load httpd selinux policy module
 exec {'load-httpd-selinux-policy':
@@ -35,20 +46,6 @@ package {$packages_general:
 service {'httpd':
     ensure => 'running',
     enable => true,
-    notify => Exec['define-errordocument-403'],
-}
-
-## define errordocument for 403 'bad request'
-exec {'define-errordocument-403':
-    command => 'sed "/\ErrorDocument 402/a ErrorDocument 400 \/webroot\/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-403'],
-}
-
-## move bad request logic
-exec {'mv-httpd-conf-403':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
     notify => Exec['remove-comment-errordocument-1'],
 }
 
