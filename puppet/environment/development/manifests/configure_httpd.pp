@@ -16,10 +16,10 @@ $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
 apache::vhost { 'drupal.demonstration.com':
-  docroot          => '/var/www/html/vagrant/webroot',
+  docroot          => '/vagrant/webroot',
   docroot_owner    => 'apache',
   docroot_group    => 'apache',
-  fallbackresource => '/webroot/error.php',
+  fallbackresource => '/vagrant/webroot/error.php',
 }
 
 ## system context: load httpd selinux policy module
