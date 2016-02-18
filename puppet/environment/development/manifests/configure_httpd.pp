@@ -10,7 +10,7 @@ class { 'apache':
 
 ## variables
 $packages_general = ['dos2unix']
-$vhost_name = 'drupal-demonstration'
+$vhost_name = 'localhost'
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 $webroot = '/vagrant/webroot'
 $port = '80'
@@ -20,7 +20,7 @@ Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
 ## define custom vhost (default not defined)
 apache::vhost { $vhost_name:
-    servername       => "${vhost_name}.com",
+    servername       => $vhost_name,
     port             => $port,
     docroot          => $webroot,
     docroot_owner    => 'apache',
@@ -33,9 +33,9 @@ apache::vhost { $vhost_name:
            allowoverride  => 'None',
            require        => 'all denied',
         },
-        {  path           => "${webroot}",
+        {  path           => $webroot,
            provider       => 'directory',
-           allowoverride  => 'None',
+           allowoverride  => 'All',
            require        => 'all granted',
            options        => ['Indexes', 'FollowSymLinks'],
            acceptpathinfo => 'Off',
