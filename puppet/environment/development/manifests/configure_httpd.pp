@@ -9,22 +9,18 @@ class { 'apache':
 }
 
 ## variables
-$packages_general = ['git', 'dos2unix']
-$time_zone = 'America/New_York'
+$packages_general = ['dos2unix']
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 $webroot = '/vagrant/webroot'
+$port = '80'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
-## when ssl is configured, uncomment '443', and comment '80'
-apache::listen { '80': }
-#apache::listen { '443': }
-
 ## define custom vhost (default not defined)
 apache::vhost { 'drupal-demonstration':
     servername       => 'drupal.demonstration.com',
-    port             => '80',
+    port             => "${port}",
     docroot          => "${webroot}',
     docroot_owner    => 'apache',
     docroot_group    => 'apache',
