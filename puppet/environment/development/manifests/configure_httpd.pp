@@ -115,15 +115,15 @@ apache::vhost { $vhost_name:
 ## system context: load httpd selinux policy module
 exec {'load-httpd-selinux-policy':
     command => 'semodule -i httpd_t.pp',
-    notify => Exec['enable-httpd-selinux-policy'],
-    cwd => "${selinux_policy_dir}",
+    notify  => Exec['enable-httpd-selinux-policy'],
+    cwd     => "${selinux_policy_dir}",
 }
 
 ## system context: enable httpd selinux policy module
 exec {'enable-httpd-selinux-policy':
     command => 'semodule -e httpd_t',
-    notify => Firewalld_port['allow-port-80'],
-    cwd => "${selinux_policy_dir}",
+    before  => Firewalld_port['allow-port-80'],
+    cwd     => "${selinux_policy_dir}",
 }
 
 ## allow guest port 80 to be accessible on the host machine
@@ -132,7 +132,7 @@ firewalld_port { 'allow-port-80':
     zone     => 'public',
     port     => 80,
     protocol => 'tcp',
-    notify   => Package[$packages_general],
+    before   => Package[$packages_general],
 }
 
 ## packages: install general packages
