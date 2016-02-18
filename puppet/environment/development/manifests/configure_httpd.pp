@@ -32,7 +32,7 @@ apache::vhost { 'drupal.demonstration.com':
            provider       => 'directory',
            allowoverride  => 'None',
            require        => 'all granted',
-           options        => ['Options', 'Indexes', 'FollowSymLinks'],
+           options        => ['Indexes', 'FollowSymLinks'],
            acceptpathinfo => 'Off',
 
            error_documents => [
