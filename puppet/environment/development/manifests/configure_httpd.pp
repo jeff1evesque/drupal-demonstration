@@ -21,6 +21,17 @@ apache::vhost { 'drupal.demonstration.com':
     docroot_owner    => 'apache',
     docroot_group    => 'apache',
     fallbackresource => '/vagrant/webroot/error.php',
+
+    directories => [
+        {  path     => '/',
+           provider => 'directory',
+           override => ['all'],
+        },
+        {  path     => '/vagrant',
+           provider => 'directory',
+           override => ['all'],
+        }
+    ]
 }
 
 ## system context: load httpd selinux policy module
