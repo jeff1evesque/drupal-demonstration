@@ -8,14 +8,15 @@ class { 'apache':
 }
 
 ## variables
-$packages_general = ['git', 'gd', 'dos2unix']
+$packages_general = ['git', 'dos2unix']
 $time_zone = 'America/New_York'
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
-apache::vhost { 'drupal.demonstration.com':
+apache::vhost { 'drupal-demonstration':
+    servername       => 'drupal.demonstration.com'
     port             => '80',
     docroot          => '/vagrant/webroot',
     docroot_owner    => 'apache',
@@ -102,7 +103,7 @@ apache::vhost { 'drupal.demonstration.com':
                { 'error_code' => '505',
                  'document'   => '/vagrant/webroot/error.php',
                },
-      ],
+           ],
         }
     ]
 }
