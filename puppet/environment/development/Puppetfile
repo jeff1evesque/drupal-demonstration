@@ -26,3 +26,8 @@ mod 'nodejs',
 mod 'mysql',
   :git => 'git@github.com:puppetlabs/puppetlabs-mysql.git',
   :ref => '3.6.2'
+
+## Install Module: firewalld
+mod 'firewalld',
+  :git => 'git@github.com:crayfishx/puppet-firewalld.git',
+  :ref => '3.6.2'
