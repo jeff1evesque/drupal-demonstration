@@ -8,6 +8,9 @@ class { 'apache':
     default_vhost => false,
 }
 
+## install 'mod_ssl' module
+class { 'apache::mod::ssl': }
+
 ## variables
 $packages_general = ['dos2unix']
 $vhost_name = 'localhost'
