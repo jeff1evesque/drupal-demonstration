@@ -122,16 +122,17 @@ exec {'load-httpd-selinux-policy':
 ## system context: enable httpd selinux policy module
 exec {'enable-httpd-selinux-policy':
     command => 'semodule -e httpd_t',
-    notify => Package[$packages_general],
+    notify => Firewalld_port['allow-port-80'],
     cwd => "${selinux_policy_dir}",
 }
 
 ## allow guest port 80 to be accessible on the host machine
-firewalld_port { 'Open port 8080 in the public zone':
+firewalld_port { 'allow-port-80':
     ensure   => present,
     zone     => 'public',
     port     => 80,
     protocol => 'tcp',
+    Package[$packages_general]
 }
 
 ## packages: install general packages
