@@ -132,7 +132,7 @@ firewalld_port { 'allow-port-80':
     zone     => 'public',
     port     => 80,
     protocol => 'tcp',
-    Package[$packages_general]
+    notify   => Package[$packages_general],
 }
 
 ## packages: install general packages
