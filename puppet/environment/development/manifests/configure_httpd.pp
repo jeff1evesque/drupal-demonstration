@@ -23,6 +23,7 @@ apache::listen { '80': }
 ## define custom vhost (default not defined)
 apache::vhost { 'drupal-demonstration':
     servername       => 'drupal.demonstration.com',
+    port             => '80',
     docroot          => '/vagrant/webroot',
     docroot_owner    => 'apache',
     docroot_group    => 'apache',
