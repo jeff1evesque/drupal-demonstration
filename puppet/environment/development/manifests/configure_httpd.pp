@@ -16,6 +16,7 @@ $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
 apache::vhost { 'drupal.demonstration.com':
+  port             => '80',
   docroot          => '/vagrant/webroot',
   docroot_owner    => 'apache',
   docroot_group    => 'apache',
