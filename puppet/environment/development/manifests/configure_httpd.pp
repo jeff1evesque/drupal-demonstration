@@ -23,13 +23,17 @@ apache::vhost { 'drupal.demonstration.com':
     fallbackresource => '/vagrant/webroot/error.php',
 
     directories => [
-        {  path     => '/',
-           provider => 'directory',
-           override => ['all'],
+        {  path           => '/',
+           provider       => 'directory',
+           allowoverride  => 'None',
+           require        => 'all denied',
         },
-        {  path     => '/vagrant',
-           provider => 'directory',
-           override => ['all'],
+        {  path           => '/vagrant/webroot',
+           provider       => 'directory',
+           allowoverride  => 'None',
+           require        => 'all granted',
+           options        => 'Options Indexes FollowSymLinks',
+           acceptpathinfo => 'Off',
 
            error_documents => [
                { 'error_code' => '401',
