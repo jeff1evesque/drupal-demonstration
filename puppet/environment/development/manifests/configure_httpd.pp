@@ -25,7 +25,6 @@ apache::vhost { $vhost_name:
     docroot          => $webroot,
     docroot_owner    => 'apache',
     docroot_group    => 'apache',
-    fallbackresource => "${webroot}/error.php",
 
     directories => [
         {  path           => '/',
