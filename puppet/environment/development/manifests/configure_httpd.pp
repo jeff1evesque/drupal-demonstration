@@ -3,6 +3,7 @@ class { 'nodejs':
   repo_url_suffix => 'node_5.x',
 }
 
+## install apache, remove default vhost
 class { 'apache':
   default_vhost => false,
 }
@@ -15,6 +16,7 @@ $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
+## define custom vhost (since default disabled)
 apache::vhost { 'drupal-demonstration':
     servername       => 'drupal.demonstration.com'
     port             => '80',
