@@ -10,6 +10,7 @@ class { 'apache':
 
 ## variables
 $packages_general = ['dos2unix']
+$vhost_name = 'drupal-demonstration'
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 $webroot = '/vagrant/webroot'
 $port = '80'
@@ -18,10 +19,10 @@ $port = '80'
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
 ## define custom vhost (default not defined)
-apache::vhost { 'drupal-demonstration':
-    servername       => 'drupal.demonstration.com',
-    port             => "${port}",
-    docroot          => "${webroot}',
+apache::vhost { $vhost_name:
+    servername       => "${vhost_name}.com",
+    port             => $port,
+    docroot          => $webroot,
     docroot_owner    => 'apache',
     docroot_group    => 'apache',
     fallbackresource => "${webroot}/error.php",
