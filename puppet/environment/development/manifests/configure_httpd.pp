@@ -3,7 +3,7 @@ class { 'nodejs':
   repo_url_suffix => 'node_5.x',
 }
 
-## install apache, remove default vhost
+## install apache, without default vhost
 class { 'apache':
   default_vhost => false,
 }
@@ -20,7 +20,7 @@ Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 apache::listen { '80': }
 #apache::listen { '443': }
 
-## define custom vhost (since default disabled)
+## define custom vhost (default not defined)
 apache::vhost { 'drupal-demonstration':
     servername       => 'drupal.demonstration.com'
     port             => '80',
