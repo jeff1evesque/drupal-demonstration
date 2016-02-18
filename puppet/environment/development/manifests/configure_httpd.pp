@@ -16,6 +16,10 @@ $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
+## when ssl is configured, uncomment '443', and comment '80'
+apache::listen { '80': }
+#apache::listen { '443': }
+
 ## define custom vhost (since default disabled)
 apache::vhost { 'drupal-demonstration':
     servername       => 'drupal.demonstration.com'
