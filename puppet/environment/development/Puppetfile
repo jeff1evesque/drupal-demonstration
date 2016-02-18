@@ -30,4 +30,4 @@ mod 'mysql',
 ## Install Module: firewalld
 mod 'firewalld',
   :git => 'git@github.com:crayfishx/puppet-firewalld.git',
-  :ref => '3.6.2'
+  :ref => '2.1.0'
