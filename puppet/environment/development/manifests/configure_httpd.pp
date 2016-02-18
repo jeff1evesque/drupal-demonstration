@@ -126,6 +126,14 @@ exec {'enable-httpd-selinux-policy':
     cwd => "${selinux_policy_dir}",
 }
 
+## allow guest port 80 to be accessible on the host machine
+firewalld_port { 'Open port 8080 in the public zone':
+    ensure   => present,
+    zone     => 'public',
+    port     => 80,
+    protocol => 'tcp',
+}
+
 ## packages: install general packages
 package {$packages_general:
     ensure => present,
