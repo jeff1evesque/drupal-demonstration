@@ -1,11 +1,11 @@
 ## include puppet modules
 class { 'nodejs':
-  repo_url_suffix => 'node_5.x',
+    repo_url_suffix => 'node_5.x',
 }
 
 ## install apache, without default vhost
 class { 'apache':
-  default_vhost => false,
+    default_vhost => false,
 }
 
 ## variables
@@ -122,6 +122,7 @@ exec {'load-httpd-selinux-policy':
 exec {'enable-httpd-selinux-policy':
     command => 'semodule -e httpd_t',
     before  => Firewalld_port["allow-port-${port}"],
+    refreshonly => true,
     cwd     => "${selinux_policy_dir}",
 }
 
@@ -131,6 +132,13 @@ firewalld_port { "allow-port-${port}":
     zone     => 'public',
     port     => $port,
     protocol => 'tcp',
+    notify   => Exec['restart-httpd'],
+}
+
+## restart apache
+exec { 'restart-httpd':
+    command => 'systemctl restart httpd',
+    refreshonly => true,
     before   => Package[$packages_general],
 }
 
