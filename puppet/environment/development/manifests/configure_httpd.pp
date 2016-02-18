@@ -108,8 +108,8 @@ apache::vhost { $vhost_name:
                  'document'   => "${webroot}/error.php",
                },
            ],
-        }
-    ]
+        },
+    ],
 }
 
 ## system context: load httpd selinux policy module
