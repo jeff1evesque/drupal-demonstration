@@ -89,7 +89,6 @@ class httpd {
                 allowoverride   => 'All',
                 require         => 'all granted',
                 options         => ['Indexes', 'FollowSymLinks'],
-                acceptpathinfo  => 'Off',
                 error_documents => [
                     {   'error_code' => '401',
                         'document'   => "${webroot}/error.php",
@@ -157,7 +156,7 @@ class httpd {
                     {   'error_code' => '505',
                         'document'   => "${webroot}/error.php",
                     },
-                ]
+                ],
             },
         ],
     }
