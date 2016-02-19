@@ -60,7 +60,7 @@ class httpd {
         redirect_status  => 'permanent',
         redirect_dest    => "https://${vhost_name}.com",
 
-        ## keep in case we remove 'redirect_dest'
+        ## keep in case we remove 'redirect_dest', and 'redirect_status'
         directories => [
             {  path           => '/',
                provider       => 'directory',
