@@ -79,7 +79,7 @@ class httpd {
         ],
     }
 
-    ## custom ssl vhost (default not defined)
+    ## ssl vhost (default not defined)
     apache::vhost { "${vhost_name}_ssl":
         servername       => $vhost_name,
         port             => $port_ssl,
