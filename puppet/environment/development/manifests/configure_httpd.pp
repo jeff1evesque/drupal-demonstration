@@ -20,16 +20,21 @@ package {$packages_general:
 ## define $PATH for all execs
 Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
+## generate ssh key-pair
+class generate_keypair {
+    exec {'create-keys]':
+        command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
+    }
+}
+
 ## install, and configure apache
 class httpd {
+    ## set dependency
+    require generate_keypair
+
     ## install apache, without default vhost
     class { 'apache':
         default_vhost => false,
-    }
-
-    ## generate key-pair: used for ssl vhost
-    exec {'create-keys]':
-        command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
     }
 
     ## standard vhost (default not defined)
@@ -91,6 +96,7 @@ class httpd {
 ## load, and enable selinux policy modules
 class selinux {
     ## set dependency
+    require generate_keypair
     require httpd
 
     ## system context: load httpd selinux policy module
@@ -114,6 +120,7 @@ class selinux {
 ## open port(s) to be accessible to the host machine
 class firewalld {
     ## set dependency
+    require generate_keypair
     require httpd
     require selinux
 
@@ -135,6 +142,7 @@ class firewalld {
 ## restart apache
 class restart_httpd {
     ## set dependency
+    require generate_keypair
     require httpd
     require selinux
     require firewalld
