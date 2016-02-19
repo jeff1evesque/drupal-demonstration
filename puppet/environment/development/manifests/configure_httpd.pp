@@ -3,11 +3,6 @@ class { 'nodejs':
     repo_url_suffix => 'node_5.x',
 }
 
-## install apache, without default vhost
-class { 'apache':
-    default_vhost => false,
-}
-
 ## install 'mod_ssl' module
 class { 'apache::mod::ssl': }
 
