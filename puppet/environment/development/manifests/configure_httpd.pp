@@ -55,7 +55,10 @@ class httpd {
         docroot          => $webroot,
         docroot_owner    => 'apache',
         docroot_group    => 'apache',
+        redirect_status  => 'permanent',
+        redirect_dest    => "https://${vhost_name}.com",
 
+        ## keep in case we remove 'redirect_dest'
         directories => [
             {  path           => '/',
                provider       => 'directory',
