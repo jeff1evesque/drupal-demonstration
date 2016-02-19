@@ -3,14 +3,25 @@ class { 'nodejs':
     repo_url_suffix => 'node_5.x',
 }
 
-## variables
-$vhost_name = 'localhost'
-$selinux_policy_dir = '/vagrant/centos7x/selinux/'
+## variables: non-ssl
 $webroot = '/vagrant/webroot'
-$port = '80'
-$port_ssl = '443'
-$packages_general = ['dos2unix']
-$build_environment = development
+$port    = '80'
+
+## variables: ssl
+$ssl_dir      = '/etc/httpd/ssl'
+$port_ssl     = '443'
+$ssl_country  = 'US'
+$ssl_state    = 'VA'
+$ssl_city     = 'city'
+$ssl_org_name = 'organizational name'
+$ssl_org_unit = 'organizational unit'
+$ssl_cname    = 'localhost'
+
+## variables: general
+$build_environment  = development
+$vhost_name         = 'localhost'
+$selinux_policy_dir = '/vagrant/centos7x/selinux/'
+$packages_general   = ['dos2unix']
 
 ## packages: install general packages
 package {$packages_general:
@@ -23,7 +34,7 @@ Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 ## generate ssh key-pair
 class generate_keypair {
     exec {'create-keys]':
-        command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
+        command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ${ssl_dir}/httpd.key -out ${ssl_dir}/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
     }
 }
 
@@ -71,8 +82,8 @@ class httpd {
         docroot_owner    => 'apache',
         docroot_group    => 'apache',
         ssl              => true,
-        default_ssl_key  => '/etc/httpd/ssl/httpd.key',
-        default_ssl_cert => '/etc/httpd/ssl/httpd.crt',
+        default_ssl_key  => "${ssl_dir}/httpd.key",
+        default_ssl_cert => "${ssl_dir}/httpd.crt",
 
         directories => [
             {  path           => '/',
@@ -111,9 +122,9 @@ class selinux {
 
     ## system context: enable httpd selinux policy module
     exec {'enable-httpd-selinux-policy':
-        command => 'semodule -e httpd_t',
+        command     => 'semodule -e httpd_t',
         refreshonly => true,
-        cwd     => "${selinux_policy_dir}",
+        cwd         => "${selinux_policy_dir}",
     }
 }
 
