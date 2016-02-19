@@ -33,7 +33,7 @@ Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
 
 ## generate ssh key-pair
 class generate_keypair {
-    exec {'create-keys]':
+    exec {'create-keys':
         command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ${ssl_dir}/httpd.key -out ${ssl_dir}/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
     }
 }
