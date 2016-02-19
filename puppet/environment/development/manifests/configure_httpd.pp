@@ -117,9 +117,6 @@ class httpd {
             },
         ],
     }
-
-    ## restart apache
-    require restart_httpd
 }
 
 
@@ -144,9 +141,6 @@ class selinux {
         refreshonly => true,
         cwd     => "${selinux_policy_dir}",
     }
-
-    ## restart apache
-    require restart_httpd
 }
 
 ## open port(s) to be accessible to the host machine
@@ -162,13 +156,15 @@ class firewalld {
         port     => $port,
         protocol => 'tcp',
     }
-
-    ## restart apache
-    require restart_httpd
 }
 
 ## restart apache
 class restart_httpd {
+    ## set dependency
+    require httpd
+    require selinux
+    require firewalld
+
     exec { 'restart-httpd':
         command => 'systemctl restart httpd',
     }
@@ -179,5 +175,6 @@ class constructor {
     contain httpd
     contain selinux
     contain firewalld
+    contain restart_httpd
 }
 include constructor
