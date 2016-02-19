@@ -3,15 +3,14 @@ class { 'nodejs':
     repo_url_suffix => 'node_5.x',
 }
 
-## install 'mod_ssl' module
-class { 'apache::mod::ssl': }
-
 ## variables
 $vhost_name = 'localhost'
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
 $webroot = '/vagrant/webroot'
 $port = '80'
+$port_ssl = '443'
 $packages_general = ['dos2unix']
+$build_environment = development
 
 ## packages: install general packages
 package {$packages_general:
@@ -28,8 +27,13 @@ class httpd {
         default_vhost => false,
     }
 
-    ## define custom vhost (default not defined)
-    apache::vhost { $vhost_name:
+    ## generate key-pair: used for ssl vhost
+    exec {'create-keys]':
+        command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout /etc/httpd/ssl/httpd.key -out /etc/httpd/ssl/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
+    }
+
+    ## standard vhost (default not defined)
+    apache::vhost { "${vhost_name}":
         servername       => $vhost_name,
         port             => $port,
         docroot          => $webroot,
@@ -49,79 +53,40 @@ class httpd {
                options        => ['Indexes', 'FollowSymLinks'],
                acceptpathinfo => 'Off',
 
-               error_documents => [
-                   { 'error_code' => '401',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '402',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '403',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '404',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '405',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '406',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '407',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '408',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '409',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '411',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '412',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '413',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '414',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '415',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '416',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '417',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '500',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '501',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '502',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '503',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '504',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '505',
-                     'document'   => "${webroot}/error.php",
-                   },
-               ],
+               error_documents => template("/vagrant/puppet/environment/${build_environment}/template/error_documents.erb"),
+            },
+        ],
+    }
+
+    ## custom ssl vhost (default not defined)
+    apache::vhost { "${vhost_name}_ssl":
+        servername       => $vhost_name,
+        port             => $port_ssl,
+        docroot          => $webroot,
+        docroot_owner    => 'apache',
+        docroot_group    => 'apache',
+        ssl              => true,
+        default_ssl_key  => '/etc/httpd/ssl/httpd.key',
+        default_ssl_cert => '/etc/httpd/ssl/httpd.crt',
+
+        directories => [
+            {  path           => '/',
+               provider       => 'directory',
+               allowoverride  => 'None',
+               require        => 'all denied',
+            },
+            {  path           => $webroot,
+               provider       => 'directory',
+               allowoverride  => 'All',
+               require        => 'all granted',
+               options        => ['Indexes', 'FollowSymLinks'],
+               acceptpathinfo => 'Off',
+
+               error_documents => template("/vagrant/puppet/environment/${build_environment}/template/error_documents.erb"),
             },
         ],
     }
 }
-
 
 ## load, and enable selinux policy modules
 class selinux {
@@ -152,8 +117,14 @@ class firewalld {
     require httpd
     require selinux
 
-    ## open general port
+    ## open general, and ssl port
     firewalld_port { "allow-port-${port}":
+        ensure   => present,
+        zone     => 'public',
+        port     => $port,
+        protocol => 'tcp',
+    }
+    firewalld_port { "allow-port-${port_ssl}":
         ensure   => present,
         zone     => 'public',
         port     => $port,
