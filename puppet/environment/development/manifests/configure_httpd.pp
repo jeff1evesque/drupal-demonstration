@@ -62,18 +62,17 @@ class httpd {
 
         ## keep in case we remove 'redirect_dest', and 'redirect_status'
         directories => [
-            {  path           => '/',
-               provider       => 'directory',
-               allowoverride  => 'None',
-               require        => 'all denied',
+            {  path            => '/',
+               provider        => 'directory',
+               allowoverride   => 'None',
+               require         => 'all denied',
             },
-            {  path           => $webroot,
-               provider       => 'directory',
-               allowoverride  => 'All',
-               require        => 'all granted',
-               options        => ['Indexes', 'FollowSymLinks'],
-               acceptpathinfo => 'Off',
-
+            {  path            => $webroot,
+               provider        => 'directory',
+               allowoverride   => 'All',
+               require         => 'all granted',
+               options         => ['Indexes', 'FollowSymLinks'],
+               acceptpathinfo  => 'Off',
                error_documents => template("/vagrant/puppet/environment/${build_environment}/template/error_documents.erb"),
             },
         ],
@@ -81,25 +80,25 @@ class httpd {
 
     ## ssl vhost (default not defined)
     apache::vhost { "${vhost_name}_ssl":
-        servername       => $vhost_name,
-        port             => $port_ssl,
-        docroot          => $webroot,
-        docroot_owner    => 'apache',
-        docroot_group    => 'apache',
-        ssl              => true,
+        servername    => $vhost_name,
+        port          => $port_ssl,
+        docroot       => $webroot,
+        docroot_owner => 'apache',
+        docroot_group => 'apache',
+        ssl           => true,
 
         directories => [
-            {  path           => '/',
-               provider       => 'directory',
-               allowoverride  => 'None',
-               require        => 'all denied',
+            {  path            => '/',
+               provider        => 'directory',
+               allowoverride   => 'None',
+               require         => 'all denied',
             },
-            {  path           => $webroot,
-               provider       => 'directory',
-               allowoverride  => 'All',
-               require        => 'all granted',
-               options        => ['Indexes', 'FollowSymLinks'],
-               acceptpathinfo => 'Off',
+            {  path            => $webroot,
+               provider        => 'directory',
+               allowoverride   => 'All',
+               require         => 'all granted',
+               options         => ['Indexes', 'FollowSymLinks'],
+               acceptpathinfo  => 'Off',
 
                error_documents => template("/vagrant/puppet/environment/${build_environment}/template/error_documents.erb"),
             },
@@ -148,7 +147,7 @@ class firewalld {
     firewalld_port { "allow-port-${port_ssl}":
         ensure   => present,
         zone     => 'public',
-        port     => $port,
+        port     => $port_ssl,
         protocol => 'tcp',
     }
 }
