@@ -29,7 +29,7 @@ package {$packages_general:
 }
 
 ## define $PATH for all execs
-Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
+Exec {path => ['/usr/bin/', '/usr/sbin/']}
 
 ## generate ssh key-pair
 class generate_keypair {
@@ -168,6 +168,7 @@ class restart_httpd {
 
 ## constructor
 class constructor {
+    contain generate_keypair
     contain httpd
     contain selinux
     contain firewalld
