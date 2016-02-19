@@ -8,14 +8,15 @@ $webroot = '/vagrant/webroot'
 $port    = '80'
 
 ## variables: ssl
-$ssl_dir      = '/etc/ssl/httpd'
-$port_ssl     = '443'
-$ssl_country  = 'US'
-$ssl_state    = 'VA'
-$ssl_city     = 'city'
-$ssl_org_name = 'organizational name'
-$ssl_org_unit = 'organizational unit'
-$ssl_cname    = 'localhost'
+$ssl_dir       = '/etc/ssl/httpd'
+$port_ssl      = '443'
+$port_ssl_host = '6686'
+$ssl_country   = 'US'
+$ssl_state     = 'VA'
+$ssl_city      = 'city'
+$ssl_org_name  = 'organizational name'
+$ssl_org_unit  = 'organizational unit'
+$ssl_cname     = 'localhost'
 
 ## variables: general
 $build_environment  = development
@@ -43,6 +44,7 @@ class generate_keypair {
     ## create key-pair
     exec { 'create-keys':
         command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ${ssl_dir}/httpd.key -out ${ssl_dir}/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
+        refreshonly => true,
     }
 }
 
@@ -64,7 +66,7 @@ class httpd {
         docroot_owner    => 'apache',
         docroot_group    => 'apache',
         redirect_status  => 'permanent',
-        redirect_dest    => "https://${vhost_name}.com",
+        redirect_dest    => "https://${vhost_name}:{$port_ssl_host}",
     }
 
     ## ssl vhost (default not defined)
@@ -74,7 +76,6 @@ class httpd {
         docroot       => $webroot,
         docroot_owner => 'apache',
         docroot_group => 'apache',
-        ssl           => true,
         ssl_cert      => "${ssl_dir}/httpd.crt",
         ssl_key       => "${ssl_dir}/httpd.key",
 
