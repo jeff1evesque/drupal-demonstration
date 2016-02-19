@@ -8,7 +8,7 @@ $webroot = '/vagrant/webroot'
 $port    = '80'
 
 ## variables: ssl
-$ssl_dir      = '/etc/httpd/ssl'
+$ssl_dir      = '/etc/ssl/httpd'
 $port_ssl     = '443'
 $ssl_country  = 'US'
 $ssl_state    = 'VA'
@@ -33,7 +33,15 @@ Exec {path => ['/usr/bin/', '/usr/sbin/']}
 
 ## generate ssh key-pair
 class generate_keypair {
-    exec {'create-keys':
+    ## create directory
+    file { $ssl_dir:
+        ensure => 'directory',
+        before => Exec['create-keys'],
+        notify => Exec['create-keys'],
+    }
+
+    ## create key-pair
+    exec { 'create-keys':
         command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ${ssl_dir}/httpd.key -out ${ssl_dir}/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
     }
 }
@@ -99,7 +107,6 @@ class httpd {
                require         => 'all granted',
                options         => ['Indexes', 'FollowSymLinks'],
                acceptpathinfo  => 'Off',
-
                error_documents => template("/vagrant/puppet/environment/${build_environment}/template/error_documents.erb"),
             },
         ],
