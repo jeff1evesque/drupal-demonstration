@@ -54,8 +54,6 @@ class httpd {
     ## install apache, without default vhost
     class { 'apache':
         default_vhost    => false,
-        default_ssl_key  => "${ssl_dir}/httpd.key",
-        default_ssl_cert => "${ssl_dir}/httpd.crt",
     }
 
     ## standard vhost (default not defined)
@@ -77,6 +75,8 @@ class httpd {
         docroot_owner => 'apache',
         docroot_group => 'apache',
         ssl           => true,
+        ssl_cert      => "${ssl_dir}/httpd.crt",
+        ssl_key       => "${ssl_dir}/httpd.key",
 
         directories => [
             {   path            => '/',
