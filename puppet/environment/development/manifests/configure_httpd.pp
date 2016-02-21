@@ -70,6 +70,8 @@ class httpd {
     ## ssl vhost (default not defined)
     apache::vhost { "${vhost_name}_ssl":
         servername    => $vhost_name,
+        port          => $port_ssl,
+        add_listen    => false,
         docroot       => $webroot,
         ssl           => true,
         ssl_cert      => "${ssl_dir}/httpd.crt",
