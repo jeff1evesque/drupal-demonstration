@@ -63,19 +63,15 @@ class httpd {
         servername       => $vhost_name,
         port             => $port,
         docroot          => $webroot,
-        docroot_owner    => 'apache',
-        docroot_group    => 'apache',
         redirect_status  => 'permanent',
-        redirect_dest    => "https://${vhost_name}:{$port_ssl_host}",
+        redirect_dest    => "https://${vhost_name}:${port_ssl_host}",
     }
 
     ## ssl vhost (default not defined)
     apache::vhost { "${vhost_name}_ssl":
         servername    => $vhost_name,
-        port          => $port_ssl,
         docroot       => $webroot,
-        docroot_owner => 'apache',
-        docroot_group => 'apache',
+        ssl           => true,
         ssl_cert      => "${ssl_dir}/httpd.crt",
         ssl_key       => "${ssl_dir}/httpd.key",
 
