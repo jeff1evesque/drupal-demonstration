@@ -3,12 +3,26 @@ class { 'nodejs':
     repo_url_suffix => 'node_5.x',
 }
 
-## variables
-$vhost_name = 'localhost'
-$selinux_policy_dir = '/vagrant/centos7x/selinux/'
+## variables: non-ssl
 $webroot = '/vagrant/webroot'
-$port = '80'
-$packages_general = ['dos2unix']
+$port    = '80'
+
+## variables: ssl
+$ssl_dir       = '/etc/ssl/httpd'
+$port_ssl      = '443'
+$port_ssl_host = '6686'
+$ssl_country   = 'US'
+$ssl_state     = 'VA'
+$ssl_city      = 'city'
+$ssl_org_name  = 'organizational name'
+$ssl_org_unit  = 'organizational unit'
+$ssl_cname     = 'localhost'
+
+## variables: general
+$build_environment  = development
+$vhost_name         = 'localhost'
+$selinux_policy_dir = '/vagrant/centos7x/selinux/'
+$packages_general   = ['dos2unix']
 
 ## packages: install general packages
 package {$packages_general:
@@ -16,144 +30,180 @@ package {$packages_general:
 }
 
 ## define $PATH for all execs
-Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
+Exec {path => ['/usr/bin/', '/usr/sbin/']}
+
+## generate ssh key-pair
+class generate_keypair {
+    ## create directory
+    file { $ssl_dir:
+        ensure => 'directory',
+        before => Exec['create-keys'],
+        notify => Exec['create-keys'],
+    }
+
+    ## create key-pair
+    exec { 'create-keys':
+        command => "openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ${ssl_dir}/httpd.key -out ${ssl_dir}/httpd.crt -subj '/C=${ssl_country}/ST=${ssl_state}/L=${ssl_city}/O=${ssl_org_name}/OU=${ssl_org_unit}/CN=${ssl_cname}'",
+        refreshonly => true,
+    }
+}
 
 ## install, and configure apache
 class httpd {
+    ## set dependency
+    require generate_keypair
+
     ## install apache, without default vhost
     class { 'apache':
-        default_vhost => false,
+        default_vhost    => false,
     }
 
-    ## define custom vhost (default not defined)
-    apache::vhost { $vhost_name:
+    ## standard vhost (default not defined)
+    apache::vhost { "${vhost_name}":
         servername       => $vhost_name,
         port             => $port,
         docroot          => $webroot,
-        docroot_owner    => 'apache',
-        docroot_group    => 'apache',
+        redirect_status  => 'permanent',
+        redirect_dest    => "https://${vhost_name}:${port_ssl_host}",
+    }
+
+    ## ssl vhost (default not defined)
+    #
+    #  @add_listen, setting to false, prevents 'Listen $port_ssl' directive
+    #      within 'ports.conf', which would conflict with similar directive,
+    #      found in 'ssl.conf'
+    apache::vhost { "${vhost_name}_ssl":
+        servername    => $vhost_name,
+        port          => $port_ssl,
+        add_listen    => false,
+        docroot       => $webroot,
+        ssl           => true,
+        ssl_cert      => "${ssl_dir}/httpd.crt",
+        ssl_key       => "${ssl_dir}/httpd.key",
 
         directories => [
-            {  path           => '/',
-               provider       => 'directory',
-               allowoverride  => 'None',
-               require        => 'all denied',
+            {   path            => '/',
+                provider        => 'directory',
+                allowoverride   => 'None',
+                require         => 'all denied',
             },
-            {  path           => $webroot,
-               provider       => 'directory',
-               allowoverride  => 'All',
-               require        => 'all granted',
-               options        => ['Indexes', 'FollowSymLinks'],
-               acceptpathinfo => 'Off',
-
-               error_documents => [
-                   { 'error_code' => '401',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '402',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '403',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '404',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '405',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '406',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '407',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '408',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '409',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '411',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '412',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '413',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '414',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '415',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '416',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '417',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '500',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '501',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '502',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '503',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '504',
-                     'document'   => "${webroot}/error.php",
-                   },
-                   { 'error_code' => '505',
-                     'document'   => "${webroot}/error.php",
-                   },
-               ],
+            {   path            => $webroot,
+                provider        => 'directory',
+                allowoverride   => 'All',
+                require         => 'all granted',
+                options         => ['Indexes', 'FollowSymLinks'],
+                error_documents => [
+                    {   'error_code' => '401',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '402',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '403',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '404',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '405',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '406',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '407',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '408',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '409',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '411',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '412',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '413',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '414',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '415',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '416',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '417',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '500',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '501',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '502',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '503',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '504',
+                        'document'   => "${webroot}/error.php",
+                    },
+                    {   'error_code' => '505',
+                        'document'   => "${webroot}/error.php",
+                    },
+                ],
             },
         ],
     }
 }
 
-
 ## load, and enable selinux policy modules
 class selinux {
     ## set dependency
+    require generate_keypair
     require httpd
 
     ## system context: load httpd selinux policy module
     exec {'load-httpd-selinux-policy':
         command => 'semodule -i httpd_t.pp',
-        require => [
-            Class['apache'],
-        ],
         notify  => Exec['enable-httpd-selinux-policy'],
         cwd     => "${selinux_policy_dir}",
     }
 
     ## system context: enable httpd selinux policy module
     exec {'enable-httpd-selinux-policy':
-        command => 'semodule -e httpd_t',
+        command     => 'semodule -e httpd_t',
         refreshonly => true,
-        cwd     => "${selinux_policy_dir}",
+        cwd         => "${selinux_policy_dir}",
     }
 }
 
 ## open port(s) to be accessible to the host machine
 class firewalld {
     ## set dependency
+    require generate_keypair
     require httpd
     require selinux
 
-    ## open general port
+    ## open general, and ssl port
     firewalld_port { "allow-port-${port}":
         ensure   => present,
         zone     => 'public',
         port     => $port,
+        protocol => 'tcp',
+    }
+    firewalld_port { "allow-port-${port_ssl}":
+        ensure   => present,
+        zone     => 'public',
+        port     => $port_ssl,
         protocol => 'tcp',
     }
 }
@@ -161,6 +211,7 @@ class firewalld {
 ## restart apache
 class restart_httpd {
     ## set dependency
+    require generate_keypair
     require httpd
     require selinux
     require firewalld
@@ -172,6 +223,7 @@ class restart_httpd {
 
 ## constructor
 class constructor {
+    contain generate_keypair
     contain httpd
     contain selinux
     contain firewalld

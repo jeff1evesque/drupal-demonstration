@@ -123,5 +123,11 @@ exec {'phpmyadmin-system-context':
 ## increase php memory limit (i.e. bootstrap 3 theme)
 exec {'php-memory-limit':
     command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php.ini',
+    notify => Exec['restart-httpd'],
+}
+
+## restart httpd
+exec {'restart-httpd':
+    command => 'systemctl restart httpd',
     refreshonly => true,
 }

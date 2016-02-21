@@ -92,15 +92,6 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file    = 'configure_drush.pp'
   end
 
-  # Custom Manifest: ssl configuration
-  config.vm.provision "puppet" do |puppet|
-    puppet.environment_path = 'puppet/environment'
-    puppet.environment      = 'development'
-    puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = 'puppet/environment/development/modules'
-    puppet.manifest_file    = 'configure_ssl.pp'
-  end
-
   # Custom Manifest: add sass, uglifyjs, imagemin compilers
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
