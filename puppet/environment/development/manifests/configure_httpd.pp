@@ -68,6 +68,10 @@ class httpd {
     }
 
     ## ssl vhost (default not defined)
+    #
+    #  @add_listen, setting to false, prevents 'Listen $port_ssl' directive
+    #      within 'ports.conf', which would conflict with similar directive,
+    #      found in 'ssl.conf'
     apache::vhost { "${vhost_name}_ssl":
         servername    => $vhost_name,
         port          => $port_ssl,
