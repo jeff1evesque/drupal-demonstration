@@ -204,9 +204,9 @@ When the `vagrant up` build succeeds, visit [https://localhost:6686](https://loc
 
 ### SSH
 
-The following account / password, have been already created:
+The following user / password, have been created:
 
-- `root`: `vagrant-provision`
+- `root`: `vagrant-admin`
 - `provisioner`: `vagrant-provision`
 
 In addition, the ssh key-pair implements the passphrase:
