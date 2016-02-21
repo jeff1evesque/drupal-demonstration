@@ -58,6 +58,9 @@ class httpd {
         default_vhost    => false,
     }
 
+    ## install 'mod_rewrite' module
+    class { 'apache::mod::rewrite': }
+
     ## standard vhost (default not defined)
     apache::vhost { "${vhost_name}":
         servername       => $vhost_name,
