@@ -50,4 +50,4 @@ mod 'composer',
 ## Install Module: puppet-drush
 mod 'drush',
   :git => 'git@github.com:previousnext/puppet-drush',
-  :ref => '1.8.1'
+  :ref => '0.1.1'
