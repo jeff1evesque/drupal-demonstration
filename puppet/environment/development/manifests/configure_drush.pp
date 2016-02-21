@@ -2,7 +2,7 @@
 $user = 'provisioner'
 
 ## define $PATH for all execs
-Exec {path => ['/usr/sbin/']}
+Exec {path => ['/usr/sbin/', '/usr/bin']}
 
 ## install, and enable drush
 class drush {
