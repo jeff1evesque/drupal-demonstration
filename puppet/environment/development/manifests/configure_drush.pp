@@ -1,14 +1,12 @@
-## define $PATH for all execs
-Exec {path => ['/usr/bin/', '/usr/local/']}
-
 ## install, and enable drush
 class drush {
     ## drush dependency
     include composer
 
     ## install drush
-    drush::drush { 'drush8':
-        version => '8',
+    drush::drush { 'drush':
+        version    => '8',
+        target_dir => '/usr/bin'
     }
 }
 
