@@ -41,3 +41,13 @@ mod 'apache',
 mod 'firewalld',
   :git => 'git@github.com:crayfishx/puppet-firewalld.git',
   :ref => '2.1.0'
+
+## Install Module: puppet-composer (puppet-drush dependency)
+mod 'composer',
+  :git => 'git@github.com:willdurand/puppet-composer.git',
+  :ref => 'v1.1.1',
+
+## Install Module: puppet-drush
+mod 'drush',
+  :git => 'git@github.com:previousnext/puppet-drush',
+  :ref => '1.8.1',
