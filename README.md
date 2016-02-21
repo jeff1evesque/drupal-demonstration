@@ -195,6 +195,11 @@ Otherwise, if ssl is configured, then the application is accessible via
 
 **Note:** general convention implements port `443` for ssl.
 
+Lastly, when the `vagrant up` build has succeeded, visit https://localhost:6686 within a browser, and complete the drupal installation:
+
+- mysql user: `authenticated`
+- mysql pass: `password`
+
 ## Testing / Execution
 
 ### SSH
