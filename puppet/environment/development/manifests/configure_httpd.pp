@@ -1,175 +1,180 @@
 ## include puppet modules
 class { 'nodejs':
-  repo_url_suffix => 'node_5.x',
+    repo_url_suffix => 'node_5.x',
 }
 
 ## variables
-$packages_general = ['git', 'httpd', 'gd', 'dos2unix']
-$time_zone = 'America/New_York'
+$vhost_name = 'localhost'
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
-
-## define $PATH for all execs
-Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
-
-## system context: load httpd selinux policy module
-exec {'load-httpd-selinux-policy':
-    command => 'semodule -i httpd_t.pp',
-    notify => Exec['enable-httpd-selinux-policy'],
-    cwd => "${selinux_policy_dir}",
-}
-
-## system context: enable httpd selinux policy module
-exec {'enable-httpd-selinux-policy':
-    command => 'semodule -e httpd_t',
-    notify => Package[$packages_general],
-    cwd => "${selinux_policy_dir}",
-}
+$webroot = '/vagrant/webroot'
+$port = '80'
+$packages_general = ['dos2unix']
 
 ## packages: install general packages
 package {$packages_general:
     ensure => present,
-    before => Service['httpd'],
 }
 
-## start compiler service(s), and ensure always running
-service {'httpd':
-    ensure => 'running',
-    enable => true,
-    notify => Exec['define-errordocument-403'],
+## define $PATH for all execs
+Exec {path => ['/sbin/', '/usr/bin/', '/bin/', '/usr/sbin/']}
+
+## install, and configure apache
+class httpd {
+    ## install apache, without default vhost
+    class { 'apache':
+        default_vhost => false,
+    }
+
+    ## define custom vhost (default not defined)
+    apache::vhost { $vhost_name:
+        servername       => $vhost_name,
+        port             => $port,
+        docroot          => $webroot,
+        docroot_owner    => 'apache',
+        docroot_group    => 'apache',
+
+        directories => [
+            {  path           => '/',
+               provider       => 'directory',
+               allowoverride  => 'None',
+               require        => 'all denied',
+            },
+            {  path           => $webroot,
+               provider       => 'directory',
+               allowoverride  => 'All',
+               require        => 'all granted',
+               options        => ['Indexes', 'FollowSymLinks'],
+               acceptpathinfo => 'Off',
+
+               error_documents => [
+                   { 'error_code' => '401',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '402',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '403',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '404',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '405',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '406',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '407',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '408',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '409',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '411',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '412',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '413',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '414',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '415',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '416',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '417',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '500',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '501',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '502',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '503',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '504',
+                     'document'   => "${webroot}/error.php",
+                   },
+                   { 'error_code' => '505',
+                     'document'   => "${webroot}/error.php",
+                   },
+               ],
+            },
+        ],
+    }
 }
 
-## define errordocument for 403 'bad request'
-exec {'define-errordocument-403':
-    command => 'sed "/\ErrorDocument 402/a ErrorDocument 400 \/webroot\/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-403'],
+
+## load, and enable selinux policy modules
+class selinux {
+    ## set dependency
+    require httpd
+
+    ## system context: load httpd selinux policy module
+    exec {'load-httpd-selinux-policy':
+        command => 'semodule -i httpd_t.pp',
+        require => [
+            Class['apache'],
+        ],
+        notify  => Exec['enable-httpd-selinux-policy'],
+        cwd     => "${selinux_policy_dir}",
+    }
+
+    ## system context: enable httpd selinux policy module
+    exec {'enable-httpd-selinux-policy':
+        command => 'semodule -e httpd_t',
+        refreshonly => true,
+        cwd     => "${selinux_policy_dir}",
+    }
 }
 
-## move bad request logic
-exec {'mv-httpd-conf-403':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['remove-comment-errordocument-1'],
+## open port(s) to be accessible to the host machine
+class firewalld {
+    ## set dependency
+    require httpd
+    require selinux
+
+    ## open general port
+    firewalld_port { "allow-port-${port}":
+        ensure   => present,
+        zone     => 'public',
+        port     => $port,
+        protocol => 'tcp',
+    }
 }
 
-## remove comment (part 1): remove '# Some examples:' line.
-exec {'remove-comment-errordocument-1':
-    command => 'sed "/\# Some examples:/d" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-comment-1'],
-}
-exec {'mv-httpd-conf-comment-1':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['define-http-400'],
+## restart apache
+class restart_httpd {
+    ## set dependency
+    require httpd
+    require selinux
+    require firewalld
+
+    exec { 'restart-httpd':
+        command => 'systemctl restart httpd',
+    }
 }
 
-## define errordocument for 400 'bad request'
-exec {'define-http-400':
-    command => 'sed "/\\#ErrorDocument 402/a ErrorDocument 400 \/webroot\/error.php" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-400'],
+## constructor
+class constructor {
+    contain httpd
+    contain selinux
+    contain firewalld
+    contain restart_httpd
 }
-exec {'mv-httpd-conf-400':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['remove-comment-errordocument-2'],
-}
-
-## remove comment (part 2): remove line after 'ErrorDocument 400 /error.php'.
-exec {'remove-comment-errordocument-2':
-    command => 'sed -e "/ErrorDocument 400 \/webroot\/error.php/{N;s/\n.*//;}" /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-comment-2'],
-}
-exec {'mv-httpd-conf-comment-2':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['change-docroot'],
-}
-
-## change docroot: point docroot to mounted '/vagrant/webroot' directory
-exec {'change-docroot':
-    command => 'sed -i "s/\/var\/www\/html/\/vagrant\/webroot/g" /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['adjust-firewalld'],
-}
-
-## adjust firewalld, which allows guest port 80 to be accessible on the host machine
-exec {'adjust-firewalld':
-    command => 'firewall-cmd --add-port=80/tcp --permanent',
-    refreshonly => true,
-    notify => Exec['restart-firewalld'],
-}
-
-## restart firewalld
-exec {'restart-firewalld':
-    command => 'firewall-cmd --reload',
-    refreshonly => true,
-    notify => Exec['allow-htaccess-1'],
-}
-
-## allow htaccess (part 1): replace 'AllowOverride None', with 'AllowOverride All' between the starting
-#                           delimiter '<Directory />', and ending delimiter '</Directory>'.
-exec {'allow-htaccess-1':
-    command => 'awk "/<Directory \/>/,/<\/Directory>/ { if (/AllowOverride None/) \$0 = \"    AllowOverride All\" }1"  /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-htaccess-1'],
-}
-
-## move htaccess access (part 1): an attempt to write the results directly to 'httpd.conf' in the above
-#                                 'allow htaccess (part 1)' step, results in an empty 'httpd.conf' file.
-#                                 Therefore, the temporary 'httpd.conf.tmp', and this corresponding 'mv'
-#                                 step is required.
-exec {'mv-httpd-conf-htaccess-1':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['allow-htaccess-2'],
-}
-
-## allow htaccess (part 2): replace 'AllowOverride None', with 'AllowOverride All' between the starting
-#                           delimiter '<Directory "/vagrant">', and ending delimiter '</Directory>'.
-exec {'allow-htaccess-2':
-    command => 'awk "/<Directory \"\/vagrant\">/,/<\/Directory>/ { if (/AllowOverride None/) \$0 = \"    AllowOverride All\" }1"  /etc/httpd/conf/httpd.conf > /vagrant/httpd.conf.tmp',
-    refreshonly => true,
-    notify => Exec['mv-httpd-conf-htaccess-2'],
-}
-
-## move htaccess access (part 2): an attempt to write the results directly to 'httpd.conf' in the above
-#                                 'allow htaccess (part 2)' step, results in an empty 'httpd.conf' file.
-#                                 Therefore, the temporary 'httpd.conf.tmp', and this corresponding 'mv'
-#                                 step is required.
-exec {'mv-httpd-conf-htaccess-2':
-    command => 'mv /vagrant/httpd.conf.tmp /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    before => File['httpd-conf-permission'],
-}
-
-## reset permission on httpd.conf
-file {'httpd-conf-permission':
-    path => '/etc/httpd/conf/httpd.conf',
-    mode => '644',
-    owner => root,
-    group => root,
-    notify => Exec['httpd-system-context'],
-}
-
-## reset system context on httpd.conf (needed for selinux)
-exec {'httpd-system-context':
-    command => 'restorecon /etc/httpd/conf/httpd.conf',
-    refreshonly => true,
-    notify => Exec['set-time-zone'],
-}
-
-## define system timezone
-exec {'set-time-zone':
-    command => "rm /etc/localtime && ln -s /usr/share/zoneinfo/${time_zone} /etc/localtime",
-    refreshonly => true,
-    notify => Exec['restart-httpd'],
-}
-
-## restart httpd to allow PHP extensions to load properly (dom, gd)
-exec {'restart-httpd':
-    command => 'systemctl restart httpd',
-    refreshonly => true,
-}
+include constructor

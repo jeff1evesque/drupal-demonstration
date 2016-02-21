@@ -27,6 +27,16 @@ mod 'mysql',
   :git => 'git@github.com:puppetlabs/puppetlabs-mysql.git',
   :ref => '3.6.2'
 
+## Install Module: concat (apache dependency)
+mod 'concat',
+  :git => 'git@github.com:puppetlabs/puppetlabs-concat.git',
+  :ref => '2.1.0'
+
+## Install Module: apache
+mod 'apache',
+  :git => 'git@github.com:puppetlabs/puppetlabs-apache.git',
+  :ref => '1.8.1'
+
 ## Install Module: firewalld
 mod 'firewalld',
   :git => 'git@github.com:crayfishx/puppet-firewalld.git',
