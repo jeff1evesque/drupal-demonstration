@@ -3,8 +3,8 @@ Exec {path => ['/usr/bin/', '/usr/local/']}
 
 ## install, and enable drush
 class drush {
-    ## install composer: drush installation dependency
-    class { 'composer': }
+    ## install composer module: drush dependency
+    include composer
 
     ## install drush
     drush::drush { 'drush8':
