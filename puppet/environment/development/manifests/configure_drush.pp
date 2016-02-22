@@ -30,19 +30,20 @@ class drush {
     }
 }
 
-## drush: enable clean urls
+## drush: enable clean urls, requires functional drupal instance
 class clean_url {
     ## set dependency
     require drush
 
     exec { 'enable-clean-url':
         command => 'drush vset clean_url 1',
+        cwd     => '/vagrant/webroot'
     }
 }
 
 ## constructor
 class constructor {
     contain drush
-    contain clean_url
+#    contain clean_url
 }
 include constructor
