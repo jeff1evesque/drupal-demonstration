@@ -178,14 +178,14 @@ class selinux {
     require httpd
 
     ## system context: load httpd selinux policy module
-    exec {'load-httpd-selinux-policy':
+    exec { 'load-httpd-selinux-policy':
         command => 'semodule -i httpd_t.pp',
         notify  => Exec['enable-httpd-selinux-policy'],
         cwd     => "${selinux_policy_dir}",
     }
 
     ## system context: enable httpd selinux policy module
-    exec {'enable-httpd-selinux-policy':
+    exec { 'enable-httpd-selinux-policy':
         command     => 'semodule -e httpd_t',
         refreshonly => true,
         cwd         => "${selinux_policy_dir}",
