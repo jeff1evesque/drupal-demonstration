@@ -2,7 +2,7 @@
 $user = 'provisioner'
 
 ## define $PATH for all execs
-Exec {path => ['/usr/sbin/', '/usr/bin']}
+Exec {path => ['/usr/sbin/']}
 
 ## install, and enable drush
 class drush {
@@ -17,7 +17,7 @@ class drush {
 
     ## define drush alias
     exec {'drush-alias':
-        command => "echo 'alias drush="sudo /usr/local/bin/drush"' >> /home/${user}/.bashrc",
+        command => "echo 'alias drush=\'/usr/local/bin/drush\'' >> /home/${user}/.bashrc",
         refreshonly => true,
         notify => Exec['reload-bash-startup-config'],
     }
