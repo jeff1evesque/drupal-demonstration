@@ -4,7 +4,6 @@ class { 'nodejs':
 }
 
 ## variables: non-ssl
-$webroot = '/vagrant/webroot'
 $port    = '80'
 
 ## variables: ssl
@@ -19,6 +18,7 @@ $ssl_org_unit  = 'organizational unit'
 $ssl_cname     = 'localhost'
 
 ## variables: general
+$webroot            = '/vagrant/webroot'
 $build_environment  = development
 $vhost_name         = 'localhost'
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
@@ -165,21 +165,27 @@ class httpd {
     }
 }
 
-## load, and enable selinux policy modules
+## selinux policy module(s): changing the selinux context for the shared
+##     webroot, is not possible (with vagrant). Instead selinux policy
+##     module(s) are loaded, and enabled.
+##
+## Note: for more information:
+##
+##       https://github.com/mitchellh/vagrant/issues/6970
 class selinux {
     ## set dependency
     require generate_keypair
     require httpd
 
     ## system context: load httpd selinux policy module
-    exec {'load-httpd-selinux-policy':
+    exec { 'load-httpd-selinux-policy':
         command => 'semodule -i httpd_t.pp',
         notify  => Exec['enable-httpd-selinux-policy'],
         cwd     => "${selinux_policy_dir}",
     }
 
     ## system context: enable httpd selinux policy module
-    exec {'enable-httpd-selinux-policy':
+    exec { 'enable-httpd-selinux-policy':
         command     => 'semodule -e httpd_t',
         refreshonly => true,
         cwd         => "${selinux_policy_dir}",
