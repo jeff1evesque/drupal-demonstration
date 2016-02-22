@@ -16,14 +16,14 @@ class drush {
     }
 
     ## define drush alias
-    exec {'drush-alias':
+    exec { 'drush-alias':
         command => "echo 'alias drush=\'/usr/local/bin/drush\'' >> /home/${user}/.bashrc",
         refreshonly => true,
         notify => Exec['reload-bash-startup-config'],
     }
 
     ## reload bash startup files
-    exec {'reload-bash-startup-config':
+    exec { 'reload-bash-startup-config':
         command => 'source ~/.bashrc',
         refreshonly => true,
         provider => 'shell',
@@ -35,7 +35,7 @@ class clean_url {
     ## set dependency
     require drush
 
-    exec {
+    exec { 'enable-clean-url':
         command => 'drush vset clean_url 1',
     }
 }
