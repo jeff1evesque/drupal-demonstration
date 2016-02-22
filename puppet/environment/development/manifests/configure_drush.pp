@@ -30,7 +30,7 @@ class drush {
     }
 }
 
-## drush: enable clean urls, requires functional drupal instance
+## drush: enable clean urls, which requires functional drupal instance
 class clean_url {
     ## set dependency
     require drush
