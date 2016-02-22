@@ -4,7 +4,6 @@ class { 'nodejs':
 }
 
 ## variables: non-ssl
-$webroot = '/vagrant/webroot'
 $port    = '80'
 
 ## variables: ssl
@@ -19,6 +18,7 @@ $ssl_org_unit  = 'organizational unit'
 $ssl_cname     = 'localhost'
 
 ## variables: general
+$webroot            = '/vagrant/webroot'
 $build_environment  = development
 $vhost_name         = 'localhost'
 $selinux_policy_dir = '/vagrant/centos7x/selinux/'
