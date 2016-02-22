@@ -58,9 +58,6 @@ class httpd {
         default_vhost    => false,
     }
 
-    ## install 'mod_rewrite' module
-    class { 'apache::mod::rewrite': }
-
     ## standard vhost (default not defined)
     apache::vhost { "${vhost_name}":
         servername       => $vhost_name,
@@ -168,7 +165,12 @@ class httpd {
     }
 }
 
-## load, and enable selinux policy modules
+## selinux policy module(s): changing selinux context for shared webroot is not
+##     possible (with vagrant), instead a policy module is implemented.
+##
+## Note: for more information:
+##
+##       https://github.com/mitchellh/vagrant/issues/6970
 class selinux {
     ## set dependency
     require generate_keypair
