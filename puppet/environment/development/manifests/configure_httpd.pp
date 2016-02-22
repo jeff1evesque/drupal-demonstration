@@ -165,8 +165,9 @@ class httpd {
     }
 }
 
-## selinux policy module(s): changing selinux context for shared webroot is not
-##     possible (with vagrant), instead a policy module is implemented.
+## selinux policy module(s): changing the selinux context for the shared
+##     webroot, is not possible (with vagrant). Instead selinux policy
+##     module(s) are loaded, and enabled.
 ##
 ## Note: for more information:
 ##
