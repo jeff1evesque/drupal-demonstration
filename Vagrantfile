@@ -138,8 +138,8 @@ Vagrant.configure(2) do |config|
     run 'rm -Rf log'
     run 'rm -Rf webroot/sites/all/themes/custom/sample_theme/asset'
     run 'rm -Rf webroot/sites/default/files/!(README.md)'
-    run 'rm webroot/sites/default/settings.php'
-    run 'rm src/default/settings.php'
+    run 'rm -f webroot/sites/default/settings.php'
+    run 'rm -f src/default/settings.php'
   end
 
   # Provider-specific configuration so you can fine-tune various
