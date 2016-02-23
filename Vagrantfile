@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
   # https://docs.vagrantup.com.
 
   ## Variables (ruby syntax)
-  required_plugins = %w(vagrant-r10k vagrant-vbguest)
+  required_plugins = %w(vagrant-r10k vagrant-triggers)
   plugin_installed = false
 
   ## Install Vagrant Plugins
@@ -132,6 +132,15 @@ Vagrant.configure(2) do |config|
     owner: 'provisioner',
     group: 'apache',
     mount_options: ['dmode=775', 'fmode=775']
+
+  # clean up files on the host after the guest is destroyed
+  config.trigger.after :destroy do
+    run 'rm -Rf log'
+    run 'rm -Rf webroot/sites/all/themes/custom/sample_theme/asset'
+    run 'rm -Rf webroot/sites/default/files'
+    run 'rm webroot/sites/default/settings.php'
+    run 'rm src/default/settings.php'
+  end
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
