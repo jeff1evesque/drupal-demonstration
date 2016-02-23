@@ -52,7 +52,7 @@ class install_db {
 }
 
 ## install mariadb bindings
-class install_bindings {	
+class install_bindings {
     ## set dependency
     require install_db
 
