@@ -58,7 +58,6 @@ class install_bindings {
 
     class {'::mysql::bindings':
         php_enable    => true,
-        require       => Class['::mysql::server'],
     }
 }
 
