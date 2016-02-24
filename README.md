@@ -207,7 +207,7 @@ When the `vagrant up` build succeeds, visit [https://localhost:6686](https://loc
 This project include a fully functional [phpMyAdmin](https://www.phpmyadmin.net/) implementation,
  which can be accessed as follows:
 
-- https://localhost:6686/phpMyAdmin
+- [https://localhost:6686/phpMyAdmin](https://localhost:6686/phpMyAdmin)
 
 The corresponding password, is the same user password, used for our mariadb:
 
