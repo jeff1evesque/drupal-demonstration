@@ -197,10 +197,22 @@ Otherwise, if ssl is configured, then the application is accessible via
 
 When the `vagrant up` build succeeds, visit [https://localhost:6686](https://localhost:6686), and complete the drupal installation:
 
-- mysql user: `authenticated`
-- mysql pass: `password`
+- mariadb user: `authenticated`
+- mariadb pass: `password`
 
 ## Testing / Execution
+
+### phpMyAdmin
+
+This project include a fully functional [phpMyAdmin](https://www.phpmyadmin.net/) implementation,
+ which can be accessed as follows:
+
+- [https://localhost:6686/phpMyAdmin](https://localhost:6686/phpMyAdmin)
+
+The corresponding user / password, is the same as our drupal mariadb implementation:
+
+- mariadb user: `authenticated`
+- mariadb pass: `password`
 
 ### SSH
 
