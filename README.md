@@ -209,7 +209,7 @@ This project include a fully functional [phpMyAdmin](https://www.phpmyadmin.net/
 
 - [https://localhost:6686/phpMyAdmin](https://localhost:6686/phpMyAdmin)
 
-The corresponding password, is the same user password, used for our mariadb:
+The corresponding user, and password, is the same as our drupal mariadb implementation:
 
 - mariadb user: `authenticated`
 - mariadb pass: `password`
