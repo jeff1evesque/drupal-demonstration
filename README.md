@@ -1,12 +1,14 @@
 # Drupal Demonstration
 
-This repository is a simple demonstration of a virtualized environment (vagrant + virtualbox),
+This repository is a simple demonstration of a virtualized environment
+ ([vagrant](https://www.vagrantup.com/) + [virtualbox](https://www.virtualbox.org/)),
  tailored for [drupal](https://www.drupal.org/), within a [Centos 7x](https://www.centos.org/)
  operating system.  Specifically, a custom vagrant [base box](https://www.vagrantup.com/docs/boxes/base.html),
  has been created, from [minimal iso](http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso),
  with a custom selinux [policy module](https://github.com/mitchellh/vagrant/issues/6970)
  enabled.  This allows the corresponding drupal website, within the specified
- document root, to be served up.  The exact [details](https://atlas.hashicorp.com/jeff1evesque/boxes/centos7x)
+ [document root](https://httpd.apache.org/docs/2.2/mod/core.html#documentroot),
+ to be served up.  The exact [details](https://atlas.hashicorp.com/jeff1evesque/boxes/centos7x)
  of the vagrant box, can be located via the corresponding [atlas repository](https://atlas.hashicorp.com/jeff1evesque).   
 
 ## Contributing
