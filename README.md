@@ -225,6 +225,27 @@ In addition, the ssh key-pair implements the passphrase:
 
 - `passphrase`
 
+### Drush
+
+Several preconfigured drush scripts have been defined:
+
+- `drush/core_update.py`: update drupal core, without rewriting `webroot/.htaccess`, and `webroot/robots.txt`.
+
+To run one of the above `[script]`:
+
+```bash
+$ vagrant ssh
+==> default: The machine you're attempting to SSH into is configured to use
+==> default: password-based authentication. Vagrant can't script entering the
+==> default: password for you. If you're prompted for a password, please enter
+==> default: the same password you have configured in the Vagrantfile.
+Enter passphrase for key '/path/to/.ssh/id_rsa':
+provisioner@127.0.0.1's password:
+Last login: Tue Feb xx xx:xx:xx xxxx from gateway
+[provisioner@drupal-demonstration ~]$ cd /vagrant/drush
+[provisioner@drupal-demonstration ~]$ python [script].py
+```
+
 ### Vagrant Box
 
 This repository implements a custom vagrant base box, created from a centos 7x
