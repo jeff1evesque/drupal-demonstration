@@ -18,7 +18,6 @@ class download_rpm_packages {
 
     exec {'download-rpm-package':
         command => "wget ${rpm_package_epel} && wget ${rpm_package_remi}",
-        notify => Exec['install-rpm-package'],
         cwd => "${working_dir}",
     }
 }
@@ -31,8 +30,6 @@ class install_rpm_packages {
 
     exec {'install-rpm-package':
         command => "rpm -Uvh ${rpm_package_epel} && rpm -Uvh ${rpm_package_remi}",
-        refreshonly => true,
-        notify => Exec['remove-rpm-package'],
         cwd => "${working_dir}",
     }
 }
@@ -46,8 +43,6 @@ class clean_rpm_packages {
 
     exec {'remove-rpm-package':
         command => 'rm *.rpm',
-        refreshonly => true,
-        notify => Exec['update-yum'],
         cwd => "${working_dir}",
     }
 }
@@ -62,8 +57,6 @@ class update_yum {
 
     exec {'update-yum':
         command => 'yum -y update',
-        refreshonly => true,
-        notify => Exec['install-phpmyadmin'],
         timeout => 750,
     }
 }
@@ -79,13 +72,11 @@ class enable_php_repo {
 
     exec {'enable-php-56-repo-1':
         command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/provisioner/remi.tmp',
-        refreshonly => true,
         notify => Exec['enable-php-56-repo-2'],
     }
     exec {'enable-php-56-repo-2':
         command => "mv ${working_dir}/remi.tmp /etc/yum.repos.d/remi.repo",
         refreshonly => true,
-        before => Package[$php_packages],
     }
 }
 
@@ -104,8 +95,6 @@ class install_php_packages {
 
     package { $php_packages:
         ensure => present,
-        notify => Exec['enable-opcache'],
-        before => Exec['enable-opcache'],
     }
 }
 
@@ -122,8 +111,6 @@ class enable_opcache {
 
     exec {'enable-opcache':
         command => 'printf "\nzend_extension=opcache.so" >> /etc/php.ini',
-        refreshonly => true,
-        notify => Exec['phpmyadmin-comment-require-1'],
     }
 }
 
@@ -140,8 +127,6 @@ class install_phpmyadmin {
 
     exec {'install-phpmyadmin':
         command => 'yum -y install phpmyadmin',
-        refreshonly => true,
-        notify => Exec['enable-php-56-repo-1'],
     }
 }
 
@@ -160,7 +145,6 @@ class enable_phpmyadmin {
     ## comment out unnecessary 'require' statements
     exec {'phpmyadmin-comment-require-1':
         command => 'awk "/<RequireAny>/,/<\/RequireAny>/ { if (/Require ip 127.0.0.1/) \$0 = \"       #Require ip 127.0.0.1\" }1"  /etc/httpd/conf.d/phpMyAdmin.conf > /home/provisioner/phpMyAdmin.tmp',
-        refreshonly => true,
         notify => Exec['phpmyadmin-comment-require-2'],
     }
     exec {'phpmyadmin-comment-require-2':
@@ -200,7 +184,6 @@ class enable_phpmyadmin {
     exec {'phpmyadmin-system-context':
         command => 'restorecon /etc/httpd/conf.d/phpMyAdmin.conf',
         refreshonly => true,
-        notify => Exec['php-memory-limit'],
     }
 }
 
@@ -219,7 +202,6 @@ class php_configuration {
 
     exec {'php-memory-limit':
         command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php.ini',
-        notify => Exec['restart-httpd'],
     }
 }
 
@@ -239,7 +221,6 @@ class restart_httpd {
 
     exec {'restart-httpd':
         command => 'systemctl restart httpd',
-        refreshonly => true,
     }
 }
 
