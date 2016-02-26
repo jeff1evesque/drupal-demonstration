@@ -1,7 +1,6 @@
 # variables
 $rpm_package_epel = 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm'
 $rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-7.rpm'
-$php_packages     = ['php', 'php-gd', 'php-mcrypt', 'php-opcache']
 $working_dir      = '/home/provisioner'
 
 ## define $PATH for all execs
@@ -99,6 +98,9 @@ class install_php_packages {
     require clean_rpm_packages
     require update_yum
     require enable_php_repo
+
+    ## variables
+    $php_packages = ['php', 'php-gd', 'php-mcrypt', 'php-opcache']
 
     package { $php_packages:
         ensure => present,
