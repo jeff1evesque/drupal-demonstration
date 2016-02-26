@@ -1,10 +1,12 @@
 # Drupal Demonstration
 
 This repository is a simple demonstration of a virtualized environment,
- tailored for drupal, within a Centos 7x operating system.  Installation,
- and information regarding [user accounts](https://github.com/jeff1evesque/drupal-demonstration#ssh)
- needed to ssh into the [vagrant box](https://github.com/jeff1evesque/drupal-demonstration#vagrant-box)
- can be found below.
+ tailored for drupal, within a Centos 7x operating system.  Specifically, a
+ custom vagrant base box, from [minimal iso](http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso),
+ with a custom selinux [policy module](https://github.com/mitchellh/vagrant/issues/6970)
+ has been enabled.  This allows drupal pages to be served, defined within the
+ specified document root, to be served up.  The exact [details](https://atlas.hashicorp.com/jeff1evesque/boxes/centos7x)
+ of the vagrant box, can be located on the corresponding [atlas repository](https://atlas.hashicorp.com/jeff1evesque).   
 
 ## Contributing
 
@@ -245,11 +247,3 @@ Last login: Tue Feb xx xx:xx:xx xxxx from gateway
 [provisioner@drupal-demonstration ~]$ cd /vagrant/drush
 [provisioner@drupal-demonstration ~]$ python [script].py
 ```
-
-### Vagrant Box
-
-This repository implements a custom vagrant base box, created from a centos 7x
- [minimal iso](http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso),
- with a custom selinux [policy module](https://github.com/mitchellh/vagrant/issues/6970)
- enabled, to allow drupal pages to be served.  The exact [details](https://atlas.hashicorp.com/jeff1evesque/boxes/centos7x)
- of the vagrant box, can be located on the corresponding atlas repository page.
