@@ -64,7 +64,7 @@ class create_directories {
     ## create log directory
     file {'/vagrant/log/':
         ensure => 'directory',
-        before => File[$directory_systemd],
+        before => File[$path_source],
     }
 
     ## create source directory
