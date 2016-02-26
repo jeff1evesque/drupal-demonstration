@@ -236,7 +236,7 @@ Several preconfigured drush scripts have been defined:
 
 - `drush/core_update.py`: update drupal core, without rewriting `webroot/.htaccess`, and `webroot/robots.txt`.
 
-To run one of the above `[script]`:
+To run one of the above drush scripts:
 
 ```bash
 $ vagrant ssh
