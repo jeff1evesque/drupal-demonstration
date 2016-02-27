@@ -1,6 +1,3 @@
-## include puppet modules
-include stdlib
-
 ## define $PATH for all execs, and packages
 Exec {path => ['/usr/bin/', '/sbin/', '/bin/', '/usr/share/']}
 
@@ -37,8 +34,16 @@ $build_environment = 'development'
 $path_source       = '/vagrant/src'
 $path_asset        = '/vagrant/webroot/sites/all/themes/custom/sample_theme/asset'
 
-## include puppet modules
+## install stdlib: required for npm
+class install_stdlib {
+    include stdlib
+}
+
+## install nodejs: to use npm
 class install_nodejs {
+    ## set dependency
+    require install_stdlib
+
     class { 'nodejs':
         repo_url_suffix => 'node_5.x',
     }
@@ -47,6 +52,7 @@ class install_nodejs {
 ## install necessary packages
 class install_packages {
     ## set dependency
+    require install_stdlib
     require install_nodejs
 
     ## variables
@@ -69,6 +75,7 @@ class install_packages {
 ## create necessary directories
 class create_directories {
     ## set dependency
+    require install_stdlib
     require install_nodejs
     require install_packages
 
@@ -93,6 +100,7 @@ class create_directories {
 ## create compilers
 class create_compilers {
     ## set dependency
+    require install_stdlib
     require install_nodejs
     require install_packages
     require create_directories
@@ -176,6 +184,7 @@ class create_compilers {
 
 ## constructor
 class constructor {
+    contain install_stdlib
     contain install_nodejs
     contain install_packages
     contain create_directories
