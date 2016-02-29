@@ -121,6 +121,12 @@ Vagrant.configure(2) do |config|
     group: 'provisioner',
     mount_options: ['dmode=755', 'fmode=664']
 
+  ## set puppet bash script(s) ownership, and permission
+  config.vm.synced_folder './puppet/environment/development/scripts', '/vagrant/puppet/environment/development/scripts',
+    owner: 'provisioner',
+    group: 'provisioner',
+    mount_options: ['dmode=755', 'fmode=700']
+
   ## set permission for drupal 'settings*.php'
   config.vm.synced_folder './src/default', '/vagrant/webroot/sites/default',
     owner: 'provisioner',

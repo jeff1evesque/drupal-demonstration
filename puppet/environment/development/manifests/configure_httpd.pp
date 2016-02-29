@@ -1,8 +1,3 @@
-## include puppet modules
-class { 'nodejs':
-    repo_url_suffix => 'node_5.x',
-}
-
 ## variables: non-ssl
 $port    = '80'
 

@@ -8,7 +8,7 @@
 
 
 # Pre-Pathing: allow 'imagemin' command
-PATH="/usr/lib:$PATH"
+PATH="/usr/bin:$PATH"
 
 
 # track execution of script
