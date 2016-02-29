@@ -93,6 +93,9 @@ class httpd {
                 require         => 'all granted',
                 options         => ['Indexes', 'FollowSymLinks'],
                 error_documents => [
+                    {   'error_code' => '302',
+                        'document'   => "${webroot}/error.php",
+                    },
                     {   'error_code' => '401',
                         'document'   => "${webroot}/error.php",
                     },
