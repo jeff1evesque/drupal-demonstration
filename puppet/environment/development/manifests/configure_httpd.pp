@@ -1,5 +1,5 @@
 ## variables: non-ssl
-$port    = '80'
+$port = '80'
 
 ## variables: ssl
 $ssl_dir       = '/etc/ssl/httpd'
@@ -68,94 +68,121 @@ class httpd {
     #      within 'ports.conf', which would conflict with similar directive,
     #      found in 'ssl.conf'
     apache::vhost { "${vhost_name}_ssl":
-        servername    => $vhost_name,
-        port          => $port_ssl,
-        add_listen    => false,
-        docroot       => $webroot,
-        ssl           => true,
-        ssl_cert      => "${ssl_dir}/httpd.crt",
-        ssl_key       => "${ssl_dir}/httpd.key",
+        servername      => $vhost_name,
+        port            => $port_ssl,
+        add_listen      => false,
+        docroot         => $webroot,
+        ssl             => true,
+        ssl_cert        => "${ssl_dir}/httpd.crt",
+        ssl_key         => "${ssl_dir}/httpd.key",
+        error_documents => [
+            {
+                'error_code' => '400',
+                'document'   => 'error.php',
+            },
+        ],
 
         directories => [
-            {   path            => '/',
+            {
+                path            => '/',
                 provider        => 'directory',
                 allowoverride   => 'None',
                 require         => 'all denied',
             },
-            {   path            => $webroot,
+            {
+                path            => $webroot,
                 provider        => 'directory',
                 allowoverride   => 'All',
                 require         => 'all granted',
                 options         => ['Indexes', 'FollowSymLinks'],
                 error_documents => [
-                    {   'error_code' => '302',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '401',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '401',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '402',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '402',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '403',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '403',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '404',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '404',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '405',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '405',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '406',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '406',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '407',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '407',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '408',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '408',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '409',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '409',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '411',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '411',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '412',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '412',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '413',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '413',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '414',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '414',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '415',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '415',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '416',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '416',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '417',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '417',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '500',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '500',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '501',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '501',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '502',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '502',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '503',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '503',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '504',
+                        'document'   => 'error.php',
                     },
-                    {   'error_code' => '504',
-                        'document'   => "${webroot}/error.php",
-                    },
-                    {   'error_code' => '505',
-                        'document'   => "${webroot}/error.php",
+                    {
+                        'error_code' => '505',
+                        'document'   => 'error.php',
                     },
                 ],
             },
