@@ -22,6 +22,6 @@ RequiresMountsFor=/vagrant
 #  @ExecStart (optional), command to run when the unit is started.
 [Service]
 Type=simple
-User=vagrant
+User=provisioner
 Restart=always
 ExecStart=/vagrant/puppet/environment/<%= @build_environment %>/scripts/<%= @compiler %>
