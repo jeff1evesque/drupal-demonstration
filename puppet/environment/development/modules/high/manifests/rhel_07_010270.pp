@@ -24,7 +24,8 @@ class high::rhel_07_010270 {
     include stdlib
 
     ## ensure line
-	file_line { '/etc/ssh/sshd_config':
+	file_line { 'prevent-empty-ssh-passowrd':
+        path  => '/etc/ssh/sshd_config',
 		line  => 'PermitEmptyPasswords no',
   		match => '^PermitEmptyPasswords yes',
 	}
