@@ -21,6 +21,13 @@ class high::rhel_07_040590 {
     ## allow 'file_line' directive
     include stdlib
 
+    ## ensure protocol 2
+	file_line { 'ensure-protocol-2':
+        line  => 'Protocol 2',
+		path  => '/etc/ssh/sshd_config', 
+  		match => '^.*Protocol 2',
+	}
+
     ## remove multiple protocols
 	file_line { 'remove-multiple-protocols':
         line  => 'Protocol 2',
@@ -33,12 +40,5 @@ class high::rhel_07_040590 {
         line  => 'Protocol 2',
 		path  => '/etc/ssh/sshd_config', 
   		match => '^.*Protocol 1.*$',
-	}
-
-    ## ensure protocol 2
-	file_line { 'ensure-protocol-2':
-        line  => 'Protocol 2',
-		path  => '/etc/ssh/sshd_config', 
-  		match => '^.*Protocol 2',
 	}
 }
