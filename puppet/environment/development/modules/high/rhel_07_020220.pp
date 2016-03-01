@@ -30,6 +30,7 @@ class high::rhel_07_020220 {
         mode   => 640,
         owner  => root,
         group  => root,
+        before => File_line['prevent-ctrl-alt-delete'],
     }
 
     ## ensure line
