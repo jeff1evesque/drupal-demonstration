@@ -1,4 +1,4 @@
-### ID: rhel-07-020000
+### ID: rhel_07_020000
 ### Severity: High
 ###
 ### Description: It is detrimental for operating systems to provide, or install

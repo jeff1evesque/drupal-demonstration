@@ -15,6 +15,9 @@ class stig {
             ### rhel_07_040590: The SSH daemon must be configured to only use the SSHv2 protocol.
             include high::rhel_07_040590
 
+            ### rhel_07_040330: There must be no .rhosts, .shosts, rhosts.equiv, or shosts.equiv files on the system.
+            include high::rhel_07_040330
+
             ### rhel_07_020220:	The x86 Ctrl-Alt-Delete key sequence must be disabled.
             include high::rhel_07_020220
 
