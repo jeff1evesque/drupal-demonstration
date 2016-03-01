@@ -78,7 +78,7 @@ class httpd {
         error_documents => [
             {
                 'error_code' => '400',
-                'document'   => 'error.php',
+                'document'   => '/error.php',
             },
         ],
 
@@ -98,91 +98,91 @@ class httpd {
                 error_documents => [
                     {
                         'error_code' => '401',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '402',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '403',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '404',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '405',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '406',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '407',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '408',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '409',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '411',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '412',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '413',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '414',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '415',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '416',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '417',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '500',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '501',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '502',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '503',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '504',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                     {
                         'error_code' => '505',
-                        'document'   => 'error.php',
+                        'document'   => '/error.php',
                     },
                 ],
             },
