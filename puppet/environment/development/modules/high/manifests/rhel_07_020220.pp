@@ -21,15 +21,15 @@
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
 class high::rhel_07_020220 {
-    ## allows 'file_line' directive
+    ## allow 'file_line' directive
     include stdlib
 
     ## ensure directory
     file { '/etc/init':
         ensure => directory,
+        mode   => '755',
         owner  => root,
         group  => root,
-        mode   => 755,
         before => File['/etc/init/control-alt-delete.conf.conf'],
     }
 
