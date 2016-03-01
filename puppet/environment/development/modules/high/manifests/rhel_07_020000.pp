@@ -33,7 +33,7 @@ class high::rhel_07_020000 {
     ## variables
     $packages = ['rexecd', 'rlogind', 'rsh-server']
 
-    ## remove package(s)
+    ## remove package(s): uninstall, and remove corresponding configurations
 	package { $packages:
 		ensure => purged,
     }
