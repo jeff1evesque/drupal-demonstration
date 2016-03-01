@@ -21,11 +21,20 @@
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
 class high::rhel_07_020220 {
-	file { '/etc/init/control-alt-delete.conf.conf':
-		ensure	=> present,
-		mode 	=> 640,
-		owner	=> root,
-		group 	=> root,		
-		source	=> "puppet:///modules/etc/init/control-alt-delete.conf.conf",
-	}
+    ## allows 'file_line' directive
+    include stdlib
+
+    ## ensure permission, and ownership
+    file { '/etc/init/control-alt-delete.conf.conf':
+        ensure => present,
+        mode   => 640,
+        owner  => root,
+        group  => root,
+    }
+
+    ## ensure line
+    file_line { 'prevent-ctrl-alt-delete':
+        path => '/etc/init/control-alt-delete.conf.conf',
+        line => 'exec /usr/bin/logger -p security.info "Control-Alt-Delete pressed"',
+    }
 }
