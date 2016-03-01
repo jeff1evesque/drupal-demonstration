@@ -46,7 +46,7 @@ Vagrant.configure(2) do |config|
   config.ssh.username = 'provisioner'
   config.ssh.password = 'vagrant-provision'
 
-  # Define fully qualified domain name
+  ## Define fully qualified domain name
   config.vm.hostname = "drupal-demonstration.com"
 
   ## Create a forwarded port mapping which allows access to a specific port
@@ -58,7 +58,54 @@ Vagrant.configure(2) do |config|
   config.r10k.puppet_dir = 'puppet/environment/development'
   config.r10k.puppetfile_path = 'puppet/environment/development/Puppetfile'
 
+  ## Custom Manifest: install, and configure database
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
+    puppet.manifest_file    = 'configure_database.pp'
+  end
 
+  ## Custom Manifest: general configuration
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
+    puppet.manifest_file    = 'configure_httpd.pp'
+  end
+
+  ## Custom Manifest: install, and configure php (required before drush)
+  #
+  #  Note: future parser allow array iteration in the puppet manifest
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
+    puppet.manifest_file    = "configure_php.pp"
+  end
+
+  ## Custom Manifest: install drush
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
+    puppet.manifest_file    = 'configure_drush.pp'
+  end
+
+  ## Custom Manifest: add sass, uglifyjs, imagemin compilers
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
+    puppet.manifest_file    = 'configure_compilers.pp'
+  end
 
   ## Custom Manifest: stig redhat
   config.vm.provision 'puppet' do |puppet|
@@ -107,7 +154,7 @@ Vagrant.configure(2) do |config|
     group: 'apache',
     mount_options: ['dmode=775', 'fmode=775']
 
-  # clean up files on the host after the guest is destroyed
+  ## clean up files on the host after the guest is destroyed
   config.trigger.after :destroy do
     run 'rm -Rf log'
     run 'rm -Rf puppet/environment/development/modules_contrib'
