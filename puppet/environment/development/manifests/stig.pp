@@ -15,6 +15,9 @@ class stig {
             ### rhel_07_020220:	The x86 Ctrl-Alt-Delete key sequence must be disabled.
             include high::rhel_07_020220
 
+            ### rhel_07_010270: The SSH daemon must not allow authentication using an empty password.
+            include high::rhel_07_010270
+
             #############################################################################
             #                                                                           #
             #       Redhat Enterprise 7                                                 #
