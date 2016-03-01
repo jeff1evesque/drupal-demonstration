@@ -1,11 +1,11 @@
 class stig {
 	case $operatingsystem 
 	{
-		redhat:
+		redhat, centos:
 		{
             #############################################################################
 			#                                                                           #
-			#       Centos 7x                                                           #
+			#       Redhat Enterprise 7                                                 #
 			#       Severity: High                                                      #
             #                                                                           #
 			#       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #                                                    #
@@ -14,7 +14,7 @@ class stig {
 
 			#############################################################################
 			#                                                                           #
-			#       Centos 7x                                                           #
+			#       Redhat Enterprise 7                                                 #
 			#       Severity: Medium                                                    #
             #                                                                           #
 			#       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #                                                    #
@@ -23,7 +23,7 @@ class stig {
 
 			#############################################################################
 			#                                                                           #
-			#       Centos 7x                                                           #
+			#       Redhat Enterprise 7                                                 #
 			#       Severity: Low                                                       #
             #                                                                           #
 			#       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #                                                    #
