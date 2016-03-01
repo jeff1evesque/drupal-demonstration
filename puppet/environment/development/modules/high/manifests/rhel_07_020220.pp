@@ -27,7 +27,7 @@ class high::rhel_07_020220 {
     ## ensure permission, and ownership
     file { '/etc/init/control-alt-delete.conf.conf':
         ensure => present,
-        mode   => 640,
+        mode   => '640',
         owner  => root,
         group  => root,
         before => File_line['prevent-ctrl-alt-delete'],
