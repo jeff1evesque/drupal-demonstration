@@ -27,9 +27,9 @@ class high::rhel_07_020220 {
     ## ensure directory
     file { '/etc/init':
         ensure => directory,
+        mode   => '755',
         owner  => root,
         group  => root,
-        mode   => 755,
         before => File['/etc/init/control-alt-delete.conf.conf'],
     }
 
