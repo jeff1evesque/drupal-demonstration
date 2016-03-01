@@ -24,9 +24,18 @@ class high::rhel_07_020220 {
     ## allows 'file_line' directive
     include stdlib
 
+    ## ensure directory
+    file { '/etc/init':
+        ensure => directory,
+        owner  => root,
+        group  => root,
+        mode   => 755,
+        before => File['/etc/init/control-alt-delete.conf.conf'],
+    }
+
     ## ensure permission, and ownership
     file { '/etc/init/control-alt-delete.conf.conf':
-        ensure => present,
+        ensure => file,
         mode   => '640',
         owner  => root,
         group  => root,
