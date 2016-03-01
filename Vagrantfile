@@ -27,6 +27,12 @@ Vagrant.configure(2) do |config|
     exec "vagrant #{ARGV.join(' ')}"
   end
 
+  ## ensure puppet/modules directory on the host before 'vagrant up'
+  config.trigger.before :up do
+    run 'mkdir -p puppet/environment/development/modules'
+    run 'mkdir -p puppet/environment/development/modules_contrib'
+  end
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = 'jeff1evesque/centos7x'
