@@ -17,7 +17,7 @@
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
-class high::rhel_07_040590.pp {
+class high::rhel_07_040590 {
     ## allow 'file_line' directive
     include stdlib
 
