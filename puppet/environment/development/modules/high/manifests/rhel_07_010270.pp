@@ -27,6 +27,6 @@ class high::rhel_07_010270 {
 	file_line { 'prevent-empty-ssh-passowrd':
         path  => '/etc/ssh/sshd_config',
 		line  => 'PermitEmptyPasswords no',
-  		match => '^PermitEmptyPasswords yes',
+  		match => '^PermitEmptyPasswords',
 	}
 }
