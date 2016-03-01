@@ -1,14 +1,14 @@
 class stig {
-    case $operatingsystem 
+    case $operatingsystem
     {
-        redhat, centos:
+        'RedHat', 'CentOS':
         {
             #############################################################################
             #                                                                           #
             #       Redhat Enterprise 7                                                 #
             #       Severity: High                                                      #
             #                                                                           #
-            #       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #                                                    #
+            #       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #
             #                                                                           #
             #############################################################################
 
@@ -17,7 +17,7 @@ class stig {
             #       Redhat Enterprise 7                                                 #
             #       Severity: Medium                                                    #
             #                                                                           #
-            #       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #                                                    #
+            #       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #
             #                                                                           #
             #############################################################################
 
@@ -26,7 +26,7 @@ class stig {
             #       Redhat Enterprise 7                                                 #
             #       Severity: Low                                                       #
             #                                                                           #
-            #       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #                                                    #
+            #       http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx         #
             #                                                                           #
             #############################################################################
         }
