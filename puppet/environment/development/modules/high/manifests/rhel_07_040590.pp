@@ -36,7 +36,7 @@ class high::rhel_07_040590 {
 	}
 
     ## ensure protocol 2
-	file_line { 'remove-multiple-protocols':
+	file_line { 'ensure-protocol-2':
         line  => 'Protocol 2',
 		path  => '/etc/ssh/sshd_config', 
   		match => '^.*Protocol 2',
