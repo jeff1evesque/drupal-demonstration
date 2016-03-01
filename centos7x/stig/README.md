@@ -15,6 +15,6 @@ The corresponding stigging logic, will be found in the following directories,
 - `puppet/environment/development/modules/medium/`
 - `puppet/environment/development/modules/low/`
 
-A complimentary `status.xlsx`, within this directory, will identify which stig
+A complimentary `status.md`, within this directory, will identify which stig
  items have been completed with respect to the guidelines, determined by the
  downloaded [IASE](http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx) files.
