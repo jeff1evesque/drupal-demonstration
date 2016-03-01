@@ -28,7 +28,7 @@ class high::rhel_07_040590.pp {
   		match => '^.*Protocol 2,.*$',
 	}
 
-    ## remove protocol 1
+    ## remove protocol 1 (possible multiples)
 	file_line { 'remove-protocol-1':
         line  => 'Protocol 2',
 		path  => '/etc/ssh/sshd_config', 
