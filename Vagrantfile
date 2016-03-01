@@ -107,7 +107,7 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file    = 'configure_compilers.pp'
   end
 
-  ## Custom Manifest: stig redhat
+  ## Custom Manifest: stig centos
   config.vm.provision 'puppet' do |puppet|
     puppet.environment_path = 'puppet/environment'
     puppet.environment      = 'development'
