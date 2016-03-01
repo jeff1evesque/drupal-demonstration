@@ -21,7 +21,7 @@
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
 class high::rhel_07_020220 {
-    ## allows 'file_line' directive
+    ## allow 'file_line' directive
     include stdlib
 
     ## ensure directory
