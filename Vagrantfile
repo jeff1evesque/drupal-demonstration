@@ -59,7 +59,7 @@ Vagrant.configure(2) do |config|
     puppet.environment_path = 'puppet/environment'
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
     puppet.manifest_file    = 'configure_database.pp'
   end
 
@@ -68,7 +68,7 @@ Vagrant.configure(2) do |config|
     puppet.environment_path = 'puppet/environment'
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
     puppet.manifest_file    = 'configure_httpd.pp'
   end
 
@@ -79,7 +79,7 @@ Vagrant.configure(2) do |config|
     puppet.environment_path = 'puppet/environment'
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
     puppet.manifest_file    = "configure_php.pp"
   end
 
@@ -88,7 +88,7 @@ Vagrant.configure(2) do |config|
     puppet.environment_path = 'puppet/environment'
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
     puppet.manifest_file    = 'configure_drush.pp'
   end
 
@@ -97,8 +97,17 @@ Vagrant.configure(2) do |config|
     puppet.environment_path = 'puppet/environment'
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = 'puppet/environment/development/modules'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
     puppet.manifest_file    = 'configure_compilers.pp'
+  end
+
+  ## Custom Manifest: stig redhat
+  config.vm.provision 'puppet' do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = ['puppet/environment/development/modules_contrib', 'puppet/environment/development/modules']
+    puppet.manifest_file    = 'stig.pp'
   end
 
   # Disable automatic box update checking. If you disable this, then
