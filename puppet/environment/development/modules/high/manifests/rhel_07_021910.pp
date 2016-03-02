@@ -28,7 +28,7 @@
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
-class high::rhel-07-021910 {
+class high::rhel_07_021910 {
     ## variables
     $packages = ['telnet-server']
 
