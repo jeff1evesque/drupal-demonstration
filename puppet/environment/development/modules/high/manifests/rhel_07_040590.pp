@@ -29,16 +29,12 @@ class high::rhel_07_040590 {
 	}
 
     ## remove multiple protocols
-	file_line { 'remove-multiple-protocols':
-        line  => 'Protocol 2',
-		path  => '/etc/ssh/sshd_config', 
-  		match => '^.*Protocol 2,.*$',
-	}
+    exec { 'remove-multiple-protocols':
+        command => 'sed -i "/.*Protocol 2,.*$/d" /etc/ssh/sshd_config',  
+    }
 
     ## remove protocol 1 (possible multiples)
-	file_line { 'remove-protocol-1':
-        line  => 'Protocol 2',
-		path  => '/etc/ssh/sshd_config', 
-  		match => '^.*Protocol 1.*$',
+	exec { 'remove-protocol-1':
+        command => 'sed -i "/^.*Protocol 1.*$/d" /etc/ssh/sshd_config',  
 	}
 }
