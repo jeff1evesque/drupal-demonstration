@@ -18,6 +18,9 @@ class stig {
             ### rhel_07_040330: There must be no .rhosts, .shosts, rhosts.equiv, or shosts.equiv files on the system.
             include high::rhel_07_040330
 
+            ### high::rhel_07_021910: The telnet-server package must not be installed.
+            include high::rhel_07_021910
+
             ### rhel_07_020220:	The x86 Ctrl-Alt-Delete key sequence must be disabled.
             include high::rhel_07_020220
 
