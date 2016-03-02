@@ -18,5 +18,8 @@
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
 class high::rhel_07_010260 {
-
+    ## remove substring: sed 's/find/replace/' file
+    exec { 'remove-nullok':
+        command => 'sed "s/nullok//" /etc/pam.d/system-auth',
+    }
 }
