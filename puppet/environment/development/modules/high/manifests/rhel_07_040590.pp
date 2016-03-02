@@ -30,11 +30,13 @@ class high::rhel_07_040590 {
 
     ## remove multiple protocols
     exec { 'remove-multiple-protocols':
-        command => 'sed -i "/.*Protocol 2,.*$/d" /etc/ssh/sshd_config',  
+        command => 'sed -i "/.*Protocol 2,.*$/d" /etc/ssh/sshd_config',
+        path    => '/usr/bin',
     }
 
     ## remove protocol 1 (possible multiples)
 	exec { 'remove-protocol-1':
-        command => 'sed -i "/^.*Protocol 1.*$/d" /etc/ssh/sshd_config',  
+        command => 'sed -i "/^.*Protocol 1.*$/d" /etc/ssh/sshd_config',
+        path    => '/usr/bin',
 	}
 }
