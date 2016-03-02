@@ -27,6 +27,9 @@ class stig {
             ### rhel_07_010270: The SSH daemon must not allow authentication using an empty password.
             include high::rhel_07_010270
 
+            ### rhel_07_010260: The system must not have accounts configured with blank or null passwords.
+            include high::rhel_07_010260
+
             #############################################################################
             #                                                                           #
             #       Redhat Enterprise 7                                                 #
