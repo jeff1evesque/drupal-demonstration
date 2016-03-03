@@ -38,15 +38,17 @@ class high::rhel_07_040580 {
     ## variables
     $snmp_file = '/etc/snmp/snmpd.conf'
 
-    ## remove public community string(s)
+    ## remove public community string(s): onlyif file exists
     exec { 'remove-public-snmp':
         command => "sed -i '/.*public.*$/d' ${snmp_file}",
         path    => '/usr/bin',
+        onlyif  => "test -f ${snmp_file}",
     }
 
-    ## remove private community string(s)
+    ## remove private community string(s): onlyif file exists
     exec { 'remove-private-snmp':
         command => "sed -i '/.*private.*$/d' ${snmp_file}",
         path    => '/usr/bin',
+        onlyif  => "test -f ${snmp_file}",
     }
 }
