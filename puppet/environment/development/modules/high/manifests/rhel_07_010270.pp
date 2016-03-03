@@ -23,10 +23,19 @@ class high::rhel_07_010270 {
     ## allow 'file_line' directive
     include stdlib
 
+    ## variables
+    $sshd_file = '/etc/ssh/sshd_config'
+
     ## ensure line
 	file_line { 'prevent-empty-ssh-passowrd':
-        path  => '/etc/ssh/sshd_config',
+        path  => $sshd_file,
 		line  => 'PermitEmptyPasswords no',
   		match => '^.*PermitEmptyPasswords.*$',
+	}
+
+    ## remove PermitEmptyPasswords yes (possible multiples)
+	exec { 'remove-protocol-1':
+        command => "sed -i '/^.*PermitEmptyPasswords yes.*$/d' ${sshd_file}",
+        path    => '/usr/bin',
 	}
 }
