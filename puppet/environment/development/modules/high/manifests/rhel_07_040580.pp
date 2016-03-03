@@ -39,14 +39,14 @@ class high::rhel_07_040580 {
     $snmp_file = '/etc/snmp/snmpd.conf'
 
     ## remove public community string(s)
-    exec { 'remove-multiple-protocols':
-        command => "sed -i '/.*public.*$/d' ${snpm_file}",
+    exec { 'remove-public-snmp':
+        command => "sed -i '/.*public.*$/d' ${snmp_file}",
         path    => '/usr/bin',
     }
 
     ## remove private community string(s)
-    exec { 'remove-multiple-protocols':
-        command => "sed -i '/.*private.*$/d' ${snpm_file}",
+    exec { 'remove-private-snmp':
+        command => "sed -i '/.*private.*$/d' ${snmp_file}",
         path    => '/usr/bin',
     }
 }
