@@ -34,7 +34,7 @@ class high::rhel_07_010270 {
 	}
 
     ## remove PermitEmptyPasswords yes (possible multiples)
-	exec { 'remove-protocol-1':
+	exec { 'remove-duplicate':
         command => "sed -i '/^.*PermitEmptyPasswords yes.*$/d' ${sshd_file}",
         path    => '/usr/bin',
 	}
