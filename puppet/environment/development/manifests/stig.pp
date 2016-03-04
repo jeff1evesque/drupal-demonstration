@@ -18,6 +18,9 @@ class stig {
             ### rhel_07_040580: SNMP community strings must be changed from the default.
             include high::rhel_07_040580
 
+            ### rhel_07_040500: The TFTP server package must not be installed if not required for operational support.
+            include high:rhel_07_040500
+
             ### rhel_07_040330: There must be no .rhosts, .shosts, rhosts.equiv, or shosts.equiv files on the system.
             include high::rhel_07_040330
 
