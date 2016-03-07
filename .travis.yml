@@ -16,6 +16,8 @@ before_install:
 #  Note: unit testing is performed within the docker container, which is
 #        defined from the Dockerfile.
 install:
+  - npm install -g jshint
+  - npm install jscs -g
   - gem install scss_lint
 
 ## implement linting
@@ -29,4 +31,6 @@ install:
 #  Note: unit testing is performed within the docker container, which is
 #        defined from the Dockerfile.
 script:
+  - jshint --verbose src/js/*.js --config test/config/jshint.json --exclude-path test/config/.jshintignore
+  - jscs . --config test/config/.jscs.json
   - scss-lint src/scss/*.scss
