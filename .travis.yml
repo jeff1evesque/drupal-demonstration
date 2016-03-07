@@ -1,5 +1,14 @@
 language: php
 
+## allows 'docker' command
+services:
+  - docker
+
+## build docker container for unit testing.
+before_install:
+  - docker ps -a
+  - docker build -t centos/centos7 .
+
 ## install packages for linting
 #
 #  @trusty-backports, allows additional packages (i.e. shellcheck) to be installed
