@@ -1,3 +1,5 @@
+language: php
+
 ## install packages for linting
 #
 #  @trusty-backports, allows additional packages (i.e. shellcheck) to be installed
