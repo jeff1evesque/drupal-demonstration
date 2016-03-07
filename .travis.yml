@@ -1,0 +1,32 @@
+language: php
+
+## allows 'docker' command
+services:
+  - docker
+
+## build docker container for unit testing.
+before_install:
+  - docker ps -a
+  - docker build -t centos/centos7 .
+
+## install packages for linting
+#
+#  @trusty-backports, allows additional packages (i.e. shellcheck) to be installed
+#
+#  Note: unit testing is performed within the docker container, which is
+#        defined from the Dockerfile.
+install:
+  - gem install scss_lint
+
+## implement linting
+#
+#  @puppet-lint, the following issue needs to be checked if it has been
+#      resolved, so the '--no-ensure_first_param-check' abusive flag
+#      implementation (below) can be removed:
+#
+#      - https://github.com/rodjek/puppet-lint/issues/410
+#
+#  Note: unit testing is performed within the docker container, which is
+#        defined from the Dockerfile.
+script:
+  - scss-lint src/scss/*.scss
