@@ -30,6 +30,9 @@ class stig {
             ### rhel_07_020220:	The x86 Ctrl-Alt-Delete key sequence must be disabled.
             include high::rhel_07_020220
 
+            ### rhel_07_020010: The ypserv package must not be installed.
+            include high::rhel_07_020010
+
             ### rhel-07-020000: The rsh-server package including rexecd and rlogind must not be installed.
             include high::rhel_07_020000
 
