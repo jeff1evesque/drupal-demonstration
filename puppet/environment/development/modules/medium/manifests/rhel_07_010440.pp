@@ -19,7 +19,7 @@
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
-class high::rhel_07_010440 {
+class medium::rhel_07_010440 {
     ## variables
     $sshd_file = '/etc/ssh/sshd_config'
 
