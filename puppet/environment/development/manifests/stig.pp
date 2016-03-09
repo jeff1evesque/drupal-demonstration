@@ -51,6 +51,9 @@ class stig {
             #                                                                           #
             #############################################################################
 
+            ### rhel_07_010440: The operating system must not allow an unattended or automatic remote logon to the system.
+            include medium::rhel_07_010440
+
             #############################################################################
             #                                                                           #
             #       Redhat Enterprise 7                                                 #
