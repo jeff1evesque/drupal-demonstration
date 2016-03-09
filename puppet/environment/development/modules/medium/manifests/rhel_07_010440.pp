@@ -27,21 +27,24 @@ class medium::rhel_07_010440 {
     file_line { 'prevent-empty-password':
 		path  => $sshd_file,
         line => 'PermitEmptyPasswords no',
-   	    match => '^.*PermitEmptyPasswords.*',
+   	    match => '^.*PermitEmptyPasswords.*yes.*',
+        multiple => true,
     }
 
     ## ensure line
     file_line { 'prevent-user-environment':
 		path  => $sshd_file,
         line => 'PermitUserEnvironment no',
-   	    match => '^.*PermitUserEnvironment.*',
+   	    match => '^.*PermitUserEnvironment.*yes.*',
+        multiple => true,
     }
 
     ## ensure line
     file_line { 'prevent-host-authentication':
 		path  => $sshd_file,
         line => 'HostbasedAuthentication no',
-   	    match => '^.*HostbasedAuthentication.*',
+   	    match => '^.*HostbasedAuthentication.*yes.*',
+        multiple => true,
     }
 
     ## remove duplicate(s)
