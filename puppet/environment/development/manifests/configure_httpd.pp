@@ -86,13 +86,13 @@ class httpd {
             {
                 path            => '/',
                 provider        => 'directory',
-                allowoverride   => 'None',
+                allow_override   => 'None',
                 require         => 'all denied',
             },
             {
                 path            => $webroot,
                 provider        => 'directory',
-                allowoverride   => 'All',
+                allow_override   => 'All',
                 require         => 'all granted',
                 options         => ['Indexes', 'FollowSymLinks'],
                 error_documents => [
