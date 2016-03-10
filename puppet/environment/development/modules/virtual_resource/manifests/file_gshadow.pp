@@ -3,7 +3,7 @@
 ###
 ###              File <| title == '/etc/gshadow' |> { mode => '000', }
 ###
-### Note: the prefix 'medium::', corresponds to a puppet convention:
+### Note: the prefix 'virtual_resource::', corresponds to a puppet convention:
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
