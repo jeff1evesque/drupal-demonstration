@@ -11,17 +11,38 @@
 ###
 class high::rhel_07_020930 {
     ## variables
-    $shell_files = [
-        '/bin/sh',
-        '/bin/bash',
-        '/sbin/nologin',
-        '/usr/bin/sh',
-        '/usr/bin/bash',
-        '/usr/sbin/nologin'
-    ]
+    $shell_links = {
+        'sh'   => [
+            '/bin/sh',
+            '/usr/bin/sh',
+        ],
+        'bash' => [
+            '/bin/bash',
+            '/usr/bin/bash',
+        ],
+        'nologin' => [
+            '/sbin/nologin',
+            '/usr/sbin/nologin',
+        ],
+    }
 
-    file { $shell_files:
-        ensure  => file,
-        mode    => '755',
+    ## symlink mode
+    $shell_links.each |String $shell_type, Array $files| {
+        $files.each |String $file| {
+            if $shell_type == 'sh' {
+                $ensure_type = link
+            }
+            else {
+                $ensure_type = file
+            }
+
+            if $environment != 'development' {
+                file { $file:
+                    ensure => $ensure_type,
+                    target => $shell_type,
+                    mode   => '707',
+                }
+            }
+        }
     }
 }
