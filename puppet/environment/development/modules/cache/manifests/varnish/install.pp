@@ -2,6 +2,6 @@
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
-class cache::install_varnish {
+class cache::varnish::install {
     class { 'varnish': }
 }
