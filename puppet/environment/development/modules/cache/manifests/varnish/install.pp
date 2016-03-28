@@ -1,4 +1,4 @@
-### Note: the prefix 'compiler::::', corresponds to a puppet convention:
+### Note: the prefix 'cache::', corresponds to a puppet convention:
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
