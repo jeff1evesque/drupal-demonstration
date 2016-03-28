@@ -1,4 +1,5 @@
 ## Install Module: vcsrepo
+## Install Module: vcsrepo
 mod 'vcsrepo',
   :git => 'git@github.com:puppetlabs/puppetlabs-vcsrepo.git',
   :ref => '1.3.0'
@@ -26,6 +27,11 @@ mod 'nodejs',
 mod 'mysql',
   :git => 'git@github.com:puppetlabs/puppetlabs-mysql.git',
   :ref => '3.6.2'
+
+## Install Module: to adjust ini files
+mod 'inifile',
+  :git => 'git@github.com:puppetlabs/puppetlabs-inifile',
+  :ref => '1.5.0'
 
 ## Install Module: concat (apache dependency)
 mod 'concat',

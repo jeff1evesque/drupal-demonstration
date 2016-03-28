@@ -109,8 +109,13 @@ class enable_opcache {
     require enable_php_repo
     require install_php_packages
 
-    exec {'enable-opcache':
-        command => 'printf "\nzend_extension=opcache.so" >> /etc/php.ini',
+    ## enable opcache
+    ini_setting { 'enable_opcache':
+        ensure  => present,
+        path    => '/etc/php.ini',
+        section => 'PHP',
+        setting => 'zend_extension',
+        value   => 'opcache.so',
     }
 }
 
@@ -200,8 +205,13 @@ class php_configuration {
     require install_phpmyadmin
     require enable_phpmyadmin
 
-    exec {'php-memory-limit':
-        command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php.ini',
+    ## set memory limit
+    ini_setting { 'adjust_memory_limit':
+        ensure  => present,
+        path    => '/etc/php.ini',
+        section => 'PHP',
+        setting => 'memory_limit',
+        value   => '512M',
     }
 }
 
@@ -218,6 +228,7 @@ class restart_httpd {
     require enable_opcache
     require install_phpmyadmin
     require enable_phpmyadmin
+    require php_configuration
 
     exec {'restart-httpd':
         command => 'systemctl restart httpd',
@@ -237,5 +248,6 @@ class constructor {
     contain install_phpmyadmin
     contain enable_phpmyadmin
     contain restart_httpd
+    contain php_configuration
 }
 include constructor
