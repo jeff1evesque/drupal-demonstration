@@ -43,6 +43,11 @@ mod 'apache',
   :git => 'git@github.com:puppetlabs/puppetlabs-apache.git',
   :ref => '1.8.1'
 
+## Install Module: varnish
+mod 'varnish',
+  :git => 'git@github.com:BashtonLtd/puppet-varnish.git',
+  :ref => '3.0.0',
+
 ## Install Module: firewalld
 mod 'firewalld',
   :git => 'git@github.com:crayfishx/puppet-firewalld.git',
