@@ -4,10 +4,10 @@
 ###
 class cache::varnish::configure {
     ## variables
-    $template = 'data/varnish/default.vcl.erb'
+    $template = 'cache/files/default.vcl'
 
     ## configure vcl
     varnish::vcl { '/etc/varnish/default.vcl':
-        content => template($template),
+        content => file(dos2unix($template)),
     }
 }
