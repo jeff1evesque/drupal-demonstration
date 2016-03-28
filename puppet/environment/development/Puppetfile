@@ -46,7 +46,7 @@ mod 'apache',
 ## Install Module: varnish
 mod 'varnish',
   :git => 'git@github.com:BashtonLtd/puppet-varnish.git',
-  :ref => '3.0.0',
+  :ref => '3.0.0'
 
 ## Install Module: firewalld
 mod 'firewalld',
