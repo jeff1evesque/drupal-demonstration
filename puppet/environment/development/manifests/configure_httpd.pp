@@ -53,6 +53,9 @@ class httpd {
         default_vhost    => false,
     }
 
+    ## enable 'mod_headers'
+    class { 'apache::mod::headers': }
+
     ## standard vhost (default not defined)
     apache::vhost { "${vhost_name}":
         servername       => $vhost_name,
