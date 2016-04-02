@@ -7,7 +7,7 @@ services:
 ## build docker container for unit testing.
 before_install:
   - docker ps -a
-  - docker build -t centos/7 .
+  - docker build -t centos/centos7 .
 
 ## install packages for linting
 #
