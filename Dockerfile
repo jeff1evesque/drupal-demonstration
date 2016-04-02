@@ -1,1 +1,1 @@
-FROM centos:7
+FROM local/c7-systemd
