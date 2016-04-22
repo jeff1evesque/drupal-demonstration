@@ -57,3 +57,8 @@ mod 'composer',
 mod 'drush',
   :git => 'git@github.com:previousnext/puppet-drush',
   :ref => '0.1.1'
+
+## Install Module: puppet-redis
+mod 'puppet-redis',
+  :git => 'git@github.com:arioch/puppet-redis',
+  :ref => '1.2.2',
