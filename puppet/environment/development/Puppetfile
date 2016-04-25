@@ -60,5 +60,5 @@ mod 'drush',
 
 ## Install Module: puppet-redis
 mod 'puppet-redis',
-  :git => 'git@github.com:arioch/puppet-redis',
-  :ref => '1.2.2'
+  :git => 'git@github.com:thomasvandoren/puppet-redis',
+  :ref => '0.10.0'
