@@ -1,5 +1,6 @@
 # Ignore configuration files that may contain sensitive information.
 /webroot/sites/*/settings*.php
+/src/default/settings.php
 
 # Ignore paths that contain user-generated content.
 /webroot/sites/*/files
