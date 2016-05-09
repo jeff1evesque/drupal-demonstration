@@ -61,3 +61,8 @@ mod 'drush',
 mod 'puppet-redis',
   :git => 'git@github.com:thomasvandoren/puppet-redis',
   :ref => '0.10.0'
+
+## Install Module: gcc (redis dependency)
+mod 'puppet-redis',
+  :git => 'git@github.com:puppetlabs/puppetlabs-gcc',
+  :ref => '0.3.0'
