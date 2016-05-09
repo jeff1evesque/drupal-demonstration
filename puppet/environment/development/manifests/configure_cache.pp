@@ -6,4 +6,4 @@
 ###
 
 ## redis
-include redis::install
+include package::redis
