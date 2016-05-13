@@ -8,5 +8,8 @@
 ## install redis
 include package::redis
 
+## install phpredis
+include package::phpredis
+
 ## start redis
 include redis::start
