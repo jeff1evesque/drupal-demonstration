@@ -3,7 +3,7 @@
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
 class package::redis {
-    class { 'redis:
-        package_ensure => '2.6.16',
+    class { 'redis::install':
+        redis_version => '3.2.0',
     }
 }
