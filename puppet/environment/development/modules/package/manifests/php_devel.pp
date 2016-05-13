@@ -2,7 +2,7 @@
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
-class package::phpredis {
+class package::php_devel {
     package { 'php-devel':
         ensure => 'installed',
     }
