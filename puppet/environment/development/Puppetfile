@@ -3,6 +3,11 @@ mod 'vcsrepo',
   :git => 'git@github.com:puppetlabs/puppetlabs-vcsrepo.git',
   :ref => '1.3.0'
 
+## Install Module: git
+mod 'git',
+  :git => 'git@github.com:puppetlabs/puppetlabs-git.git',
+  :ref => '0.4.0'
+
 ## Install Module: gpg (nodejs dependency)
 mod 'puppet-gpg_key',
   :git => 'git@github.com:treydock/puppet-gpg_key.git'
