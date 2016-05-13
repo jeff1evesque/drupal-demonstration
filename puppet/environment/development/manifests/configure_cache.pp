@@ -8,6 +8,9 @@
 ## install redis
 include package::redis
 
+## install php-devel: dependency to install 'phpredis'
+include package::php_devel
+
 ## install phpredis
 include package::phpredis
 
