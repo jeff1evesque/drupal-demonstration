@@ -7,10 +7,18 @@ class package::phpredis {
     require git
 
     ## local variables
-    $cwd = '/vagrant'
+    $root          = '/vagrant'
+    $cwd           = "${cwd}/build/phpredis"
+    $dirs_phpredis = ["${root}/build", $cwd]
+
+    ## ensure phpredis download directory
+    file { $dirs_phpredis:
+        ensure => 'directory',
+        before => Exec['install-phpredis-phpize'],
+    }
 
     ## download phpredis
-    vcsrepo { $cwd:
+    vcsrepo { "${cwd}/build/phpredis":
         ensure   => present,
         provider => git,
         source   => 'https://github.com/phpredis/phpredis',
@@ -36,14 +44,5 @@ class package::phpredis {
         cwd         => $cwd,
         path        => '/usr/bin',
         refreshonly => true,
-    }
-
-    ## remove downloaded phpredis
-    file { 'remove-remnant-phpredis':
-        ensure  => absent,
-        path    => "${cwd}/phpredis",
-        recurse => true,
-        purge   => true,
-        force   => true,
     }
 }
