@@ -27,6 +27,7 @@ class package::phpredis {
     exec { 'install-phpredis-configure':
         command     => './configure',
         cwd         => $cwd,
+        path        => $cwd,
         refreshonly => true,
         notify      => Exec['install-phpredis-make'],
     }
