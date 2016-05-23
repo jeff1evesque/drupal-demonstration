@@ -17,8 +17,8 @@ class drupal::install {
     $webroot     = '/vagrant/webroot'
 
     ## combined variables
-    $sql  = "--db-url=mysql://${db_user}:${db_pass}@${address}:${port}/${db}"
-    $acc  = "--account-name=${drupal_user} --account-pass=${drupal_pass}"
+    $sql    = "--db-url=mysql://${db_user}:${db_pass}@${address}:${port}/${db}"
+    $acc    = "--account-name=${drupal_user} --account-pass=${drupal_pass}"
     $info   = "--site-name ${site_name} --site-mail ${site_email}"
     $locale = "--locale ${locale}"
 
