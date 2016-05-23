@@ -25,7 +25,7 @@ class drupal::install {
     ## install drupal
     exec { 'install-drupal':
         command => "drush site-install ${sql} ${acc} ${tmz}",
-        path    => '/usr/local/bin/drush',
+        path    => '/usr/local/bin',
         cwd     => $webroot,
     }
 }
