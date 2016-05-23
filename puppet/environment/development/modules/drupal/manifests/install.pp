@@ -14,18 +14,18 @@ class drupal::install {
     $site_name   = 'sample'
     $site_email  = 'sample.email@domain.com'
     $locale      = 'us'
-    $timezone    = 'America/New York'
     $webroot     = '/vagrant/webroot'
 
-    ## combined logical variable
-    $sql = "--db-url=mysql://${db_user}/${db_pass}@${address}:${port}/${db}"
-    $acc = "--account-name=${drupal_user} --account-pass=${drupal_pass}"
-    $tmz = "date_default_timezone=${timezone}"
+    ## combined variables
+    $sql  = "--db-url=mysql://${db_user}:${db_pass}@${address}:${port}/${db}"
+    $acc  = "--account-name=${drupal_user} --account-pass=${drupal_pass}"
+    $info   = "--site-name ${site_name} --site-mail ${site_email}"
+    $locale = "--locale ${locale}"
 
     ## install drupal
     exec { 'install-drupal':
-        command => "drush site-install ${sql} ${acc} ${tmz}",
-        path    => '/usr/local/bin',
+        command => "drush site-install ${sql} ${acc} ${info} ${locale} -y",
+        path    => ['/usr/local/bin', '/usr/bin/'],
         cwd     => $webroot,
     }
 }
