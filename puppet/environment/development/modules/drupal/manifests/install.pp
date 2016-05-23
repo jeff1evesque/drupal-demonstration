@@ -13,14 +13,14 @@ class drupal::install {
     $drupal_pass = 'password'
     $site_name   = 'sample'
     $site_email  = 'sample.email@domain.com'
-    $locale      = 'us'
+    $locale_val  = 'us'
     $webroot     = '/vagrant/webroot'
 
     ## combined variables
     $sql    = "--db-url=mysql://${db_user}:${db_pass}@${address}:${port}/${db}"
     $acc    = "--account-name=${drupal_user} --account-pass=${drupal_pass}"
     $info   = "--site-name ${site_name} --site-mail ${site_email}"
-    $locale = "--locale ${locale}"
+    $locale = "--locale ${locale_val}"
 
     ## install drupal
     exec { 'install-drupal':
