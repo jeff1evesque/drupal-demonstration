@@ -15,6 +15,7 @@ class drupal::install {
     $site_email  = 'sample.email@domain.com'
     $locale      = 'us'
     $timezone    = 'America/New York'
+    $webroot     = '/vagrant/webroot'
 
     ## combined logical variable
     $sql = "--db-url=mysql://${db_user}/${db_pass}@${address}:${port}/${db}"
@@ -25,5 +26,6 @@ class drupal::install {
     exec { 'install-drupal':
         command => "drush site-install ${sql} ${acc} ${tmz}",
         path    => '/usr/local/bin/drush',
+        cwd     => $webroot,
     }
 }
