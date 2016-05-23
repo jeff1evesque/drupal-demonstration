@@ -107,6 +107,15 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file    = 'configure_compilers.pp'
   end
 
+  ## Custom Manifest: install drupal
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = ['puppet/environment/development/modules_contrib', 'puppet/environment/development/modules']
+    puppet.manifest_file    = 'install_drupal.pp'
+  end
+
   ## Custom Manifest: stig centos
   config.vm.provision 'puppet' do |puppet|
     puppet.environment_path = 'puppet/environment'
