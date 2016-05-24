@@ -95,6 +95,23 @@ Fork this project in your GitHub account.  Then, clone your repository, with
 - [release tag](https://github.com/jeff1evesque/drupal-demonstration/blob/master/README.md#release-tag):
  clone the remote branch, associated with the desired release tag.
 
+Then, remember make some changes within [`install.pp`](https://github.com/jeff1evesque/drupal-demonstration/blob/master/puppet/environment/development/modules/drupal/manifests/install.pp).
+ Specifically, the following variables should be customized:
+
+```puppet
+...
+    $drupal_user = 'admin'
+    $drupal_pass = 'password'
+    $site_name   = 'sample'
+    $site_email  = 'sample.email@domain.com'
+    $locale_val  = 'us'
+...
+```
+
+**Note:** the above snippet, will ensure a drupal `admin` user, with a defined
+ `password`, upon a successful drupal [installation](https://github.com/jeff1evesque/drupal-demonstration#installation).
+ Similarly, the additional variables can be trivially defined. 
+
 ### Simple clone
 
 ```bash
