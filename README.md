@@ -107,7 +107,7 @@ Then, remember to customize [`install.pp`](https://github.com/jeff1evesque/drupa
 ...
 ```
 
-The above snippet, will ensure a drupal `admin` user, with a defined `password`,
+The above snippet will ensure a drupal `admin` user, with a defined `password`,
  upon a successful drupal [installation](https://github.com/jeff1evesque/drupal-demonstration#installation).
  Similarly, the additional variables can be trivially defined. 
 
