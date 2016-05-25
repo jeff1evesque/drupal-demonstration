@@ -175,6 +175,7 @@ Vagrant.configure(2) do |config|
   ## clean up files on the host after the guest is destroyed
   config.trigger.after :destroy do
     run 'rm -Rf log'
+    run 'rm -Rf build'
     run 'rm -Rf puppet/environment/development/modules_contrib'
     run 'rm -Rf webroot/sites/all/themes/custom/sample_theme/asset'
     run 'rm -Rf webroot/sites/default/files/!(README.md)'
