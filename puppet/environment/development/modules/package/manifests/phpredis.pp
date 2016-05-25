@@ -7,8 +7,8 @@ class package::phpredis {
     require git
 
     ## local variables
-    $root          = '/vagrant'
-    $cwd           = "${root}/build/phpredis"
+    $root = '/vagrant'
+    $cwd  = "${root}/build/phpredis"
 
     ## download phpredis
     vcsrepo { $cwd:
