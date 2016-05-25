@@ -108,13 +108,13 @@ Vagrant.configure(2) do |config|
   end
 
   ## Custom Manifest: install drupal
-  config.vm.provision "puppet" do |puppet|
-    puppet.environment_path = 'puppet/environment'
-    puppet.environment      = 'development'
-    puppet.manifests_path   = 'puppet/environment/development/manifests'
-    puppet.module_path      = ['puppet/environment/development/modules_contrib', 'puppet/environment/development/modules']
-    puppet.manifest_file    = 'install_drupal.pp'
-  end
+#  config.vm.provision "puppet" do |puppet|
+#    puppet.environment_path = 'puppet/environment'
+#    puppet.environment      = 'development'
+#    puppet.manifests_path   = 'puppet/environment/development/manifests'
+#    puppet.module_path      = ['puppet/environment/development/modules_contrib', 'puppet/environment/development/modules']
+#    puppet.manifest_file    = 'install_drupal.pp'
+#  end
 
   ## Custom Manifest: add redis
   config.vm.provision "puppet" do |puppet|
@@ -153,6 +153,12 @@ Vagrant.configure(2) do |config|
     owner: 'provisioner',
     group: 'provisioner',
     mount_options: ['dmode=755', 'fmode=664']
+
+  ## set build scripts ownership, and permission
+  config.vm.share_folder '/build',
+    owner: 'provisioner',
+    group: 'provisioner',
+    mount_options: ['dmode=755', 'fmode=700']
 
   ## set puppet bash script(s) ownership, and permission
   config.vm.synced_folder './puppet/environment/development/scripts', '/vagrant/puppet/environment/development/scripts',
