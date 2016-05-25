@@ -18,7 +18,7 @@ class package::phpredis {
     }
 
     ## download phpredis
-    vcsrepo { "${cwd}/build/phpredis":
+    vcsrepo { $cwd:
         ensure   => present,
         provider => git,
         source   => 'https://github.com/phpredis/phpredis',
