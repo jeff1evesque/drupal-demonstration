@@ -155,7 +155,7 @@ Vagrant.configure(2) do |config|
     mount_options: ['dmode=755', 'fmode=664']
 
   ## set build scripts ownership, and permission
-  config.vm.share_folder '/build',
+  config.vm.synced_folder '/build',
     owner: 'provisioner',
     group: 'provisioner',
     mount_options: ['dmode=755', 'fmode=700']
