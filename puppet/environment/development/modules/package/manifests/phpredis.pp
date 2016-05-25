@@ -29,7 +29,6 @@ class package::phpredis {
         command     => './configure',
         provider    => shell,
         cwd         => $cwd,
-        path        => $cwd,
         refreshonly => true,
         notify      => Exec['install-phpredis-make'],
     }
