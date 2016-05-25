@@ -9,13 +9,6 @@ class package::phpredis {
     ## local variables
     $root          = '/vagrant'
     $cwd           = "${root}/build/phpredis"
-    $dirs_phpredis = "${root}/build"
-
-    ## ensure phpredis download directory
-    file { $dirs_phpredis:
-        ensure => 'directory',
-        before => Exec['install-phpredis-phpize'],
-    }
 
     ## download phpredis
     vcsrepo { $cwd:
