@@ -154,12 +154,6 @@ Vagrant.configure(2) do |config|
     group: 'provisioner',
     mount_options: ['dmode=755', 'fmode=664']
 
-  ## set build scripts ownership, and permission
-  config.vm.synced_folder '/build',
-    owner: 'provisioner',
-    group: 'provisioner',
-    mount_options: ['dmode=755', 'fmode=700']
-
   ## set puppet bash script(s) ownership, and permission
   config.vm.synced_folder './puppet/environment/development/scripts', '/vagrant/puppet/environment/development/scripts',
     owner: 'provisioner',
