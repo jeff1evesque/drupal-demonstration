@@ -9,7 +9,7 @@ class package::phpredis {
     ## local variables
     $root          = '/vagrant'
     $cwd           = "${root}/build/phpredis"
-    $dirs_phpredis = ["${root}/build", $cwd]
+    $dirs_phpredis = "${root}/build"
 
     ## ensure phpredis download directory
     file { $dirs_phpredis:
