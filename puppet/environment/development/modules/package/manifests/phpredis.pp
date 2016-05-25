@@ -34,6 +34,7 @@ class package::phpredis {
     }
     exec { 'install-phpredis-configure':
         command     => './configure',
+        provider    => shell,
         cwd         => $cwd,
         path        => $cwd,
         refreshonly => true,
