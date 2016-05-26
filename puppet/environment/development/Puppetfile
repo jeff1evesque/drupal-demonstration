@@ -62,17 +62,7 @@ mod 'drush',
   :git => 'git@github.com:previousnext/puppet-drush.git',
   :ref => '0.1.1'
 
-## Install Module: apt (redis dependency)
-mod 'puppet-redis',
-  :git => 'git@github.com:puppetlabs/puppetlabs-apt.git',
-  :ref => '2.2.2'
-
-## Install Module: epel (redis dependency)
-mod 'puppet-redis',
-  :git => 'git@github.com:stahnma/puppet-module-epel.git',
-  :ref => '1.2.2'
-
-## Install Module: puppet-redis
-mod 'puppet-redis',
-  :git => 'git@github.com:arioch/puppet-redis.git',
-  :ref => '1.2.2'
+## Install Module: wget
+mod 'wget',
+  :git => 'git@github.com:maestrodev/puppet-wget.git',
+  :ref => 'v1.7.3'
