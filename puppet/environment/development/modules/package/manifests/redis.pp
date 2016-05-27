@@ -4,10 +4,10 @@
 ###
 class package::redis {
     ## local variables
-    $root        = '/vagrant'
-    $version     = '3.2.0'
-    $cwd         = "${root}/build/redis-${version}"
-    $server_path = "http://download.redis.io/releases/redis-${version}.tar.gz"
+    $root    = '/vagrant'
+    $version = '3.2.0'
+    $cwd     = "${root}/build/redis-${version}"
+    $source  = "http://download.redis.io/releases/redis-${version}.tar.gz"
 
     ## download redis
     #
@@ -16,7 +16,7 @@ class package::redis {
     #      https://github.com/maestrodev/puppet-wget/blob/master/manifests/fetch.pp#L166
     #
     wget::fetch { 'download-redis-server':
-        source      => "${server_path}",
+        source      => "${source}",
         destination => "${root}/build,
         timeout     => 0,
         verbose     => false,
