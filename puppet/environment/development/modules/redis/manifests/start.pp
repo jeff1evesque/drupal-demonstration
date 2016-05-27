@@ -5,6 +5,6 @@
 class redis::start {
     exec { 'start-redis':
         command => 'redis-sever',
-        path    => '/usr/bin',
+        path    => '/usr/local/bin',
     }
 }
