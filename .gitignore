@@ -6,6 +6,10 @@
 /webroot/sites/*/files
 /webroot/sites/*/private
 
+# Ignore additional files
+/build/*.tar.gz
+/build/*.tar
+
 # Ignore the following directories
 .vagrant
 /log/
