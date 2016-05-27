@@ -15,4 +15,4 @@ include package::php_devel
 include package::phpredis
 
 ## start redis
-#include redis::start
+include redis::start
