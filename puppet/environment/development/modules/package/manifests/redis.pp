@@ -32,6 +32,7 @@ class package::redis {
     exec { 'make-install-redis-server':
         command     => 'make install',
         cwd         => $cwd,
+        path        => '/usr/bin',
         refreshonly => true,
     }
 }
