@@ -13,8 +13,8 @@ class install_redis {
     ## install php-devel: dependency to install 'phpredis'
     contain package::php_devel
 
-    ## install phpredis
-    contain package::phpredis
+    ## install predis
+    contain package::predis
 }
 
 ## start redis
