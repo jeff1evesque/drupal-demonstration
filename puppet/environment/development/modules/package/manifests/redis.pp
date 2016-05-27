@@ -17,7 +17,7 @@ class package::redis {
     #
     wget::fetch { 'download-redis-server':
         source      => "${source}",
-        destination => "${root}/build,
+        destination => "${root}/build",
         timeout     => 0,
         verbose     => false,
     }
