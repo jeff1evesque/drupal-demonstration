@@ -5,8 +5,8 @@
 class package::redis {
     ## local variables
     $root        = '/vagrant'
-    $cwd         = "${root}/build"
     $version     = '3.2.0'
+    $cwd         = "${root}/build/redis-${version}"
     $server_path = "http://download.redis.io/releases/redis-${version}.tar.gz"
 
     ## download redis
@@ -17,7 +17,7 @@ class package::redis {
     #
     wget::fetch { 'download-redis-server':
         source      => "${server_path}",
-        destination => $cwd,
+        destination => "${root}/build,
         timeout     => 0,
         verbose     => false,
     }
