@@ -10,10 +10,7 @@ class install_redis {
     ## install redis-server
     contain package::redis
 
-    ## install php-devel: dependency to install 'phpredis'
-    contain package::php_devel
-
-    ## install predis
+    ## install redis-client
     contain package::predis
 }
 
