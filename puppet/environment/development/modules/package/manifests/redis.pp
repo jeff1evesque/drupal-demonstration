@@ -19,17 +19,24 @@ class package::redis {
     #
     wget::fetch { 'download-redis-server':
         source      => "${source}",
-        destination => "${root}/build",
+        destination => "${root}/build/${version}.tar.gz",
         timeout     => 0,
         verbose     => false,
+    }
+    exec { 'untar-redis-server':
+        command => "tar xzvf redis-${version}.tar.gz",
+        cwd     => "${root}/build",
+        path    => '/bin',
+        notify  => Exec['make-redis-server']
     }
 
     ## build redis server
     exec { 'make-redis-server':
-        command => 'make',
-        cwd     => $cwd,
-        path    => '/usr/bin',
-        notify  => Exec['make-install-redis-server'],
+        command     => 'make',
+        cwd         => $cwd,
+        path        => '/usr/bin',
+        refreshonly => true,
+        notify      => Exec['make-install-redis-server'],
     }
     exec { 'make-install-redis-server':
         command     => 'make install',
