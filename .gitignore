@@ -15,4 +15,5 @@
 /log/
 /puppet/environment/development/modules_contrib/
 /webroot/sites/all/themes/custom/sample_theme/asset/
-/build/phpredis
+/webroot/sites/all/libraries/phpredis
+/build/redis-3.2.0
