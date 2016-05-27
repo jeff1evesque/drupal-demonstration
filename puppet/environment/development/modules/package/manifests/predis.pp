@@ -8,34 +8,13 @@ class package::phpredis {
 
     ## local variables
     $root = '/vagrant'
-    $cwd  = "${root}/build/phpredis"
+    $cwd  = "${root}/webroot/sites/all/libraries/predis"
 
-    ## download phpredis
+    ## download predis
     vcsrepo { $cwd:
         ensure   => present,
         provider => git,
-        source   => 'https://github.com/phpredis/phpredis',
-        revision => '2.2.7',
-    }
-
-    ## install phpredis
-    exec { 'install-phpredis-phpize':
-        command => 'phpize',
-        cwd     => $cwd,
-        path    => '/usr/bin',
-        notify  => Exec['install-phpredis-configure'],
-    }
-    exec { 'install-phpredis-configure':
-        command     => './configure',
-        provider    => shell,
-        cwd         => $cwd,
-        refreshonly => true,
-        notify      => Exec['install-phpredis-make'],
-    }
-    exec { 'install-phpredis-make':
-        command     => 'make && make install',
-        cwd         => $cwd,
-        path        => '/usr/bin',
-        refreshonly => true,
+        source   => 'https://github.com/nrk/predis',
+        revision => 'v1.0.3',
     }
 }
