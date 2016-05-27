@@ -37,5 +37,4 @@ dependencies[] = toolbar
 dependencies[] = update
 dependencies[] = user
 ; Development
-dependencies[] = profiler_builder
-
+dependencies[] = redis
