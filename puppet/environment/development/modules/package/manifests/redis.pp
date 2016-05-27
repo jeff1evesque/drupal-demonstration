@@ -19,7 +19,7 @@ class package::redis {
     #
     wget::fetch { 'download-redis-server':
         source      => "${source}",
-        destination => "${root}/build/${version}.tar.gz",
+        destination => "${root}/build/redis-${version}.tar.gz",
         timeout     => 0,
         verbose     => false,
     }
@@ -27,7 +27,8 @@ class package::redis {
         command => "tar xzvf redis-${version}.tar.gz",
         cwd     => "${root}/build",
         path    => '/bin',
-        notify  => Exec['make-redis-server']
+        notify  => Exec['make-redis-server'],
+        require => Wget::Fetch['download-redis-server'],
     }
 
     ## build redis server
