@@ -187,6 +187,7 @@ Vagrant.configure(2) do |config|
     run 'rm -Rf webroot/sites/default/files/!(README.md)'
     run 'rm -f webroot/sites/default/settings.php'
     run 'rm -f src/default/settings.php'
+    run 'rm -f build/*.tar.gz'
   end
 
   # Provider-specific configuration so you can fine-tune various
