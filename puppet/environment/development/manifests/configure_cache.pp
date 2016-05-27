@@ -6,13 +6,25 @@
 ###
 
 ## install redis
-include package::redis
+class install_redis {
+    ## install redis-server
+    contain package::redis
 
-## install php-devel: dependency to install 'phpredis'
-include package::php_devel
+    ## install php-devel: dependency to install 'phpredis'
+    contain package::php_devel
 
-## install phpredis
-include package::phpredis
+    ## install phpredis
+    contain package::phpredis
+}
 
 ## start redis
-include redis::start
+class start_redis {
+    ## set dependency
+    require install_redis
+
+    ## start redis-server
+    contain redis::start
+}
+
+## initiate
+include start_redis
