@@ -6,7 +6,7 @@ class package::redis {
     ## local variables
     $root        = '/vagrant'
     $cwd         = "${root}/build"
-    $verion      = '3.2.0'
+    $version     = '3.2.0'
     $server_path = "http://download.redis.io/releases/redis-${version}.tar.gz"
 
     ## download redis
