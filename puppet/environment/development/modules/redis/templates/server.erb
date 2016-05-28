@@ -14,15 +14,15 @@ RequiresMountsFor=/vagrant
 ## Service (required): the service configuration.
 #
 #  @Type (recommended), configures the process start-up type for this service
-#      unit. Specifically, 'simple' defines the process configured with
-#      'ExecStart' as the main process.
+#      unit. Specifically, 'forking' specifies the process configured with
+#      'ExecStart' to fork another process.
 #  @User (optional), run service as specified user.
 #  @Restart (optional), restart service, when the service process exits, is
 #      killed, or a timeout is reached. This has been removed since, an error
 #      stated this service has started too quickly.
 #  @ExecStart (optional), command to run when the unit is started.
 [Service]
-Type=simple
+Type=forking
 User=provisioner
-#Restart=always
-ExecStart=/vagrant/puppet/environment/<%= @build_environment %>/scripts/<%= @script %>
+WorkingDirectory=/vagrant/puppet/environment/<%= @build_environment %>/scripts
+ExecStart=/bin/sh ./<%= @script %>
