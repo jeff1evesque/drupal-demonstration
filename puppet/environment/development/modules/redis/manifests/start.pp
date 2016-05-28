@@ -9,7 +9,7 @@ class redis::start {
 
     ## background process writes stderr to stdout, and stdout to log
     exec { 'start-redis':
-        command => 'redis-server >> ${log_file} 2>&1 &',
+        command => "redis-server >> ${log_file} 2>&1 &",
         path    => '/usr/local/bin',
     }
 }
