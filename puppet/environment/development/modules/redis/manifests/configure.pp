@@ -13,6 +13,7 @@ class redis::configure {
     file { '/etc/systemd/system/redis-systemd.service':
         ensure  => file,
         content => dos2unix(template($template_path)),
+        mode    => '770',
     }
 
     ## selinux: allow httpd to make socket connections
