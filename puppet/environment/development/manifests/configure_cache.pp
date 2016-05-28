@@ -12,6 +12,9 @@ class install_redis {
 
     ## install redis-client
     contain package::predis
+
+    ## allow apache to make socket connection
+    contain redis::allow_socket
 }
 
 ## start redis
