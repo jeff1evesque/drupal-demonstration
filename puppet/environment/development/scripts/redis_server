@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# @redis-server: start the redis-server
+
+
+# Pre-Pathing: allow 'redis-server' command
+PATH="/usr/local/bin:$PATH"
+
+
+# run redis-server: redis-server stdout tracec implements datetime
+redis-server >> "$log_file" 2>&1 &
