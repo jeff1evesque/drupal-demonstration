@@ -4,8 +4,8 @@
 ###
 class redis::start {
     ## local variables
-    $root     = 'root'
-    $log_file = "${root}/vagrant/log/redis_server.log"
+    $root     = 'vagrant'
+    $log_file = "${root}/log/redis_server.log"
 
     ## background process writes stderr to stdout, and stdout to log
     exec { 'start-redis':
