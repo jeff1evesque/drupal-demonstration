@@ -200,7 +200,7 @@ Depending on the network speed, the build can take between 10-15 minutes. So,
  vagrant [wiki page](https://github.com/jeff1evesque/drupal-demonstration/wiki/Vagrant).
 
 The following lines, indicate the application is accessible via
- `localhost:6585`, on the host machine:
+ `https://localhost:6586`, on the host machine, since ssl has been configured:
 
 ```bash
 ...
@@ -211,15 +211,16 @@ The following lines, indicate the application is accessible via
 ...
 ```
 
-Otherwise, if ssl is configured, then the application is accessible via
- `https://localhost:6686`, on the host machine.
-
 **Note:** general convention implements port `443` for ssl.
 
-When the `vagrant up` build succeeds, visit [https://localhost:6686](https://localhost:6686), and complete the drupal installation:
+When the `vagrant up` build succeeds, the corresponding drupal installation
+ [`sample`](https://github.com/jeff1evesque/drupal-demonstration/tree/master/webroot/profiles/sample)
+ profile, will have enabled corresponding drupal modules, and themes.
+ Additionally the database can be accessed via the following accounts:
 
+- mariadb root: `root`
 - mariadb user: `authenticated`
-- mariadb pass: `password`
+- mariadb pass (for both): `password`
 
 ## Testing / Execution
 
