@@ -15,7 +15,7 @@ mod 'puppet-gpg_key',
 ## Install Module: stdlib (nodejs, redis dependency)
 mod 'stdlib',
   :git => 'git@github.com:puppetlabs/puppetlabs-stdlib.git',
-  :ref => '4.6.0'
+  :ref => '4.12.0'
 
 ## Install Module: wget (nodejs dependency)
 mod 'wget',
