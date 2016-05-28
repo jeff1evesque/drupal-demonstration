@@ -107,6 +107,15 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file    = 'configure_compilers.pp'
   end
 
+  ## Custom Manifest: add redis
+  config.vm.provision "puppet" do |puppet|
+    puppet.environment_path = 'puppet/environment'
+    puppet.environment      = 'development'
+    puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = ['puppet/environment/development/modules_contrib', 'puppet/environment/development/modules']
+    puppet.manifest_file    = 'configure_cache.pp'
+  end
+
   ## Custom Manifest: install drupal
   config.vm.provision "puppet" do |puppet|
     puppet.environment_path = 'puppet/environment'
@@ -145,6 +154,12 @@ Vagrant.configure(2) do |config|
     group: 'provisioner',
     mount_options: ['dmode=755', 'fmode=664']
 
+  ## set build ownership, and permission
+  config.vm.synced_folder './build', '/vagrant/build',
+    owner: 'provisioner',
+    group: 'provisioner',
+    mount_options: ['dmode=755', 'fmode=700']
+
   ## set puppet bash script(s) ownership, and permission
   config.vm.synced_folder './puppet/environment/development/scripts', '/vagrant/puppet/environment/development/scripts',
     owner: 'provisioner',
@@ -167,10 +182,12 @@ Vagrant.configure(2) do |config|
   config.trigger.after :destroy do
     run 'rm -Rf log'
     run 'rm -Rf puppet/environment/development/modules_contrib'
+    run 'rm -Rf webroot/sites/all/libraries/phpredis'
     run 'rm -Rf webroot/sites/all/themes/custom/sample_theme/asset'
     run 'rm -Rf webroot/sites/default/files/!(README.md)'
     run 'rm -f webroot/sites/default/settings.php'
     run 'rm -f src/default/settings.php'
+    run 'rm -f build/*.tar.gz'
   end
 
   # Provider-specific configuration so you can fine-tune various

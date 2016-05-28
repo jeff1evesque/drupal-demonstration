@@ -1,12 +1,19 @@
 # Ignore configuration files that may contain sensitive information.
 /webroot/sites/*/settings*.php
+/src/default/settings.php
 
 # Ignore paths that contain user-generated content.
 /webroot/sites/*/files
 /webroot/sites/*/private
+
+# Ignore additional files
+/build/*.tar.gz
+/build/*.tar
 
 # Ignore the following directories
 .vagrant
 /log/
 /puppet/environment/development/modules_contrib/
 /webroot/sites/all/themes/custom/sample_theme/asset/
+/webroot/sites/all/libraries/predis
+/build/redis-3.2.0
