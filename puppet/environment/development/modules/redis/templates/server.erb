@@ -25,4 +25,4 @@ RequiresMountsFor=/vagrant
 Type=simple
 User=provisioner
 #Restart=always
-ExecStart=/vagrant/puppet/environment/<%= @build_environment %><%= @script %>
+ExecStart=/vagrant/puppet/environment/<%= @build_environment %>/scripts/<%= @script %>
