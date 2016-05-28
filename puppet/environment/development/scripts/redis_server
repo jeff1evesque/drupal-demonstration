@@ -7,5 +7,9 @@
 PATH="/usr/local/bin:$PATH"
 
 
+# local variables
+log_file='/vagrant/log/redis_server.log'
+
+
 # run redis-server: redis-server stdout tracec implements datetime
 redis-server >> "$log_file" 2>&1 &
