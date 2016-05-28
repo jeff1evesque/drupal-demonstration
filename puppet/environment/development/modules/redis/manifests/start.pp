@@ -3,8 +3,12 @@
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
 class redis::start {
+    ## local variables
+    $root     = 'root'
+    $log_file = "${root}/vagrant/log/redis_server.log"
+
     exec { 'start-redis':
-        command => 'redis-server &',
+        command => 'redis-server >> ${log_file} 2>&1 &',
         path    => '/usr/local/bin',
     }
 }
