@@ -15,6 +15,7 @@ class redis::configure {
     file { '/etc/systemd/system/redis-systemd.service':
         ensure  => file,
         content => dos2unix(template($template_path)),
+        mode    => '770',
     }
 
     ## dos2unix bash script: convert clrf (windows to linux) in case host
