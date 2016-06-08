@@ -57,7 +57,7 @@ class update_yum {
 
     exec {'update-yum':
         command => 'yum -y update',
-        timeout => 750,
+        timeout => 1800,
     }
 }
 
