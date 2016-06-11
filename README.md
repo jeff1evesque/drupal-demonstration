@@ -1,4 +1,4 @@
-# Drupal Demonstration [![Build Status](https://travis-ci.org/jeff1evesque/drupal-demonstration.svg)](https://travis-ci.org/jeff1evesque/drupal-demonstration)
+# Drupal Demonstration [![Build Status](https://travis-ci.org/jeff1evesque/drupal-demonstration.svg?branch=master)](https://travis-ci.org/jeff1evesque/drupal-demonstration)
 
 This repository is a simple demonstration of a virtualized environment
  ([vagrant](https://www.vagrantup.com/) + [virtualbox](https://www.virtualbox.org/)),
