@@ -17,6 +17,11 @@ mod 'stdlib',
   :git => 'git@github.com:puppetlabs/puppetlabs-stdlib.git',
   :ref => '4.12.0'
 
+## Install Module: redis
+mod 'redis',
+  :git => 'git@github.com:arioch/puppet-redis.git',
+  :ref => '1.2.3'
+
 ## Install Module: wget (nodejs dependency)
 mod 'wget',
   :git => 'git@github.com:maestrodev/puppet-wget.git',
