@@ -136,14 +136,15 @@ class create_compilers {
             ensure  => 'present',
             content => template("/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb"),
             mode    => '770',
-            notify  => Exec["dos2unix-systemd-${compiler}"],
+            before  => File["dos2unix-systemd-${compiler}"],
         }
 
         ## dos2unix systemd: convert clrf (windows to linux) in case host machine is windows.
-        exec {"dos2unix-systemd-${compiler}":
-            command => "dos2unix /etc/systemd/system/${compiler}.service",
-            notify  => Exec["dos2unix-bash-${compiler}"],
-            refreshonly => true,
+        file { "dos2unix-systemd-${compiler}":
+            ensure  => 'present',
+            content => dos2unix("/etc/systemd/system/${compiler}.service"),
+            path    => "/etc/systemd/system/${compiler}.service",
+            before  => File["dos2unix-bash-${compiler}"],
         }
 
         ## dos2unix bash: convert clrf (windows to linux) in case host machine is windows.
@@ -151,9 +152,10 @@ class create_compilers {
         #  @notify, ensure the webserver service is started. This is similar to an exec statement, where the
         #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
         #      'service' end point does not require the 'refreshonly' attribute.
-        exec {"dos2unix-bash-${compiler}":
-            command => "dos2unix /vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
-            refreshonly => true,
+        file {"dos2unix-bash-${compiler}":
+            ensure  => 'present',
+            content => dos2unix("/vagrant/puppet/environment/${build_environment}/scripts/${compiler}"),
+            path    => "/vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
             notify  => Service[$compiler],
         }
 
