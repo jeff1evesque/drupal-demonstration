@@ -134,17 +134,9 @@ class create_compilers {
         file {"${compiler}-startup-script":
             path    => "/etc/systemd/system/${compiler}.service",
             ensure  => 'present',
-            content => template("/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb"),
+            content => dos2unix("/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb"),
             mode    => '770',
             before  => File["dos2unix-systemd-${compiler}"],
-        }
-
-        ## dos2unix systemd: convert clrf (windows to linux) in case host machine is windows.
-        file { "dos2unix-systemd-${compiler}":
-            ensure  => 'present',
-            content => dos2unix("/etc/systemd/system/${compiler}.service"),
-            path    => "/etc/systemd/system/${compiler}.service",
-            before  => File["dos2unix-bash-${compiler}"],
         }
 
         ## dos2unix bash: convert clrf (windows to linux) in case host machine is windows.
