@@ -134,7 +134,7 @@ class create_compilers {
         file {"${compiler}-startup-script":
             path    => "/etc/systemd/system/${compiler}.service",
             ensure  => 'present',
-            content => dos2unix("/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb"),
+            content => dos2unix(template("/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb")),
             mode    => '770',
             before  => File["dos2unix-bash-${compiler}"],
         }
