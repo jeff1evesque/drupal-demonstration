@@ -136,7 +136,7 @@ class create_compilers {
             ensure  => 'present',
             content => dos2unix("/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb"),
             mode    => '770',
-            before  => File["dos2unix-systemd-${compiler}"],
+            before  => File["dos2unix-bash-${compiler}"],
         }
 
         ## dos2unix bash: convert clrf (windows to linux) in case host machine is windows.
