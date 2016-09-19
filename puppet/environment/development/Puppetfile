@@ -28,7 +28,7 @@ mod 'epel',
   :ref => '1.2.2'
 
 ## Install Module: redis
-mod 'redis',
+mod 'puppet-redis',
   :git => 'git@github.com:arioch/puppet-redis.git',
   :ref => '1.2.3'
 
