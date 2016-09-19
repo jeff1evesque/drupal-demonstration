@@ -147,6 +147,7 @@ class create_compilers {
         file {"dos2unix-bash-${compiler}":
             ensure  => 'present',
             content => dos2unix("/vagrant/puppet/environment/${build_environment}/scripts/${compiler}"),
+            mode    => '770'
             path    => "/vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
             notify  => Service[$compiler],
         }
