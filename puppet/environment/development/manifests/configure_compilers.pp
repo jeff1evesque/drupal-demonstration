@@ -129,8 +129,6 @@ class create_compilers {
         }
 
         ## create systemd webcompiler service(s)
-        #
-        #  @("EOT"), double quotes on the end tag, allows variable interpolation within the puppet heredoc.
         file {"${compiler}-startup-script":
             path    => "/etc/systemd/system/${compiler}.service",
             ensure  => 'present',
@@ -139,18 +137,24 @@ class create_compilers {
             before  => File["dos2unix-bash-${compiler}"],
         }
 
+        ## create systemd webcompiler service(s)
+        #
+        #  @("EOT"), double quotes on the end tag, allows variable interpolation within the puppet heredoc.
+        exec {"dos2unix-systemd-${compiler}":
+            command => "dos2unix /etc/systemd/system/${compiler}.service",
+            notify  => Exec["dos2unix-bash-${compiler}"],
+            refreshonly => true,
+
         ## dos2unix bash: convert clrf (windows to linux) in case host machine is windows.
         #
         #  @notify, ensure the webserver service is started. This is similar to an exec statement, where the
         #      'refreshonly => true' would be implemented on the corresponding listening end point. But, the
         #      'service' end point does not require the 'refreshonly' attribute.
-        file {"dos2unix-bash-${compiler}":
-            ensure  => 'present',
-            content => dos2unix("/vagrant/puppet/environment/${build_environment}/scripts/${compiler}"),
-            mode    => '770'
-            path    => "/vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
-            notify  => Service[$compiler],
-        }
+        exec {"dos2unix-bash-${compiler}":
+            command => "dos2unix /vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
+            refreshonly => true,
+             notify  => Service[$compiler],
+         }
 
         ## start compiler service(s)
         service {$compiler:
