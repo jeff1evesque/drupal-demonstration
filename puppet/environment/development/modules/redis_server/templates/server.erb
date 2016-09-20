@@ -23,5 +23,5 @@ RequiresMountsFor=/vagrant
 #  @ExecStart (optional), command to run when the unit is started.
 [Service]
 Type=forking
-User=provisioner
+User=<% @provisioner %>
 ExecStart=redis-server
