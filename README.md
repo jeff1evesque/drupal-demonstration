@@ -1,4 +1,4 @@
-# Drupal Demonstration [![Build Status](https://travis-ci.org/jeff1evesque/drupal-demonstration.svg)](https://travis-ci.org/jeff1evesque/drupal-demonstration)
+# Drupal Demonstration [![Build Status](https://travis-ci.org/jeff1evesque/drupal-demonstration.svg?branch=master)](https://travis-ci.org/jeff1evesque/drupal-demonstration)
 
 This repository is a simple demonstration of a virtualized environment
  ([vagrant](https://www.vagrantup.com/) + [virtualbox](https://www.virtualbox.org/)),
@@ -226,7 +226,7 @@ When the `vagrant up` build succeeds, the corresponding drupal installation
 
 ### phpMyAdmin
 
-This project include a fully functional [phpMyAdmin](https://www.phpmyadmin.net/) implementation,
+This project includes a fully functional [phpMyAdmin](https://www.phpmyadmin.net/) implementation,
  which can be accessed as follows:
 
 - [https://localhost:6686/phpMyAdmin](https://localhost:6686/phpMyAdmin)
