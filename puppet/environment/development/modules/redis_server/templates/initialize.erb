@@ -22,6 +22,5 @@ RequiresMountsFor=/vagrant
 #      stated this service has started too quickly.
 #  @ExecStart (optional), command to run when the unit is started.
 [Service]
-Type=forking
 User=<% @provisioner %>
 ExecStart=/usr/sbin/setsebool httpd_can_network_connect=1
