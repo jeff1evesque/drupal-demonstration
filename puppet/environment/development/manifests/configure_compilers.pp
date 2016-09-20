@@ -155,7 +155,7 @@ class create_compilers {
             command => "dos2unix /vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
             refreshonly => true,
             notify  => Service[$compiler],
-         }
+        }
 
         ## start compiler service(s)
         service {$compiler:
