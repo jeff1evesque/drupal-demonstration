@@ -5,8 +5,8 @@
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
 
-## install redis
-class install_redis {
+## install, and configure redis
+class configure_redis {
     ## install redis-server
     contain package::redis
 
@@ -14,17 +14,8 @@ class install_redis {
     contain package::predis
 
     ## configure, and allow httpd socket connections
-    contain redis::configure
-}
-
-## start redis
-class start_redis {
-    ## set dependency
-    require install_redis
-
-    ## start redis-server
-    contain redis::start
+    contain redis_server::configure
 }
 
 ## initiate
-include start_redis
+include configure_redis
