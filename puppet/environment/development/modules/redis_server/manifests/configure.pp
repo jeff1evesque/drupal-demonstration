@@ -33,9 +33,8 @@ class redis_server::configure {
     }
 
     ## selinux for redis
-    service { 'redis-initialize':
-        ensure => 'running',
-        enable => true,
+    exec { 'selinux-redis':
+        command => '/usr/sbin/setsebool -P httpd_can_network_connect=1',
     }
 
     ## ensure redis start on successive boot
