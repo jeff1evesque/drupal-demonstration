@@ -134,7 +134,7 @@ class create_compilers {
             ensure  => 'present',
             content => dos2unix(template("/vagrant/puppet/environment/${build_environment}/template/webcompilers.erb")),
             mode    => '770',
-            before  => File["dos2unix-bash-${compiler}"],
+            notify  => Exec["dos2unix-systemd-${compiler}"],
         }
 
         ## create systemd webcompiler service(s)
@@ -154,7 +154,7 @@ class create_compilers {
         exec {"dos2unix-bash-${compiler}":
             command => "dos2unix /vagrant/puppet/environment/${build_environment}/scripts/${compiler}",
             refreshonly => true,
-             notify  => Service[$compiler],
+            notify  => Service[$compiler],
          }
 
         ## start compiler service(s)
