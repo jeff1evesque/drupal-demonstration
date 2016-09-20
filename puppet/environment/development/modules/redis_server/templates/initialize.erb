@@ -14,12 +14,13 @@ RequiresMountsFor=/vagrant
 ## Service (required): the service configuration.
 #
 #  @Type (recommended), configures the process start-up type for this service
-#      unit. Specifically, 'forking' specifies the process configured with
-#      'ExecStart' to fork another process.
+#      unit. Specifically, 'oneshot' requires the process has to exit before
+#      systemd starts follow-up units.
 #  @User (optional), run service as specified user.
 #  @Restart (optional), restart service, when the service process exits, is
 #      killed, or a timeout is reached. This has been removed since, an error
 #      stated this service has started too quickly.
 #  @ExecStart (optional), command to run when the unit is started.
 [Service]
-ExecStart=/usr/sbin/setsebool httpd_can_network_connect=1
+Type=oneshot
+ExecStart=/usr/sbin/setsebool -P httpd_can_network_connect=1
