@@ -8,7 +8,7 @@
 #      and 'After=' for mount units required to access the specified path.
 [Unit]
 Description=define run corresponding bash script to start redis server
-Documentation=allow selinux to run redis-server
+Documentation=https://github.com/jeff1evesque/drupal-demonstration/issues/479
 RequiresMountsFor=/vagrant
 
 ## Service (required): the service configuration.
@@ -24,4 +24,4 @@ RequiresMountsFor=/vagrant
 [Service]
 Type=forking
 User=<% @provisioner %>
-ExecStart=/usr/sbin/setsebool httpd_can_network_connect=1
+ExecStart=redis-server
