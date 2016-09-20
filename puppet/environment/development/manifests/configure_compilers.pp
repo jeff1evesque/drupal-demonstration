@@ -144,6 +144,7 @@ class create_compilers {
             command => "dos2unix /etc/systemd/system/${compiler}.service",
             notify  => Exec["dos2unix-bash-${compiler}"],
             refreshonly => true,
+        }
 
         ## dos2unix bash: convert clrf (windows to linux) in case host machine is windows.
         #
