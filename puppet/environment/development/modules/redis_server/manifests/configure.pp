@@ -13,11 +13,6 @@ class redis_server::configure {
 
     ## dos2unix systemd: convert clrf (windows to linux) in case host
     #                    machine is windows.
-    file { '/etc/systemd/system/redis-initialize.service':
-        ensure  => file,
-        content => dos2unix(template("${template_path}/initialize.erb")),
-        mode    => '770',
-    }
     file { '/etc/systemd/system/redis-server.service':
         ensure  => file,
         content => dos2unix(template("${template_path}/initialize.erb")),
