@@ -24,5 +24,4 @@ RequiresMountsFor=/vagrant
 [Service]
 Type=forking
 User=provisioner
-WorkingDirectory=/vagrant/puppet/environment/<%= @build_environment %>/scripts
-ExecStart=/bin/sh ./<%= @script %>
+ExecStart=redis-server
