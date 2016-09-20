@@ -4,7 +4,13 @@
 ###
 class redis::start {
     ## start redis server
-    service { 'redis-systemd':
+    service { 'redis':
+        ensure => 'running',
+        enable => true,
+    }
+
+    ## selinux for redis
+    service { 'redis-initialize':
         ensure => 'running',
         enable => true,
     }

@@ -38,11 +38,13 @@ class package::redis {
         path        => '/usr/bin',
         refreshonly => true,
         notify      => Exec['make-install-redis-server'],
+        timeout     => 1800,
     }
     exec { 'make-install-redis-server':
         command     => 'make install',
         cwd         => $cwd,
         path        => '/usr/bin',
         refreshonly => true,
+        timeout     => 1800,
     }
 }
