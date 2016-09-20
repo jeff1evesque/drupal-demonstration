@@ -13,12 +13,12 @@ class redis_server::configure {
 
     ## dos2unix systemd: convert clrf (windows to linux) in case host
     #                    machine is windows.
-    file { '/etc/systemd/system/redis.service':
+    file { '/etc/systemd/system/redis-initialize.service':
         ensure  => file,
-        content => dos2unix(template("${template_path}/server.erb")),
+        content => dos2unix(template("${template_path}/initialize.erb")),
         mode    => '770',
     }
-    file { '/etc/systemd/system/redis-initialize.service':
+    file { '/etc/systemd/system/redis-server.service':
         ensure  => file,
         content => dos2unix(template("${template_path}/initialize.erb")),
         mode    => '770',
@@ -30,5 +30,16 @@ class redis_server::configure {
         ensure  => file,
         content => dos2unix(file("${environment_dir}/scripts/${script}")),
         mode    => '770',
+    }
+
+    ## selinux for redis
+    service { 'redis-initialize':
+        ensure => 'running',
+        enable => true,
+    }
+
+    ## ensure redis start on successive boot
+    service { 'redis-server':
+        enable => true,
     }
 }
