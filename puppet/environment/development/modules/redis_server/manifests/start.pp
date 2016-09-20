@@ -2,9 +2,9 @@
 ###
 ###       https://github.com/jeff1evesque/machine-learning/issues/2349
 ###
-class redis::start {
+class redis_server::start {
     ## start redis server
-    service { 'redis':
+    service { 'redis_server':
         ensure => 'running',
         enable => true,
     }
