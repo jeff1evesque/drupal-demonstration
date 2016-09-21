@@ -11,14 +11,6 @@ class redis_server::configure {
     $script            = 'redis_server'
     $environment_dir   = "${root_dir}/puppet/environment/${environment}"
 
-    ## dos2unix systemd: convert clrf (windows to linux) in case host
-    #                    machine is windows.
-    file { '/etc/systemd/system/redis-server.service':
-        ensure  => file,
-        content => dos2unix(template("${template_path}/initialize.erb")),
-        mode    => '770',
-    }
-
     ## dos2unix bash script: convert clrf (windows to linux) in case host
     #                    machine is windows.
     file { "${environment_dir}/scripts/${script}":
