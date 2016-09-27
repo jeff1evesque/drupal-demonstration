@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
   # https://docs.vagrantup.com.
 
   ## Variables (ruby syntax)
-  required_plugins = %w(vagrant-r10k vagrant-triggers)
+  required_plugins = %w(vagrant-r10k vagrant-vbguest vagrant-triggers vagrant-puppet-install)
   plugin_installed = false
 
   ## Install Vagrant Plugins
@@ -26,6 +26,9 @@ Vagrant.configure(2) do |config|
   if plugin_installed == true
     exec "vagrant #{ARGV.join(' ')}"
   end
+
+  ## Ensure puppet installed within guest
+  config.puppet_install.puppet_version = '4.3.2'
 
   ## ensure puppet/modules directory on the host before 'vagrant up'
   config.trigger.before :up do
