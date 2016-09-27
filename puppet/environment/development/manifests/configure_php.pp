@@ -1,23 +1,25 @@
 # variables
+$remi_package     = 'remi-release-7.rpm'
 $rpm_package_epel = 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm'
-$rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-7.rpm'
+$rpm_package_remi = "http://rpms.famillecollet.com/enterprise/${remi_package}"
 $working_dir      = '/home/provisioner'
 
 ## define $PATH for all execs
 Exec {path => ['/usr/bin/', '/usr/sbin/']}
 
-## download wget
-class download_wget {
-    include wget
+## download dependencies
+class download_dependency {
+    contain epel
+    contain wget
 }
 
 ## download rpm package(s)
 class download_rpm_packages {
     ## set dependency
-    require download_wget
+    require download_dependency
 
     exec {'download-rpm-package':
-        command => "wget ${rpm_package_epel} && wget ${rpm_package_remi}",
+        command => "wget ${rpm_package_remi}",
         cwd => "${working_dir}",
     }
 }
@@ -25,11 +27,12 @@ class download_rpm_packages {
 ## install rpm package(s)
 class install_rpm_packages {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
 
+    package {"epel-release": ensure => installed}
     exec {'install-rpm-package':
-        command => "rpm -Uvh ${rpm_package_epel} && rpm -Uvh ${rpm_package_remi}",
+        command => "rpm -Uvh  ${remi_package}",
         cwd => "${working_dir}",
     }
 }
@@ -37,7 +40,7 @@ class install_rpm_packages {
 ## remove unnecessary rpm packages
 class clean_rpm_packages {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
 
@@ -50,7 +53,7 @@ class clean_rpm_packages {
 ## update yum using the added EPEL repository
 class update_yum {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -64,7 +67,7 @@ class update_yum {
 ## enable repo to install php 5.6
 class enable_php_repo {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -83,7 +86,7 @@ class enable_php_repo {
 ## install php
 class install_php_packages {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -101,7 +104,7 @@ class install_php_packages {
 ## enable opcache
 class enable_opcache {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -122,7 +125,7 @@ class enable_opcache {
 ## install phpmyadmin: requires the above 'add-epel', and 'update-yum'
 class install_phpmyadmin {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -138,7 +141,7 @@ class install_phpmyadmin {
 ## allow phpmyadmin access
 class enable_phpmyadmin {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -195,7 +198,7 @@ class enable_phpmyadmin {
 ## increase php memory limit (i.e. bootstrap 3 theme)
 class php_configuration {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -218,7 +221,7 @@ class php_configuration {
 ## restart httpd
 class restart_httpd {
     ## set dependency
-    require download_wget
+    require download_dependency
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
@@ -237,7 +240,7 @@ class restart_httpd {
 
 ## constructor
 class constructor {
-    contain download_wget
+    contain download_dependency
     contain download_rpm_packages
     contain install_rpm_packages
     contain clean_rpm_packages
