@@ -50,20 +50,6 @@ class clean_rpm_packages {
     }
 }
 
-## update yum using the added EPEL repository
-class update_yum {
-    ## set dependency
-    require download_dependency
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
-
-    exec {'update-yum':
-        command => 'yum -y update',
-        timeout => 1800,
-    }
-}
-
 ## enable repo to install php 5.6
 class enable_php_repo {
     ## set dependency
@@ -71,7 +57,6 @@ class enable_php_repo {
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
-    require update_yum
 
     exec {'enable-php-56-repo-1':
         command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/provisioner/remi.tmp',
@@ -90,7 +75,6 @@ class install_php_packages {
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
-    require update_yum
     require enable_php_repo
 
     ## variables
@@ -108,7 +92,6 @@ class enable_opcache {
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
-    require update_yum
     require enable_php_repo
     require install_php_packages
 
@@ -129,7 +112,6 @@ class install_phpmyadmin {
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
-    require update_yum
     require enable_php_repo
     require install_php_packages
 
@@ -145,7 +127,6 @@ class enable_phpmyadmin {
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
-    require update_yum
     require enable_php_repo
     require install_php_packages
     require install_phpmyadmin
@@ -202,7 +183,6 @@ class php_configuration {
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
-    require update_yum
     require enable_php_repo
     require install_php_packages
     require install_phpmyadmin
@@ -225,7 +205,6 @@ class restart_httpd {
     require download_rpm_packages
     require install_rpm_packages
     require clean_rpm_packages
-    require update_yum
     require enable_php_repo
     require install_php_packages
     require enable_opcache
@@ -244,7 +223,6 @@ class constructor {
     contain download_rpm_packages
     contain install_rpm_packages
     contain clean_rpm_packages
-    contain update_yum
     contain enable_php_repo
     contain install_php_packages
     contain enable_opcache
