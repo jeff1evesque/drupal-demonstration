@@ -2,6 +2,7 @@
 $port = '80'
 
 ## variables: ssl
+$root_dir      = '/vagrant'
 $ssl_dir       = '/etc/ssl/httpd'
 $port_ssl      = '443'
 $port_ssl_host = '6686'
@@ -26,6 +27,32 @@ package {$packages_general:
 
 ## define $PATH for all execs
 Exec {path => ['/usr/bin/', '/usr/sbin/']}
+
+## puppet GPG keys
+class gpg_puppet {
+    ## local variables
+    $puppet_gpg_key = 'RPM-GPG-KEY-puppet'
+
+    ## download gpg key
+    exec { 'curl-gpg-puppet':
+        command => "curl --remote-name --location https://yum.puppetlabs.com/${puppet_gpg_key}",
+        path    => '/usr/bin',
+        cwd     => $root_dir,
+    }
+
+    ## add gpg key
+    exec { 'add-gpg-puppet':
+        command => "rpm --import ${puppet_gpg_key}"
+        path    => '/usr/bin',
+        cwd     => $root_dir,
+    }
+
+    ## remove gpg key
+    file { 'remove-gpg-puppet':
+        ensure => 'absent',
+        path   => "${root_dir}/${puppet_gpg_key}"
+    }
+}
 
 ## generate ssh key-pair
 class generate_keypair {
@@ -257,6 +284,7 @@ class restart_httpd {
 
 ## constructor
 class constructor {
+    contain gpg_puppet
     contain generate_keypair
     contain httpd
     contain selinux
