@@ -42,7 +42,7 @@ class gpg_puppet {
 
     ## add gpg key
     exec { 'add-gpg-puppet':
-        command => "rpm --import ${puppet_gpg_key}"
+        command => "rpm --import ${puppet_gpg_key}",
         path    => '/usr/bin',
         cwd     => $root_dir,
     }
