@@ -65,6 +65,7 @@ Vagrant.configure(2) do |config|
     puppet.environment_path = 'puppet/environment'
     puppet.environment      = 'development'
     puppet.manifests_path   = 'puppet/environment/development/manifests'
+    puppet.module_path      = 'puppet/environment/development/modules_contrib'
     puppet.manifest_file    = 'configure_system.pp'
   end
 
