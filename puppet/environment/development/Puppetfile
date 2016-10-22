@@ -85,4 +85,4 @@ mod 'wget',
 ## Install Module: timezone
 mod 'timezone',
   :git => 'git@github.com:BashtonLtd/puppet-timezone.git',
-  :ref => 'v1.0.0'
+  :commit => '1672983'
