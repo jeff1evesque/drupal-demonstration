@@ -46,7 +46,8 @@ class install_nodejs {
     require install_nodejs_dependencies
 
     class { 'nodejs':
-        repo_url_suffix => '5.x',
+        repo_url_suffix    => '5.x',
+        npm_package_ensure => 'present',
     }
 }
 
