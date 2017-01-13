@@ -8,14 +8,10 @@ mod 'git',
   :git => 'git@github.com:puppetlabs/puppetlabs-git.git',
   :ref => '0.4.0'
 
-## Install Module: gpg (nodejs dependency)
-mod 'puppet-gpg_key',
-  :git => 'git@github.com:treydock/puppet-gpg_key.git'
-  
-## Install Module: stdlib (nodejs, redis dependency)
+## Install Module: stdlib (redis dependency)
 mod 'stdlib',
   :git => 'git@github.com:puppetlabs/puppetlabs-stdlib.git',
-  :ref => '4.12.0'
+  :ref => '4.14.0'
 
 ## Install Module: apt (redis dependency)
 mod 'apt',
@@ -32,15 +28,10 @@ mod 'puppet-redis',
   :git => 'git@github.com:arioch/puppet-redis.git',
   :ref => '1.2.3'
 
-## Install Module: wget (nodejs dependency)
-mod 'wget',
-  :git => 'git@github.com:maestrodev/puppet-wget.git',
-  :ref => 'v1.7.1'
-
 ## Install Module: nodejs
 mod 'nodejs',
-  :git => 'git@github.com:puppet-community/puppet-nodejs.git',
-  :ref => 'v1.3.0'
+  :git => 'git@github.com:voxpupuli/puppet-nodejs.git',
+  :ref => 'v2.2.0'
 
 ## Install Module: mysql (to be used for mariadb)
 mod 'mysql',
