@@ -68,11 +68,6 @@ mod 'drush',
   :git => 'git@github.com:previousnext/puppet-drush.git',
   :ref => '0.1.1'
 
-## Install Module: wget
-mod 'wget',
-  :git => 'git@github.com:maestrodev/puppet-wget.git',
-  :ref => 'v1.7.3'
-
 ## Install Module: timezone
 mod 'timezone',
   :git => 'git@github.com:BashtonLtd/puppet-timezone.git',
