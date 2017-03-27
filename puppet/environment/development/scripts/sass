@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# @sass: minify scss file(s).
-#
-# @/vagrant, first passed-in argument from command ($0 is the filename)
-
 
 # Pre-Pathing: allow 'sass' command
 PATH="/usr/bin:$PATH"

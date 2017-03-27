@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# @imagemin: minify image file(s).
-#
-# Note: minifid GIF files lose their animated quality. This script minifies
-#       all images except GIF (copied to the 'asset/').
-
 
 # Pre-Pathing: allow 'imagemin' command
 PATH="/usr/bin:$PATH"

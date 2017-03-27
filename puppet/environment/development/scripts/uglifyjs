@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# @uglifyjs: minify javascript file(s).
-#
-# @/vagrant, first passed-in argument from command ($0 is the filename)
 
 # Pre-Pathing: allow 'uglifyjs' command
 PATH="/usr/bin:$PATH"
