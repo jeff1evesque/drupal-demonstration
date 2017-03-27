@@ -1,22 +1,20 @@
 #!/bin/bash
 
-# @web_img: is executed from 'bash_loader', which is why the directory
-#           paths seem shorter in this file (i.e. missing extra '../').
-#
-# Note: minifid GIF files lose their animated quality. This script minifies
-#       all images except GIF (copied to the 'asset/').
-
 
 # Pre-Pathing: allow 'imagemin' command
 PATH="/usr/bin:$PATH"
 
 
 # track execution of script
-set -x; exec > /vagrant/log/imagemin_execution.log 2>&1
+log_file=/vagrant/log/imagemin.log
+set -x;
+exec &> >(while read -r line; do
+  log_date=$(date +%Y-%m-%d:%H:%M:%S)
+  printf "%s %s\n" "[$log_date]" "$line" >> "$log_file"
+done)
 
-
-# watch '/vagrant/src/img/' subdirectory
-inotifywait /vagrant/src/img/ -m -e close_write -e move --format %f |
+# watch '[root_dir]/src/img/' subdirectory
+inotifywait /vagrant/src/img/ -m -r -e close_write -e move --format %f |
   # Minify Images
   while read -r file; do
     # filename (without directory path)
@@ -25,9 +23,9 @@ inotifywait /vagrant/src/img/ -m -e close_write -e move --format %f |
     file_extension="${file##*.}"
 
     # minify with 'imagemin'
-    if [ "$file_extension" = 'gif' ]; then
+    if [ "$file_extension" = 'gif' ] || [ "$file_extension" = 'svg' ]; then
       cp /vagrant/src/img/"$file" /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/img/"$filename"
     else
-      imagemin /vagrant/src/img/"$file" > /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/img/"$filename"
+      imagemin /vagrant/src/img/"$file" > /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/img/"$filename" &
     fi
   done

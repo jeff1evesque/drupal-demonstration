@@ -1,31 +1,17 @@
 #!/bin/bash
 
-# @web_scss: is executed from 'bash_loader', which is why the directory
-#            paths seem shorter in this file (i.e. missing extra '../').
-
 
 # Pre-Pathing: allow 'sass' command
 PATH="/usr/bin:$PATH"
 
 
 # track execution of script
-set -x; exec > /vagrant/log/sass_execution.log 2>&1
+log_file=/vagrant/log/sass.log
+set -x;
+exec &> >(while read -r line; do
+  log_date=$(date +%Y-%m-%d:%H:%M:%S)
+  printf "%s %s\n" "[$log_date]" "$line" >> "$log_file"
+done)
 
-
-# watch '/vagrant/src/scss/' subdirectory
-inotifywait /vagrant/src/scss/ -m -e close_write -e move --format %f |
-  # Compile CSS
-  while read -r file; do
-    # get last `.` occurence as starting extension
-    extension=${file##*.}
-    # filename (without 'last' extension)
-    filename="${file%.*}"
-
-    if [ "$extension" = 'scss' ] && [ "${file:0:1}" != '_' ]
-    then
-
-      # compile with 'sass'
-      node-sass /vagrant/src/scss/"$file" /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/css/"$filename".min.css --output-style compressed
-
-    fi
-  done
+# watch '[root_dir]/interface/static/css/' subdirectory
+node-sass -w /vagrant/src/scss -o /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/css &

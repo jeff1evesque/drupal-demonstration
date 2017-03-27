@@ -1,32 +1,33 @@
 #!/bin/bash
 
-# @web_js: is executed from 'bash_loader', which is why the directory
-#          paths seem shorter in this file (i.e. missing extra '../').
-
 
 # Pre-Pathing: allow 'uglifyjs' command
 PATH="/usr/bin:$PATH"
 
 
 # track execution of script
-set -x; exec > /vagrant/log/uglifyjs_execution.log 2>&1
+log_file=/vagrant/log/uglifyjs.log
+set -x;
+exec &> >(while read -r line; do
+  log_date=$(date +%Y-%m-%d:%H:%M:%S)
+  printf "%s %s\n" "[$log_date]" "$line" >> "$log_file"
+done)
 
+# watch '[root_dir]/src/js/' subdirectory
+inotifywait /vagrant/src/js/ -m -r -e close_write -e move --format %f |
 
-# watch '/vagrant/src/js/' subdirectory
-inotifywait /vagrant/src/js/ -m -e close_write -e move --format %f |
   # Minify Javascript
   while read -r file; do
 
-      # get last `.` occurence as starting extension
-      extension=${file##*.}
-      # filename (without 'last' extension)
-      filename="${file%.*}"
+    # get last `.` occurence as starting extension
+    extension=${file##*.}
+    # filename (without 'last' extension)
+    filename="${file%.*}"
 
-      if [ "$extension" = 'js' ]
-      then
+    if [ "$extension" = 'js' ]; then
 
-        # minifiy with 'uglifyjs'
-        uglifyjs -c --output /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/js/"$filename".min.js /vagrant/src/js/"$file"
+      # minifiy with 'uglifyjs'
+      uglifyjs -c --output /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/js/"$filename".min.js /vagrant/src/js/"$file"
 
-      fi
+    fi
   done
