@@ -27,7 +27,7 @@ inotifywait /vagrant/src/js/ -m -r -e close_write -e move --format %f |
     if [ "$extension" = 'js' ]; then
 
       # minifiy with 'uglifyjs'
-      uglifyjs -c --output /vagrant/interface/static/js/"$filename".min.js /vagrant/src/js/"$file"
+      uglifyjs -c --output /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/js/"$filename".min.js /vagrant/src/js/"$file"
 
     fi
   done

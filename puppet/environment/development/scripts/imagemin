@@ -24,8 +24,8 @@ inotifywait /vagrant/src/img/ -m -r -e close_write -e move --format %f |
 
     # minify with 'imagemin'
     if [ "$file_extension" = 'gif' ] || [ "$file_extension" = 'svg' ]; then
-      cp /vagrant/src/img/"$file" /vagrant/interface/static/img/"$filename"
+      cp /vagrant/src/img/"$file" /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/img/"$filename"
     else
-      imagemin /vagrant/src/img/"$file" > /vagrant/interface/static/img/"$filename" &
+      imagemin /vagrant/src/img/"$file" > /vagrant/webroot/sites/all/themes/custom/sample_theme/asset/img/"$filename" &
     fi
   done
