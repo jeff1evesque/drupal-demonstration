@@ -1,5 +1,5 @@
 # local variables
-redis_version = '2.8'
+redis_version = '\*.el'
 
 # define facter
 Facter.add(:redis_version) do
