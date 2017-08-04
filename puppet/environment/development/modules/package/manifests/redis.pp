@@ -7,8 +7,6 @@
 ###       yum --enablerepo=extras install epel-release
 ###
 class package::redis {
-    notify {$::redis_version:}
-
     class { 'redis':
         package_ensure => $::redis_version,
     }
