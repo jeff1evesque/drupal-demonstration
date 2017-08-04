@@ -58,7 +58,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 443, host: 6686
 
   ## Run r10k
-  config.r10k.puppet_dir = 'puppet/environment/development'
+  config.r10k.puppet_dir      = 'puppet/environment/development'
   config.r10k.puppetfile_path = 'puppet/environment/development/Puppetfile'
 
   ## Custom Manifest: general system configurations
@@ -187,6 +187,7 @@ Vagrant.configure(2) do |config|
   config.trigger.after :destroy do
     run 'rm -Rf log'
     run 'rm -Rf puppet/environment/development/modules_contrib'
+    run 'rm -Rf src/node_modules'
     run 'rm -Rf webroot/sites/all/libraries/phpredis'
     run 'rm -Rf webroot/sites/all/themes/custom/sample_theme/asset'
     run 'rm -Rf webroot/sites/default/files/!(README.md)'
