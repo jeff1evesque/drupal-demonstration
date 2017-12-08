@@ -14,7 +14,7 @@ class php::enable_rpm {
         command     => "awk '/\[remi-php${version}\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1' ${php_repo} > ${temp_file}",
         notify      => Exec["enable-php-2"],
         path        => '/usr/bin',
-        onlyif      => "awk '/\[remi-php${version}\]/,/\[remi-test\]/ { if (/enabled=0/) exit 0 }1' ${php_repo} > ${temp_file}",
+        onlyif      => "awk 'index(\$0, \"[remi-php56]\") {f=1} index(\$0, \"[remi-test]\") {exit 0} f && /enabled=1/ {exit 1}' ${php_repo}",
     }
     exec {'enable-php-2':
         command     => "mv ${working_dir}/remi.tmp /etc/yum.repos.d/remi.repo",
