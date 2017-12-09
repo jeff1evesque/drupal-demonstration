@@ -1,5 +1,5 @@
 ###
-### Configures mongodb instance.
+### Configures php instance.
 ###
 
 class php {
