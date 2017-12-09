@@ -8,12 +8,15 @@ class drush::configure_composer {
         path    => '/usr/bin',
         cwd     => '/root',
         before  => File['/usr/local/bin/composer'],
+        onlyif  => [
+            '[ ! -f /usr/bin/composer/composer ]',
+            '[ ! -f /root/composer.phar ]',
+        ]
     }
 
     ## symlink composer to path
     file { '/usr/local/bin/composer':
         ensure  => '/usr/bin/composer/composer',
         require => Exec['move-composer-phar'],
-        notify  => Exec['initialize-drush'],
     }
 }

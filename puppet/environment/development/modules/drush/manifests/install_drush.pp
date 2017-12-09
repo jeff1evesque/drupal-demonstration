@@ -12,7 +12,7 @@ class drush::install_composer {
             'COMPOSER_HOME=/usr/bin/composer',
         ],
         provider    => 'shell',
-        require     => File['/usr/local/bin/composer'],
+        unless      => 'drush --version  &> /dev/null',
         notify      => Exec['update-composer'],
     }
 

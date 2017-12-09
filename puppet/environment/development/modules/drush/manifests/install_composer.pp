@@ -10,5 +10,6 @@ class drush::install_composer {
         environment => [
             'COMPOSER_HOME=/usr/bin/composer',
         ],
+        unless      => 'composer --version &> /dev/null'
     }
 }
