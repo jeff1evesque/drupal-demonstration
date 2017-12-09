@@ -3,16 +3,18 @@
 ###
 
 class drush {
-    include php::install_rpm
-    include php::enable_rpm
-    include php::install_php
+    include drush::download_composer
+    include drush::configure_composer
+    include drush::install_composer
+    include drush::install_drush
     include httpd::restart
 
     ## enforce resource ordering: applies left resource first, if the left
     ##     resource changes, the right resource will refresh.
     ##
-    Class['php::install_rpm'] ~>
-    Class['php::enable_rpm'] ~>
-    Class['php::install_php'] ~>
+    Class['drush::download_composer'] ~>
+    Class['drush::configure_composer'] ~>
+    Class['drush::install_composer'] ~>
+    Class['drush::install_composer'] ~>
     Class['httpd::restart']
 }
